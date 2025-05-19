@@ -6,7 +6,7 @@ import starlight from '@astrojs/starlight';
 export default defineConfig({
 	integrations: [
 		starlight({
-			title: 'rv - An R package manager',
+			title: 'rv',
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/a2-ai/rv' }],
 			sidebar: [
 				{

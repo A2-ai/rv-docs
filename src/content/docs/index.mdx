@@ -1,16 +1,21 @@
 ---
 title: Welcome to rv
 description: rv - A fast, declarative, R package manager
-template: splash
+template: doc
+tableOfContents: false
 hero:
-  tagline: "A declarative R package manager, allowing you to quickly create reproducible R environments"
+  tagline: "A declarative R package manager, allowing you to quickly create reproducible projects"
   image:
     file: ../../assets/images/rv-logo.png
   actions:
     - text: Getting Started
-      link: /guides/getting-started/
+      link: /intro/getting-started/
       icon: right-arrow
-    - text: Explore the rv reference repository
+    - text: Install rv
+      link: /intro/installation/
+      icon: download
+      variant: minimal
+    - text: Go to the repository
       link: https://github.com/a2-ai/intro-to-rv
       icon: external
       variant: minimal
@@ -18,23 +23,28 @@ hero:
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
-## Introduction 
+
+# What is `rv`?
 `rv` is a R package manager, written in Rust, to help users install and manage R packages in a declarative, reproducivle, and fast way. 
 
 Similar to tools like [`uv`](https://github.com/astral-sh/uv), [`Cargo`](https://github.com/rust-lang/cargo), and [`npm`](https://github.com/npm/cli),
 `rv` uses a configuration and lock file to allow the flexibility to determine how, from where, and what is installed, 
 while maintaining reproducibility across systems and users.
 
+# Why `rv`?
+
+TODO: Summarize some of the HN + Reddit posts + pkgr
+
 ## Sections
 
 <CardGrid>
 	<Card title="Getting Started" icon="pencil">
-		<a href="intro/getting-started">Installing `rv` and your first project</a>
+		<a href="intro/installation">Installing `rv`</a> and <a href="intro/getting-started">your first project</a>
 	</Card>
 	<Card title="Configuration" icon="document">
-		<a href="config/config_file">The configurations available for package management</a>
+		<a href="config/config_file">The configurations available for project package management</a>
 	</Card>
-	<Card title="Command" icon = "setting">
+	<Card title="Commands" icon = "setting">
 		<a href="reference/commands">The commands to interact with your rv project</a> 
 	</Card>
 	<Card title="Cookbook" icon="open-book">

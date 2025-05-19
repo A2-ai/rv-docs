@@ -5,8 +5,10 @@ description: The configurations available for package installation, most commonl
 
 import { Aside, Code, Card, Badge } from '@astrojs/starlight/components';
 
-`rv` was designed to provide a simple, reproducible way to manage packages, while still being powerful and flexible enough to
-fit the most demanding needs. We will first go over the different configuration options that are most commonly used.
+`rv` was designed to provide a simple, reproducible way to manage packages, 
+approachable even for those without a computer science background, 
+while still being powerful and flexible enough to fit the most demanding developer needs. 
+To help explore the configurations possible with `rv`, we will first go over the most common configuration options.
 
 ## `name`
 The `name` field is not used by `rv`, but is required for your own organization. 
@@ -26,7 +28,7 @@ r_version = "4.4"
 ```
 
 <Aside type="note">
-R packages installed across patch versions are compatible, 
+R packages are compatible across patch versions of R, 
 therefore for most situations it is recommended to specify only the major and minor to increase cross-system compatibility.
 </Aside>
 
