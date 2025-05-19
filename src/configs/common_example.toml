@@ -1,0 +1,21 @@
+[project]
+name = "common example"
+r_version = "4.4"
+
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+    { alias = "BioCsoft", url = "https://bioconductor.org/packages/3.20/bioc" },
+    { alias = "BioCann", url = "https://bioconductor.org/packages/3.20/data/annotation" },
+    { alias = "BioCsoft_new", url = "https://bioconductor.org/packages/3.21/bioc" },
+]
+
+dependencies = [
+    "DESeq2",
+    "dplyr",
+    { name = "SparseArray", repository = "BioCsoft_new" },
+    { name = "ggplot2", force_source = true },
+    { name = "purrr", install_suggestions = true},
+    { name = "scicalc", git = "https://github.com/a2-ai/scicalc", branch = "main" },
+    { name = "tibble", url = "https://cran.r-project.org/src/contrib/Archive/tibble/tibble_3.2.0.tar.gz" },
+    { name = "local.package", path = "path/to/local-package" },
+]

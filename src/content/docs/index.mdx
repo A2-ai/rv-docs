@@ -1,36 +1,43 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
+title: Welcome to rv
+description: rv - A fast, declarative, R package manager
 template: splash
 hero:
-  tagline: Congrats on setting up a new Starlight project!
+  tagline: "A declarative R package manager, allowing you to quickly create reproducible R environments"
   image:
-    file: ../../assets/houston.webp
+    file: ../../assets/images/rv-logo.png
   actions:
-    - text: Example Guide
-      link: /guides/example/
+    - text: Getting Started
+      link: /guides/getting-started/
       icon: right-arrow
-    - text: Read the Starlight docs
-      link: https://starlight.astro.build
+    - text: Explore the rv reference repository
+      link: https://github.com/a2-ai/intro-to-rv
       icon: external
       variant: minimal
 ---
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
-## Next steps
+## Introduction 
+`rv` is a R package manager, written in Rust, to help users install and manage R packages in a declarative, reproducivle, and fast way. 
 
-<CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
+Similar to tools like [`uv`](https://github.com/astral-sh/uv), [`Cargo`](https://github.com/rust-lang/cargo), and [`npm`](https://github.com/npm/cli),
+`rv` uses a configuration and lock file to allow the flexibility to determine how, from where, and what is installed, 
+while maintaining reproducibility across systems and users.
+
+## Sections
+
+<CardGrid>
+	<Card title="Getting Started" icon="pencil">
+		<a href="intro/getting-started">Installing `rv` and your first project</a>
 	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
+	<Card title="Configuration" icon="document">
+		<a href="config/config_file">The configurations available for package management</a>
 	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
+	<Card title="Command" icon = "setting">
+		<a href="reference/commands">The commands to interact with your rv project</a> 
 	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
+	<Card title="Cookbook" icon="open-book">
+		<a href="examples/intro">Example projects showing various configurations</a>
 	</Card>
 </CardGrid>

@@ -6,19 +6,19 @@ import starlight from '@astrojs/starlight';
 export default defineConfig({
 	integrations: [
 		starlight({
-			title: 'My Docs',
-			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/withastro/starlight' }],
+			title: 'rv - An R package manager',
+			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/a2-ai/rv' }],
 			sidebar: [
 				{
-					label: 'Guides',
+					label: 'Introduction',
 					items: [
-						// Each item here is one entry in the navigation menu.
-						{ label: 'Example Guide', slug: 'guides/example' },
+						{ label: 'Installation Instructions', slug: 'intro/installation' },
+						{ label: 'First rv project', slug: 'intro/getting-started' },
 					],
 				},
 				{
-					label: 'Reference',
-					autogenerate: { directory: 'reference' },
+					label: 'Configuration File',
+					autogenerate: { directory: 'config' },
 				},
 			],
 		}),

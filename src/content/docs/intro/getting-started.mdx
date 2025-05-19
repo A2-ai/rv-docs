@@ -1,0 +1,114 @@
+---
+title: First rv project
+description: A guide to first using rv
+---
+import { FileTree, Code, Aside, LinkCard, Card, CardGrid } from '@astrojs/starlight/components';
+
+This section will quickly walk through various `rv` components, including generating a new project, and how to install packages.
+
+## Start a new project
+To start a new project, use `rv init`:
+```bash
+rv init hello_world
+```
+
+`rv init` will create generate the following project structure:
+
+<FileTree>
+- hello_world/
+    - rv/
+        - library/
+        - scripts/
+            - activate.R  sets .libPaths and option("repos")
+            - rvr.R  sets up .rv environment
+        - .gitignore  ignores library/
+    - .Rprofile  used to run rv/scripts/* to set-up project
+    - **rproject.toml**
+</FileTree>
+
+We will discuss the other files in a later section, but will focus on the `rproject.toml` first:
+
+import init_config from '../../../configs/init_config.toml?raw';
+
+<Code code = {init_config} lang="toml" title = "rproject.toml" />
+
+This is called the config file, and it allows you to configure which packages you'd like to install, from where they are sourced, and how they are installed.
+
+## Config File Basics
+
+Before continuing, let's familiarize ourselves with the main components of the config file:
+
+#### `name`
+A name for your project. Defaults to the name of the directory, but has no requirements.
+
+#### `r_version`
+The R version for the project. During `rv init`, this is set by default to the version found on the path
+
+WARNING: If using RStudio/Positron, the R version on the path does not always match the version selected.
+
+#### `repositories`
+The repositories dependencies are sourced from by default. During `rv init` defaults to the repositories set in `options("repos")` when possible.
+
+#### `dependencies`
+The main element of the file. This is where you specify your dependencies, and options are how and from where they are installed.
+
+<Aside type="note" title="Info">
+For addtional information about the configuration file, continue to the configuration section
+<LinkCard title="Configuration File" href="/reference/configuration/" />
+</Aside>
+
+## Installing a Package
+
+Instead of individual, iterative package installation, `rv` takes a wholistic approach.
+Dependencies are "synchronized" across the config file, lock file, and project library 
+to ensure the project is in the expected, working state at all times. 
+
+Therefore, to install packages from the config file, the command is `rv sync`.
+
+To install our first package using `rv`, we will edit the config file's `dependencies` section to include `dplyr`:
+
+import first_dplyr from '../../../configs/first_dplyr.toml?raw';
+
+<Code code={first_dplyr} lang="toml" title = "rproject.toml" mark = '"dplyr"'/>
+
+Then we will run `rv sync`, which will install `dplyr` and all of its dependencies:
+
+```bash
+rv sync
++ cli (3.6.5, binary from https://packagemanager.posit.co/cran/latest) in 530ms
++ dplyr (1.1.4, binary from https://packagemanager.posit.co/cran/latest) in 509ms
++ fansi (1.0.6, binary from https://packagemanager.posit.co/cran/latest) in 421ms
++ generics (0.1.4, binary from https://packagemanager.posit.co/cran/latest) in 317ms
++ glue (1.8.0, binary from https://packagemanager.posit.co/cran/latest) in 382ms
++ lifecycle (1.0.4, binary from https://packagemanager.posit.co/cran/latest) in 379ms
++ magrittr (2.0.3, binary from https://packagemanager.posit.co/cran/latest) in 360ms
++ pillar (1.10.2, binary from https://packagemanager.posit.co/cran/latest) in 458ms
++ pkgconfig (2.0.3, binary from https://packagemanager.posit.co/cran/latest) in 287ms
++ R6 (2.6.1, binary from https://packagemanager.posit.co/cran/latest) in 339ms
++ rlang (1.1.6, binary from https://packagemanager.posit.co/cran/latest) in 553ms
++ tibble (3.2.1, binary from https://packagemanager.posit.co/cran/latest) in 407ms
++ tidyselect (1.2.1, binary from https://packagemanager.posit.co/cran/latest) in 374ms
++ utf8 (1.2.5, binary from https://packagemanager.posit.co/cran/latest) in 427ms
++ vctrs (0.6.5, binary from https://packagemanager.posit.co/cran/latest) in 476ms
++ withr (3.0.2, binary from https://packagemanager.posit.co/cran/latest) in 401ms
+```
+
+Additionally, a lock file is generated within the project, containing information about each package installed, 
+including the version, dependencies, and source, making the project directory look like the following:
+<FileTree>
+- hello_world/
+    - rv/
+        - library/
+        - scripts/
+            - activate.R 
+            - rvr.R
+        - .gitignore
+    - .Rprofile
+    - rproject.toml
+    - **rv.lock**
+</FileTree>
+
+<Aside type="note" title="Info">
+For addtional information about the cli commands, continue to the commands section
+<LinkCard title="Commands" href="/reference/commands/" />
+</Aside>
