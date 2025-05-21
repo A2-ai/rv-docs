@@ -20,6 +20,10 @@ export default defineConfig({
 					label: 'Configuration File',
 					autogenerate: { directory: 'config' },
 				},
+				{
+					label: 'Commands',
+					autogenerate: { directory: 'commands' },
+				},
 			],
 		}),
 	],
