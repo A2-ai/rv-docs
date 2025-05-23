@@ -1,0 +1,110 @@
+---
+title: Installing Packages
+description: The commands to install packages
+sidebar:
+    order: 3
+---
+
+import { Code, FileTree, Tabs, TabItem } from '@astrojs/starlight/components';
+import sync_config from '../../../configs/sync_config.toml?raw';
+import add_config from '../../../configs/add_config.toml?raw';
+
+## `rv sync`
+
+In other R tools, individual packages are installed and removed through separate commands (i.e. `install.packages()` and `remove.packages()`)
+In `rv`, a project is `sync`hronized across the config file, lock file, and the project library, performing whatever actions, 
+including installation and removal of packages and dependencies, is necessary to reach the synchronized state. 
+Therefore, package(s) installation is called `sync` in `rv`.
+
+Every time a package is changed - added, removed, new version, source changed - the lockfile is automatically updated to reflect
+the new state of the project library.
+
+### Example
+<Tabs>
+    <TabItem label = "Config File">
+        <Code code = {sync_config} lang="toml" title = "rproject.toml" />
+    </TabItem>
+    <TabItem label = "Command and Output">
+        `rv sync` installs the `tibble` package and all of its dependencies, indicating which version, from where, and
+        the time it took for each installed package.
+        ```shell {1}
+        $ rv sync
+        + cli (3.6.5, binary from https://packagemanager.posit.co/cran/latest) in 1ms
+        + fansi (1.0.6, binary from https://packagemanager.posit.co/cran/latest) in 1ms
+        + glue (1.8.0, binary from https://packagemanager.posit.co/cran/latest) in 1ms
+        + lifecycle (1.0.4, binary from https://packagemanager.posit.co/cran/latest) in 0ms
+        + magrittr (2.0.3, binary from https://packagemanager.posit.co/cran/latest) in 0ms
+        + pillar (1.10.2, binary from https://packagemanager.posit.co/cran/latest) in 0ms
+        + pkgconfig (2.0.3, binary from https://packagemanager.posit.co/cran/latest) in 0ms
+        + rlang (1.1.6, binary from https://packagemanager.posit.co/cran/latest) in 1ms
+        + tibble (3.2.1, binary from https://packagemanager.posit.co/cran/latest) in 0ms
+        + utf8 (1.2.5, binary from https://packagemanager.posit.co/cran/latest) in 0ms
+        + vctrs (0.6.5, binary from https://packagemanager.posit.co/cran/latest) in 0ms
+        ```
+    </TabItem>
+    <TabItem label = "File Tree">
+        <FileTree>
+            - my-project
+                - rv/
+                    - scripts/
+                    - library/4.4/\{arch\}/ the installed packages
+                        - cli
+                        - fansi
+                        - glue
+                        - lifecycle
+                        - magrittr
+                        - pillar
+                        - pkgconfig
+                        - rlang
+                        - tibble
+                        - utf8
+                        - vctrs
+                - rproject.toml
+                - rv.lock an `rv.lock` file generated to track the package's sources
+        </FileTree>
+    </TabItem>
+</Tabs>
+
+## `rv add`
+
+For quick editing and installation, `rv add pkg1 pkg2...` can be used to add these packages as dependencies to the config file
+and then `sync`. Currently, `rv` only adds packages as [simple dependencies](../../config/common_config#repository).
+To add packages with additional options, the config file is intended to be edited and then run `rv sync`.
+
+Using this command may feel similar to `install.packages()` where packages can be iteratively added to the project,
+just with the additional benefit of `rv`.
+
+### Flags
+* `--dry-run` - No changes made to the config or the package library, only reports what would happen if the command was run.
+* `--no-sync` - Packages are added to the config file, but not sync'ed.
+
+### Example
+<Tabs>
+    <TabItem label = "Initial Config">
+        <Code code = {sync_config} lang="toml" title = "rproject.toml" />
+    </TabItem>
+    <TabItem label = "Command and Output">
+        ```shell {1}
+        $rv add dplyr
+        + dplyr (1.1.4, binary from https://packagemanager.posit.co/cran/latest) in 1ms
+        + generics (0.1.4, binary from https://packagemanager.posit.co/cran/latest) in 1ms
+        + R6 (2.6.1, binary from https://packagemanager.posit.co/cran/latest) in 1ms
+        + tidyselect (1.2.1, binary from https://packagemanager.posit.co/cran/latest) in 0ms
+        + withr (3.0.2, binary from https://packagemanager.posit.co/cran/latest) in 3ms
+        ```
+    </TabItem>
+    <TabItem label = "Updated Config">
+        <Code code = {add_config} lang="toml" title = "rproject.toml" ins={[11]}/>
+    </TabItem>
+</Tabs>
+
+## `rv upgrade`
+`rv` will default to installing packages from the source they are locked in, with some caveats discussed in the 
+[Lockfile Reference](../../reference/lockfile).
+
+`rv upgrade` will ignore the lockfile, re-resolve, and install any changed packages.
+This does not necessarily upgrade to the latest version available across repositories, nor guarantee the packages will
+be sourced from a the same repository. Rather, your project state will be set as if there was no lockfile present.
+
+### Flags
+* `--dry-run` - No changes made, only reports what would happen if the command was run.

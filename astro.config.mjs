@@ -7,6 +7,9 @@ export default defineConfig({
 	integrations: [
 		starlight({
 			title: 'rv',
+			logo: {
+				src: './src/assets'
+			},
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/a2-ai/rv' }],
 			sidebar: [
 				{

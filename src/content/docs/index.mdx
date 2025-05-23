@@ -32,8 +32,34 @@ Similar to tools like [`uv`](https://github.com/astral-sh/uv), [`Cargo`](https:/
 while maintaining reproducibility across systems and users.
 
 # Why `rv`?
+`renv` and many of the other R package installation tools in the ecosystem have flaws, many of which are caused by packages being installed
+iteratively, which lead to the development of `rv`.
 
-TODO: Summarize some of the HN + Reddit posts + pkgr
+`rv` gives users the power to declare a desired global state and allow the tool to determine how to best reach that state, 
+while locking the how and from where that package was installed. Meanwhile, other tools in the ecosystem,
+like `install.packages()` and `pak::pkg_install()`, provide you with a mechanism to reach towards the desired state, 
+but in an iterative, non-reproducible, and potentially unstable way.
+
+With `rv` you can:
+* Install a cohesive set of packages, ensuring each are compatible with the others in the project
+* Specify options for individual packages, including which repository they must be sourced from, 
+whether to install the source or binary version, whether to install the `Suggested` packages, and many more.
+* Understand how your project's package enviroment will change _before_ any installations are performed.
+
+*And, we did it faster than the other tools too.*
+
+# Differences between `renv` and `rv`?
+`renv` utilizes the traditional R package installation pattern of iteratively installing packages,
+and then retroactively "snapshotting" the current state of the project library to generate the lockfile.
+This leads to two common issues that lead to a project not being fully reproducible:
+* The iterative installation leads to incompatible versions of packages being installed
+* Information about how a package was installed is lost by time a snapshot occurs
+
+`rv` solves these issues by resolving the full dependency tree ahead of time, avoiding the risk of incompatible package versions.
+Additionally, by locking at the time of installation, all of the information regarding the installation is captured, 
+instead of only after it is installed. This means
+
+Additional information can be found in [`Differences with `renv`]
 
 ## Sections
 
