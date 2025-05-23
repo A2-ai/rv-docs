@@ -8,7 +8,7 @@ export default defineConfig({
 		starlight({
 			title: 'rv',
 			logo: {
-				src: './src/assets'
+				src: './src/assets/images/rv-logo.png'
 			},
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/a2-ai/rv' }],
 			sidebar: [
