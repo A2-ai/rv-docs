@@ -27,6 +27,18 @@ export default defineConfig({
 					label: 'Commands',
 					autogenerate: { directory: 'commands' },
 				},
+				{
+					label: 'Cookbook',
+					items: [
+						{ 
+							label: 'Installing a Specific Version', 
+							items: [
+								{ label: 'From Snapshot', slug: 'cookbook/snapshot_pkg' },
+								{ label: 'From Archive', slug: 'cookbook/archive_pkg' },
+							]
+						}
+					]
+				},
 			],
 		}),
 	],
