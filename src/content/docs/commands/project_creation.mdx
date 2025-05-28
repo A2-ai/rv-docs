@@ -20,42 +20,44 @@ the outcome, and other helpful information.
 1. Setting up the project infrastructure, including the project library and activation scripts.
 2. Create a configuration file which is populated with the R version and repositories
 
-### Flags
-The configuration file can be customized upon project initialization using the following options.
+### Usage
 
-##### `project_directory` <Badge text="argument" variant="tip"/>
-Creates an `rv` project at the directory specified. Defaults to initializing the currently directory
+```shell
+rv init [OPTIONS] [project_directory]
+```
 
-##### `--r-version`
-The R version is set to be the version found on the path by default. 
+#### Arguments
+
+* `project_directory` <Badge text="optional" variant="caution"/> - Creates an `rv` project at the directory specified
+
+    > Default: current directory (`./`)
+
+#### Options
+
+* `--r-version` - The R version is set to be the version found on the path by default. 
 Use this flag to set a custom version
-<Aside type="note">
-For RStudio/Positron users, the R version on the path does NOT always match the version set for the session. 
-Please use this flag to ensure the correct R version is used for the project.
-</Aside>
 
-##### `--no-repositories`
-The repositories are set to what is found in the current R session,
+* `--no-repositories` - The repositories are set to what is found in the current R session,
 in `option("repos")`, by default. this flag sets the repositories field in the config file to blank.
 
-##### `--add` 
-The dependency field is blank by default. This flag can be used to add dependencies you know 
+* `--add` - The dependency field is blank by default. This flag can be used to add dependencies you know 
 will be needed to the project immediately.
-<Aside type="note">
-`rv` init will not automatically sync your project
-</Aside>
 
-##### `--no_r_environment`
-By default, `rv` creates a R enviroment `.rv` to enable `rv` to be called in R code 
+* `--no_r_environment` - By default, `rv` creates a R enviroment `.rv` to enable `rv` to be called in R code 
 (see [rvr](../../reference/rvr) for more info). This flag will disable this R enviroment
 
-##### `--force`
-By default, if an `rproject.toml` exists within a directory already, `rv` will not overwrite the file.
+* `--force` - By default, if an `rproject.toml` exists within a directory already, `rv` will not overwrite the file.
 The flag will force the creation of a new config file.
 
+<Aside type="note" title = "Notes">
+* For RStudio/Positron users, the R version on the path does NOT always match the version set for the session. 
+Please use `--r-version` to ensure the correct R version is used for the project.
 
-For interactive R sessions, we recommended restarting R after initializing your project to ensure your 
+* `rv` init will not automatically sync your project
+
+* For interactive R sessions, we recommended restarting R after initializing your project to ensure your 
 project is activated properly.
+</Aside>
 
 ### Example
 
@@ -114,14 +116,22 @@ In order to finish migrating this package:
 2. If the exact version is required and cannot be found in a different repository, use the [url dependency format](../../config/common_config#url) to directly access the archive
 3. If the exact version is not required, simply add the dependency to the config
 
-### Flags
+### Usage
+```shell
+rv migrate renv [OPTIONS] [renv_file]
+```
 
-##### `renv_file` <Badge text="argument" variant="tip"/>
-Path to a `renv` lock file other than `renv.lock` in the current directory.
+#### Arguments
+* `renv_file` <Badge text="optional" variant="caution"/> - Path to a `renv` lock file to migrate to an `rv` config file in the current working directory.
 
-##### `--strict-r-version`
-As discussed in the [config `r_version` section](../../config/common_config#r_version), the R version is recommended to only be listed as the major and minor
+    > Default: `./renv.lock`
+
+#### Options
+* `--strict-r-version` - As discussed in the [config `r_version` section](../../config/common_config#r_version), the R version is recommended to only be listed as the major and minor
 components. This flag will include the patch in the R version if needed.
+
+* `--no_r_environment` - By default, `rv` creates a R enviroment `.rv` to enable `rv` to be called in R code 
+(see [rvr](../../reference/rvr) for more info). This flag will disable this R enviroment
 
 ### Example
 

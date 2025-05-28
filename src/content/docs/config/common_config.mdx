@@ -41,7 +41,8 @@ A list of CRAN-like repositories to fetch packages from. The order in which the 
 ##### Options:
 * `alias` - Used for self-organization and to specify a dependency to come from a certain repository.
 * `url` - The CRAN-like from which to fetch packages from. Linux binaries are automatically found using the [Posit Package Manager spec](https://docs.posit.co/rspm/admin/serving-binaries.html#using-linux-binary-packages).
-* `force_source` - Force all packages coming from the repository to be source. <Badge text="optional" variant="caution"/>
+* `force_source` <Badge text="optional" variant="caution"/> - Force all packages coming from the repository to be source. 
+    > Default: `false`
 
 ```toml
 repositories = [
@@ -57,23 +58,27 @@ to install in your project, as well as some options to further tune the installa
 There are 4 types of dependency configurations, sorted by their source, each of which have individual configurations corresponding with them.
 
 All dependencies types have the following configurations:
-* `install_suggestions`: Install the suggested dependencies of the package <Badge text="optional" variant="caution"/>
-* `dependencies_only`: Install only the dependencies of the package, not the package itself. Used primarily for development. <Badge text="optional" variant="caution"/>
-
+* `install_suggestions` <Badge text="optional" variant="caution"/>: Install the suggested dependencies of the package 
+    > Default: `false`
+* `dependencies_only` <Badge text="optional" variant="caution"/>: Install only the dependencies of the package, not the package itself. Used primarily for package development. 
+    > Default: `false`
 ### Repository
 The most common/default type. The packages will be sourced from the CRAN-like repositories listed 
 in the `repositories` section, preferring binaries unless otherwise specified.
 
 ##### Configurations:
-* `name` - The name of the package. Required unless no other option is specified.
-* `repository` - Used to specify that a package must come from a specific repository, 
-by setting to the alias corresponding alias from the `repositories` section. <Badge text="optional" variant="caution"/>
-* `force_source` - Force the package to be fetched as source. <Badge text="optional" variant="caution"/>
+* `name` - The name of the package.
+
+* `repository` <Badge text="optional" variant="caution"/> - Used to specify that a package must come from a specific repository, 
+by setting to the alias corresponding alias from the `repositories` section.
+    > Default: first resolvable repository
+* `force_source`<Badge text="optional" variant="caution"/> - Force the package to be fetched as source. 
+    > Default: `false`
 
 ```toml
 dependencies = [
     "dplyr", # a simple string is equivalent to `{ name = "dplyr" }`
-    { name = "purrr", force_source = true, force_source = true },
+    { name = "purrr", force_source = true },
     { name = "ggplot2", repository = "CRAN" },
 ]
 ```
@@ -96,12 +101,13 @@ Used to install packages from a git repository from either a branch, tag, or com
 * `name` - The name of the package. Must match the name of the package found in the repository.
 * `git` - The git repository url.
 * `tag` or `commit` or `branch` - Must specify one. `commit` must be the full hash.
-* `path` - a path to a subdirectory inside of the repository containing the R package <Badge text="optional" variant="caution"/>
+* `path` <Badge text="optional" variant="caution"/> - a path to a subdirectory inside of the repository containing the R package
+    > Default: `None`
 ```toml
 dependencies = [
     { name = "git-tag", git = "https://github.com/a2-ai/git-tag", tag = "v1.0.0" },
     { name = "git-commit", git = "https://github.com/a2-ai/git-commit", commit = "bc50e550e432c3c620714f30dd59115801f89995" },
-    { name = "git-branch", git = "https://github.com/a2-ai/git-branch", branch = "main" },
+    { name = "git-branch", git = "https://github.com/a2-ai/git-branch", branch = "main", path = "r" },
 ]
 ```
 
@@ -109,7 +115,7 @@ dependencies = [
 Install a package from a local source. Can be a directory or archive containing a source or binary R package.
 
 ##### Configurations:
-* `name` - The name of the package. Must match the name of the package found in the repository.
+* `name` - The name of the package. Must match the name of the package found at the path.
 * `path` - The path pointing to the package directory or archive
 
 ```toml
@@ -123,7 +129,7 @@ dependencies = [
 Install a source or binary package directly from a URL.
 
 ##### Configurations:
-* `name` - The name of the package. Must match the name of the package found in the repository.
+* `name` - The name of the package. Must match the name of the package found at the url.
 * `url` - The url pointing to the package archive from which to download.
 
 ```toml

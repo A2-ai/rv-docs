@@ -7,9 +7,9 @@ sidebar:
 
 import { Aside } from '@astrojs/starlight/components';
 
-In [Common Configurations](../common_config), we reviewed the most commonly used configuration fields, 
-the project name, r_version, repositories, and dependencies. While these fields are the most commonly used, 
-there are more configurations to be aware of:
+[Common Configurations](../common_config) details the most commonly used configuration fields - 
+the project `name`, `r_version`, `repositories`, and `dependencies`. While these fields are the most commonly used, 
+there are more configurations to be aware of.
 
 ## Additional Metadata
 
@@ -52,7 +52,7 @@ how packages are installed.
 
 This is particularly useful if you want a common folder across projects or users.
 
-```toml
+```toml {1}
 library = "opt/R/4.4.1"
 [project]
 ...
@@ -63,7 +63,7 @@ By default, `rv` uses a lockfile to ensure packages are sourced from the same lo
 Sometimes, this may not be helpful to you and would rather use `rv` as an installer, not a package manager. 
 In this case, `use_lockfile` can be set to `false` and no lockfile will be used during dependeny resolution.
 
-```toml
+```toml {1}
 use_lockfile = false
 [project]
 ...

@@ -19,6 +19,11 @@ Therefore, package(s) installation is called `sync` in `rv`.
 Every time a package is changed - added, removed, new version, source changed - the lockfile is automatically updated to reflect
 the new state of the project library.
 
+### Usage
+```shell
+rv sync [OPTIONS]
+```
+
 ### Example
 <Tabs>
     <TabItem label = "Config File">
@@ -74,7 +79,15 @@ To add packages with additional options, the config file is intended to be edite
 Using this command may feel similar to `install.packages()` where packages can be iteratively added to the project,
 just with the additional benefit of `rv`.
 
-### Flags
+### Usage
+```shell
+rv add [OPTIONS] [packages]...
+```
+
+#### Arguments
+* `packages` - A list of packages, space separated, to add to the project
+
+#### Options
 * `--dry-run` - No changes made to the config or the package library, only reports what would happen if the command was run.
 * `--no-sync` - Packages are added to the config file, but not sync'ed.
 
@@ -106,5 +119,10 @@ just with the additional benefit of `rv`.
 This does not necessarily upgrade to the latest version available across repositories, nor guarantee the packages will
 be sourced from a the same repository. Rather, your project state will be set as if there was no lockfile present.
 
-### Flags
+### Usage:
+```shell
+rv upgrade [OPTIONS]
+```
+
+#### Options
 * `--dry-run` - No changes made, only reports what would happen if the command was run.

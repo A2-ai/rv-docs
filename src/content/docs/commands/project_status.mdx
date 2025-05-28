@@ -18,7 +18,12 @@ of the project, displaying the information differently depending on your needs.
 (including R version), how many packages are installed, how many packages need to be installed/removed, where packages come from,
 and how many packages are available in the repositories.
 
-### Flags
+### Usage
+```shell
+rv summary [OPTIONS]
+```
+
+#### Options
 * `--r-version` - Specify an R version different than the one in the config. This allows you to see what would occur if
 the project was changed to a different R version. The R version does not need to be on the system
 
@@ -60,6 +65,19 @@ In this example, we started out with `tibble` installed and want to install the 
 ## `rv plan`
 For a more granual look, `rv plan` will show the results should you run `rv sync`. 
 
+### Usage
+```shell
+rv plan [OPTIONS]
+```
+
+#### Options
+* `--r-version` - Specify an R version different than the one in the config. This allows you to see what would occur if
+the project was changed to a different R version. The R version does not need to be on the system
+* `--upgrade` - The same as [`rv upgrade --dry-run`](../package_installation/#flags-1)
+
+### Example
+The same scenario as [the example above](#example), this time wanting to see a granual installation plan.
+
 <Tabs>
     <TabItem label="Config File">
         <Code code = {summary_config} lang="toml" title = "rproject.toml" ins={11}/>
@@ -75,8 +93,3 @@ For a more granual look, `rv plan` will show the results should you run `rv sync
         ```
     </TabItem>
 </Tabs>
-
-### Flags
-* `--r-version` - Specify an R version different than the one in the config. This allows you to see what would occur if
-the project was changed to a different R version. The R version does not need to be on the system
-* `--upgrade` - The same as [`rv upgrade --dry-run`](../package_installation/#flags-1)
