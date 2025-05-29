@@ -6,7 +6,7 @@ import starlight from '@astrojs/starlight';
 export default defineConfig({
 	integrations: [
 		starlight({
-			title: 'rv',
+			title: 'rv 0.6.2',
 			logo: {
 				src: './src/assets/images/rv-logo.png'
 			},
@@ -36,9 +36,17 @@ export default defineConfig({
 								{ label: 'From Snapshot', slug: 'cookbook/snapshot_pkg' },
 								{ label: 'From Archive', slug: 'cookbook/archive_pkg' },
 							]
-						}
+						},
+						{ label: 'Overriding Remotes', slug: 'cookbook/remotes' },
 					]
 				},
+				{
+					label: 'Reference',
+					items: [
+						{ label: 'rvr - rv for R', slug: 'reference/rvr' },
+						{ label: 'Difference with renv', slug: 'reference/renv-difference'}
+					]
+				}
 			],
 		}),
 	],
