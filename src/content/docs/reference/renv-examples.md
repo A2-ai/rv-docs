@@ -1,4 +1,8 @@
-To be added to main renv
+---
+title: Some example renv projects
+description: To be added to main renv
+draft: true
+---
 
 ## Examples
 

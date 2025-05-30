@@ -32,3 +32,9 @@ package is compatible with the library at each installation.
 
 Additionally, because `rv` is handling installation and locking in one step, tracking of how, when, and from where packages are installed can be done more precisely, 
 completely removing the risk of missing information.
+
+## Conclusion
+
+Ultimately, `renv` and `rv` get you to similar spots in different ways. `renv` philosophically tries to capture the status of the used packages within your project
+and leaves it up to the user to determine how to get there and when to snapshot. `rv` allows the user to declare the desired state of the project, then the tool takes the rest 
+to ensure the project is in a resolvable, reproducible, and consistent state.
