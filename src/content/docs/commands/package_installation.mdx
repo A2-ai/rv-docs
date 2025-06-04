@@ -112,8 +112,8 @@ rv add [OPTIONS] [packages]...
 </Tabs>
 
 ## `rv upgrade`
-`rv` will default to installing packages from the source they are locked in, with some caveats discussed in the 
-[Lockfile Reference](../../reference/lockfile).
+`rv` will default to installing packages from the source they are locked in, as long as that source is still within the configuration file,
+as discussed in the [Resolution Reference](../../reference/resolution).
 
 `rv upgrade` will ignore the lockfile, re-resolve, and install any changed packages.
 This does not necessarily upgrade to the latest version available across repositories, nor guarantee the packages will
