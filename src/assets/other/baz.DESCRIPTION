@@ -3,4 +3,4 @@ Version: 1.0.0.9000
 Imports:
     bar (>= 2.0.0.9000)
 Remotes:
-    my-repo/bar
+    my-org/bar 

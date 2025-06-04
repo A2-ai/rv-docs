@@ -6,7 +6,7 @@ tableOfContents:
   maxHeadingLevel: 4
 ---
 
-import { Card, Code, FileTree } from '@astrojs/starlight/components';
+import { Card, Code, FileTree, Tabs, TabItem } from '@astrojs/starlight/components';
 import ex_3_lock from '../../../assets/other/resolution_example3.rv.lock?raw';
 import ex_4_DESC from '../../../assets/other/baz.DESCRIPTION?raw';
 
@@ -17,10 +17,12 @@ As discussed in other sections, `rv` is a declarative package manager, which mea
 `rv` has two "types" of dependencies:
 
 * ***Direct** Dependencies* - These are the packages explicity stated in the [dependencies section](../../config/common_config/#dependencies)
- of your config file. Direct dependencies can have additional configurations, which determines the initial list of requirements.
+ of your config file. Direct dependencies can have [additional configurations](../../config/common_config/#dependencies), 
+ which determines the initial list of requirements.
 
-* ***Recursive** Dependencies* - Most packages have other packages which it requires to work. Packages define its dependencies as requirements, 
-often a package name and acceptable version constraint, and occassionally [a remote source](https://r-pkgs.org/dependencies-in-practice.html#depending-on-the-development-version-of-a-package).
+* ***Recursive** Dependencies* - These are the additional dependencies required by the direct dependencies in the config file. 
+Most packages depend on additional packages to work correctly. Packages define their dependencies as requirements, often a pacakage and 
+acceptable version constraint, and occassionally [a remote source](https://r-pkgs.org/dependencies-in-practice.html#depending-on-the-development-version-of-a-package).
 
 `rv` will resolve the complete dependency tree to ensure all direct and recursive dependency requirements are met before installing packages.
 
@@ -58,9 +60,9 @@ dependencies = [
 ```
 
 In this example, the tooling determines the requirements to be:
-    * From Config:
+    * Direct Dependencies:
         * `foo`
-    * From Packages/Repositories:
+    * Recursive Dependencies:
         * `bar >= 1.0.0`
 
 Since there is only one source, the resolution is `foo 1.0.0` and `bar 1.0.0` from `repo1`
@@ -81,8 +83,8 @@ Lets consider the following dependency and repository information:
     </FileTree>
     
     ###### Dependencies Requirements
-    * `foo 1.0.0` depends on `bar >= 1.0.0`
     * `foo 2.0.0` depends on `bar >= 2.0.0`
+    * `foo 1.0.0` depends on `bar >= 1.0.0`
     * `bar 1.0.0` and `bar 2.0.0` have no dependencies
 </Card>
 
@@ -105,14 +107,15 @@ dependencies = [
 ```
 
 Given this set-up, we have the following requirements:
-* From Config:
+* Direct Dependencies:
     * `foo`
-* From Packages/Repositories:
-    * `bar >= 1.0.0` if `foo 1.0.0`
+* Recursive Dependencies:
     * `bar >= 2.0.0` if `foo 2.0.0`
+    * `bar >= 1.0.0` if `foo 1.0.0`
 
-Since `repo1` is first in the config file, we prefer packages to be sourced from that repository. Since `foo 1.0.0` and `bar 1.0.0` can be found in `repo1`
-and they meet the requirements, we end up with the same resolution as Example 1: `foo 1.0.0` and `bar 1.0.0` from `repo1`
+Since `repo1` is first in the config file, we prefer packages to be sourced from that repository. If we try `foo 1.0.0` from `repo1`, we keep the requirement
+that `bar >= 1.0.0`, meaning `bar 1.0.0` can be also be sourced from `repo1`, the preferred repository. 
+Therefore, we end up with the same resolution as Example 1: `foo 1.0.0` and `bar 1.0.0` from `repo1`.
 
 ##### Example 2.1.2 - `repo2` first
 Lets now switch the repositories section so that `repo2` is first:
@@ -128,14 +131,14 @@ dependencies = [
 ```
 
 This set-up leads to the same requirements:
-* From Config:
+* Direct Dependencies:
     * `foo`
-* From Packages/Repositories:
-    * `bar >= 1.0.0` if `foo 1.0.0`
+* Recursive Dependencies:
     * `bar >= 2.0.0` if `foo 2.0.0`
+    * `bar >= 1.0.0` if `foo 1.0.0`
 
-But in this case, we give preference to `repo2`. Since `foo 2.0.0` and `bar 2.0.0` are in `repo2` and they meet the requirements, 
-the resolution is `foo 2.0.0` and `bar 2.0.0` from `repo2`.
+But in this case, we give preference to `repo2`. If we try `foo 2.0.0` from `repo2`, we keep the more restrictive requirement that `bar >= 2.0.0`, 
+but since the preferred repository `repo2` contains `bar 2.0.0` the resolution is `foo 2.0.0` and `bar 2.0.0` from `repo2`.
 
 #### Example 2.2 - Specific Repositories
 
@@ -153,14 +156,15 @@ dependencies = [
 ```
 
 With this configuration, we have an additional requirement for the source of `foo`:
-* From Config:
+* Direct Dependencies:
     * `foo` from `repo2`
-* From Packages/Repositories:
-    * `bar >= 1.0.0` if `foo 1.0.0`
+* Recursive Dependencies:
     * `bar >= 2.0.0` if `foo 2.0.0`
+    * `bar >= 1.0.0` if `foo 1.0.0`
 
-Since `foo 2.0.0` is in `repo2`, we must also meet the requirement of `bar >= 2.0.0`, therefore we override the preference that packages come from `repo1`
-and `bar 2.0.0` is install from `repo2`. Thus, the resolution ends up being the same as if `repo2` was first: `foo 2.0.0` and `bar 2.0.0` from `repo2`.
+Since `foo 2.0.0` is in `repo2`, we keep the more restrictive requirement of `bar >= 2.0.0`. 
+Source `bar 1.0.0` from the preferred repository `repo1` does not meet the requirement, therefore we override this preference and source `bar 2.0.0` from `repo2`.
+Thus, the resolution ends up being the same as if `repo2` was first: `foo 2.0.0` and `bar 2.0.0` from `repo2`.
 
 ##### Example 2.2.2 - Unresolvable
 Sometimes, resolution from a configuration is not possible. 
@@ -179,15 +183,16 @@ dependencies = [
 ```
 
 With this configuration, we have an additional requirement for the source of `bar`:
-* From Config:
+* Direct Dependencies:
     * `foo` from `repo2`
     * `bar` from `repo1`
-* From Packages/Repositories:
-    * `bar >= 1.0.0` if `foo 1.0.0`
+* Recursive Dependencies:
     * `bar >= 2.0.0` if `foo 2.0.0`
+    * `bar >= 1.0.0` if `foo 1.0.0`
 
-Since `foo 2.0.0` is in `repo2` and `bar 1.0.0` is in `repo1`, but we have the requirement that `bar >= 2.0.0` from `foo 2.0.0`, we cannot resolve
-this configuration.
+Since `foo 2.0.0` is in `repo2`, we keep the restrictive requirement that `bar >= 2.0.0`. The only way to meet that requirement would be to install
+`bar 2.0.0` from `repo2`, but that is in direct conflict with the conflict `bar` must be sourced from `repo1`. 
+Therefore, we cannot resolve this configuration.
 
 ## Lockfile
 
@@ -218,9 +223,24 @@ Lets consider the same package and repository information as [Example 2](#exampl
     * `bar 1.0.0` and `bar 2.0.0` have no dependencies
 </Card>
 
-For this example, we will have installed `bar` from `repo1`, generating the following lockfile:
+For this example, we will have installed `bar` from `repo1` using the following config file, generating the following lockfile:
 
-<Code code = {ex_3_lock} lang="toml" title = "rv.lock" />
+<Tabs>
+    <TabItem label="Lock File">
+        <Code code = {ex_3_lock} lang="toml" title = "rv.lock" />
+    </TabItem>
+    <TabItem label="Config File">
+    ```toml ins={3}
+    //rproject.toml
+    repositories = [
+        { alias = "repo1", url = "https://cran-like-repo.com/repo1" },
+    ]
+    dependencies = [
+        "bar"
+    ]
+    ```
+    </TabItem>
+</Tabs>
 
 #### Example 3.1 - New Repository
 We first will add `repo2` as the first repository in this config file excerpt:
@@ -239,7 +259,7 @@ dependencies = [
 Without the lockfile, the resolution would be simple, and similar to [Example 2.1](#example-21---order-matters), 
 `bar 2.0.0` would come from `repo2` since that repository comes first. But the presence of the lockfile adds additional
 requirements:
-* From Config:
+* Direct Dependencies:
     * `bar`
 * From Lockfile:
     * `bar 1.0.0` from `https://cran-like-repo.com/repo1`
@@ -262,7 +282,7 @@ dependencies = [
 ```
 
 Therefore, by removing the source `bar` is locked to, we remove the requirement that `bar` must come from `repo1`:
-* From Config:
+* Direct Dependencies:
     * `bar`
 * ~From Lockfile:~
     * ~`bar 1.0.0` from `https://cran-like-repo.com/repo1`~
@@ -272,8 +292,8 @@ Since the only requirement is that `bar` is installed and we have one source, th
 #### Example 3.3 - Additional Dependencies
 In this example, we'll add `foo` into the project in two different ways, one that is compatible with the locked version of `bar` and one that is not.
 
-##### Example 3.3.1 - Not Compatible Locked Version
-Lets return to [Example 3.1](#example-31---new-repository) and add `foo` to the dependencies field.
+##### Example 3.3.1 - Incompatible Locked Version
+Let's return to [Example 3.1](#example-31---new-repository) and add `foo` to the dependencies field.
 
 ```toml ins={8}
 //rproject.toml
@@ -288,12 +308,12 @@ dependencies = [
 ```
 
 Since `foo` is not within the lockfile, we consult the repository and get these requirements:
-* From Config:
+* Direct Dependencies:
     * `bar`
     * `foo`
 * From Lockfile:
     * `bar 1.0.0` from `repo1`
-* From Packages/Repositories:
+* Recursive Dependencies:
     * `bar >= 1.0.0` if `foo 1.0.0`
     * `bar >= 2.0.0` if `foo 2.0.0`
 
@@ -302,11 +322,16 @@ repository, `repo2`, we choose to use this version. This leads to conflicting re
 AND `bar >= 2.0.0` since `foo 2.0.0`. In this case, we prefer to ingore the lockfile requirement and resolve to `foo 2.0.0` and `bar 2.0.0` from `repo2`.
 
 ##### Example 3.3.2 - Compatible Locked Version
-Like we have discussed in [other sections](../../commands/project_status), one of the benefits is `rv` is the ability to resolve and see what will happen
-before it actually occurs. If ran an `rv plan` and saw the resolution from the [above example](#example-331---not-compatible-locked-version) was not the desired
-outcome, we can change our config file to ensure we get the same version of `bar` as is locked.
+Like we have discussed in [other sections](../../commands/project_status), one of the benefits of `rv` is the ability to resolve and see what will happen
+before it actually occurs. `rv plan` will resolve and show what would occur upon calling `rv sync`, as seen below.
 
-To do this, we can either:
+```shell
+$ rv plan
++ bar (2.0.0, binary from https://cran-like-repo.com/repo2)
++ foo (2.0.0, binary from https://cran-like-repo.com/repo2)
+```
+
+If the outcome is not desired, you can change the config file as needed. In this scenario, we can either:
     1. Make `repo1` the first repository
     2. Specify `foo` should be sourced from `repo1`
 
@@ -325,12 +350,12 @@ dependencies = [
 ```
 
 This configuration leads to the following requirements:
-* From Config:
+* Direct Dependencies:
     * `bar`
     * `foo` from `repo1`
 * From Lockfile:
     * `bar 1.0.0` from `repo1`
-* From Packages/Repositories:
+* Recursive Dependencies:
     * `bar >= 1.0.0` if `foo 1.0.0`
     * `bar >= 2.0.0` if `foo 2.0.0`
 
@@ -341,7 +366,7 @@ therefore the locked version of `bar 1.0.0` is compatible with the rest of the r
 In [Overriding Remotes](../../cookbook/remotes) and [`prefer_repositories_for`](../../config/additional_config/#prefer_repositories_for),
 we have discussed Remotes resolution, but we'll discuss further in this section. 
 
-Within a packages DESCRIPTION file, the Remotes field can be set to install a dependencies from a nonstandard place. This often occurs when developing one package
+Within a package's DESCRIPTION file, the Remotes field can be set to install a dependencies from a nonstandard place. This often occurs when developing one package
 alongside a development version of another. This is dicussed further in the [R package book](https://r-pkgs.org/dependencies-in-practice.html#sec-dependencies-nonstandard).
 
 `rv` always respects the Remotes field of a package, unless the [`prefer_repositories_for`](../../config/additional_config/#prefer_repositories_for) configuration is specified.
@@ -370,8 +395,8 @@ Additionally, we have the following new packages/versions:
     
     Below is an excerpt from the `baz` DESCRIPTION file:
     <Code code={ex_4_DESC} lang="txt" title="DESCRIPTION"/>
-    By not indicating a reference in the Remote, `rv` (and the default tooling) installs from the HEAD, which is main in this example.
-
+    > By not specifying a reference (tag/branch) on the remote, the latest commit on the default branch will be installed. 
+    > If `my-org/bar@dev` is specified, then the `dev` branch is installed.
 #### Example 4.1 - Installing from Remotes
 
 In this example, we will install `baz` from its git repo using the following config file excerpt:
@@ -387,16 +412,16 @@ dependencies = [
 ```
 
 To start resolution, `rv` consults the DESCRIPTION file of `baz` and ends up with the following requirements:
-* From Config:
+* Direct Dependencies:
     * `baz` from `my-org/baz@main`
-* From Packages/Repositories:
+* Recursive Dependencies:
     * `bar` from `my-org/baz`
     * `bar >= 2.0.0.9000`
 
 Since `bar` is specified as a remote in `baz`, the resolution is `baz 1.0.0.9000` from `my-org/baz@main` and `bar 2.0.0.9000` from `my-org/bar@main`.
 
 #### Example 4.2 - Satisfying Package Version in Repository
-The previous example was did not have multiple resolutions since `bar 2.0.0` from `repo2` did not meet the requirement set by the `baz 1.0.0.9000`,
+The previous example did not have multiple resolutions since `bar 2.0.0` from `repo2` did not meet the requirement set by the `baz 1.0.0.9000` DESCRIPTION file,
 
 We'll next look at what occurs if `bar 3.0.0` was released in `repo3`.
 
@@ -414,7 +439,7 @@ The package and repository info for `repo3` is as follows:
     * `bar 3.0.0` has no dependencies
 </Card>
 
-Lets we keep the same configuration file as [Example 4.1](#example-41---installing-from-remotes), but with `repo3` instead:
+Let's keep the same configuration file as [Example 4.1](#example-41---installing-from-remotes), but with `repo3` instead:
 
 ```toml ins={3}
 // rproject.toml
@@ -451,10 +476,10 @@ prefer_repositories_for = [
 ```
 
 The requirements now become:
-* From Config:
+* Direct Dependencies:
     * `baz` from `my-org@main`
     * **`bar` from repository**
-* From Packages/Repositories:
+* Recursive Dependencies:
     * **`bar` from `my-org/baz`**
     * `bar >= 2.0.0.9000`
 
