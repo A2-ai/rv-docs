@@ -45,7 +45,8 @@ export default defineConfig({
 					items: [
 						{ label: 'rvr - rv for R', slug: 'reference/rvr' },
 						{ label: 'Difference with renv', slug: 'reference/renv-difference'},
-						{ label: 'Resolution', slug: 'reference/resolution'}
+						{ label: 'Resolution', slug: 'reference/resolution'},
+						{ label: 'FAQ', slug: 'reference/faq'},
 					]
 				}
 			],
