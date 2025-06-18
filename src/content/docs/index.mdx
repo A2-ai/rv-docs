@@ -21,7 +21,7 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 
 
 # What is `rv`?
-`rv` is a R package manager, written in Rust, to help users install and manage R packages in a declarative, reproducivle, and fast way. 
+`rv` is a R package manager, written in Rust, to help users install and manage R packages in a declarative, reproducible, and fast way. 
 
 Similar to tools like [`uv`](https://github.com/astral-sh/uv), [`Cargo`](https://github.com/rust-lang/cargo), and [`npm`](https://github.com/npm/cli),
 `rv` uses a configuration and lock file to allow the flexibility to determine how, from where, and what is installed, 
@@ -37,25 +37,28 @@ like `install.packages()` and `pak::pkg_install()`, provide you with a mechanism
 but in an iterative, non-reproducible, and potentially unstable way.
 
 With `rv` you can:
-* Install a cohesive set of packages, ensuring each are compatible with the others in the project
+* Install a cohesive set of packages, ensuring each are compatible with the others in the project.
 * Specify options for individual packages, including which repository they must be sourced from, 
 whether to install the source or binary version, whether to install the `Suggested` packages, and many more.
 * Understand how your project's package enviroment will change _before_ any installations are performed.
 
-*And, we did it faster than the other tools too.*
+*And, we did it over 25x faster than the other tools too.*
 
 # Differences between `renv` and `rv`?
 `renv` utilizes the traditional R package installation pattern of iteratively installing packages,
 and then retroactively "snapshotting" the current state of the project library to generate the lockfile.
-This leads to two common issues that lead to a project not being fully reproducible:
+This leads to two common issues that make a project not fully reproducible:
 * The iterative installation leads to incompatible versions of packages being installed
 * Information about how a package was installed is lost by time a snapshot occurs
 
 `rv` solves these issues by resolving the full dependency tree ahead of time, avoiding the risk of incompatible package versions.
 Additionally, by locking at the time of installation, all of the information regarding the installation is captured, 
-instead of only after it is installed. This means
+instead of only after it is installed. 
 
-Additional information can be found in the [differences with `renv`](reference/renv-difference) section
+In summary, `rv`'s declarative design ensures users are provided with a working, fully reproducible enviroment in a way
+that's approachable enough for a new R user, but complex enough to fit an advanced developers need.
+
+Additional information can be found in the [differences with `renv`](reference/renv-difference) section.
 
 ## Sections
 
