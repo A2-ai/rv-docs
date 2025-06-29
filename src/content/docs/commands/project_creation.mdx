@@ -1,0 +1,171 @@
+---
+title: Project Creation
+description: Commands used to create or migrate to an rv project
+sidebar:
+    order: 2
+---
+
+import { Aside, Badge, Code, FileTree, Icon, Tabs, TabItem } from '@astrojs/starlight/components';
+import init_config from '../../../configs/init_cmd.toml?raw';
+import renv_config from '../../../configs/renv_migrate.toml?raw';
+import renv_resolved from '../../../configs/renv_resolved.toml?raw';
+
+`rv` is able to create new projects, initialize an existing project, or migrate a project from `renv`
+using `rv init` or `rv migrate renv`. The following sections will detail how to do so, the options to customize
+the outcome, and other helpful information.
+
+## From scratch
+`rv init` will initialize a new or existing project by:
+
+1. Setting up the project infrastructure, including the project library and activation scripts.
+2. Create a configuration file which is populated with the R version and repositories
+
+### Usage
+
+```shell
+rv init [OPTIONS] [project_directory]
+```
+
+#### Arguments
+
+* `project_directory` <Badge text="optional" variant="caution"/> - Creates an `rv` project at the directory specified
+
+    > Default: current directory (`./`)
+
+#### Options
+
+* `--r-version` - The R version is set to be the version found on the path by default. 
+Use this flag to set a custom version
+
+* `--no-repositories` - The repositories are set to what is found in the current R session,
+in `option("repos")`, by default. this flag sets the repositories field in the config file to blank.
+
+* `--add` - The dependency field is blank by default. This flag can be used to add dependencies you know 
+will be needed to the project immediately.
+
+* `--no_r_environment` - By default, `rv` creates a R enviroment `.rv` to enable `rv` to be called in R code 
+(see [rvr](../../reference/rvr) for more info). This flag will disable this R enviroment
+
+* `--force` - By default, if an `rproject.toml` exists within a directory already, `rv` will not overwrite the file.
+The flag will force the creation of a new config file.
+
+<Aside type="note" title = "Notes">
+* For RStudio/Positron users, the R version on the path does NOT always match the version set for the session. 
+Please use `--r-version` to ensure the correct R version is used for the project.
+
+* `rv` init will not automatically sync your project
+
+* For interactive R sessions, we recommended restarting R after initializing your project to ensure your 
+project is activated properly.
+</Aside>
+
+### Example
+
+Follow the tabs below to see the changes:
+
+<Tabs>
+    <TabItem label = "Command">
+    ```shell
+    rv init my_rv_project --r-version 4.5 --add tidyverse
+    ```
+    </TabItem>
+    <TabItem label = "File Structure">
+        <FileTree>
+            - my_rv_project
+                - rv/
+                    - library/
+                    - scripts/
+                        - activate.R set the library and repositories within R
+                        - rvr.R set-up `.rv`. See [rvr](../../reference/rvr) for more info
+                    - .gitignore ignores the library
+                - .Rprofile
+                - rproject.toml
+        </FileTree>
+    </TabItem>
+    <TabItem label = "Config File">
+        <Code code = {init_config} lang="toml" title = "rproject.toml" />
+    </TabItem>
+</Tabs>
+
+## From `renv`
+`rv migrate renv` will initialize an existing renv project by:
+1. Setting up the project infrastructure, including the project library and activation scripts.
+2. Migrating your renv.lock file to a `rv` config file.
+
+We cannot guarantee `rv` will migrate your renv project in its entirety, but any dependencies not fully migrated will be logged.
+
+### Common Migration Issues
+Some common reasons a dependency may not be able to be migrated
+
+####  Package not found
+If you get the error `Package not found in repositories`, this is because the repository source was not
+captured in the `renv.lock` repositories section. 
+
+In order to finish migrating this package, add the package to the `dependencies` field and a repository containg
+the package to the `repositories` section.
+
+#### Version not found
+If you get the error `Package version (1.2.3) not found in repositories Found version 2.3.4 in https://cran.rstudio.com`,
+this is because the package version of interest is in the archive and not in any of the repositories directly.
+
+This is the most common error when dealing with `renv` migration. Because `rv` does not support version pinning within the
+config file, versions not found to be sourced directly from the repository cannot be specified in the config file. 
+
+In order to finish migrating this package:
+1. If the exact version is required and can be found in a different repository, add both the dependency and repository to the config
+2. If the exact version is required and cannot be found in a different repository, use the [url dependency format](../../config/common_config#url) to directly access the archive
+3. If the exact version is not required, simply add the dependency to the config
+
+### Usage
+```shell
+rv migrate renv [OPTIONS] [renv_file]
+```
+
+#### Arguments
+* `renv_file` <Badge text="optional" variant="caution"/> - Path to a `renv` lock file to migrate to an `rv` config file in the current working directory.
+
+    > Default: `./renv.lock`
+
+#### Options
+* `--strict-r-version` - As discussed in the [config `r_version` section](../../config/common_config#r_version), the R version is recommended to only be listed as the major and minor
+components. This flag will include the patch in the R version if needed.
+
+* `--no_r_environment` - By default, `rv` creates a R enviroment `.rv` to enable `rv` to be called in R code 
+(see [rvr](../../reference/rvr) for more info). This flag will disable this R enviroment
+
+### Example
+
+Follow the tabs below to see the changes:
+
+<Tabs>
+    <TabItem label = "Command">
+        ```
+        $ rv migrate renv
+
+        renv.lock was migrated to rproject.toml with 3 unresolved packages: 
+            `cli` could not be resolved due to: 
+                "Package version (3.6.3) not found in repositories. Found version 3.6.5 in https://cran.rstudio.com"
+            `osinfo` could not be resolved due to: 
+                "Package not found in repositories."
+            `stringi` could not be resolved due to: 
+                "Package version (1.8.4) not found in repositories. Found version 1.8.7 in https://cran.rstudio.com"
+        ```
+    </TabItem>
+    <TabItem label = "Initial Config File">
+        `rv migrate renv` was able to successfully migrate `glue` since the version in CRAN at the time of migration 
+        is the same the locked version. Note, the repository field is listed explicitly on all migrated packages to
+        ensure reproducibility from `renv`.
+        <Code code = {renv_config} lang="toml" title = "rproject.toml" />
+    </TabItem>
+    <TabItem label = "Resolution">
+        * `cli` - CRAN does not contains this package version and we determined we cannot upgrade to the latest version. 
+        We add this package as a [URL dependency](../../config/common_config#url), pointing to the archive
+        * `osinfo` - CRAN does not contain this package, but A2-Ai's r-universe does. 
+        We will therefore add this repository and the package to the config.
+        * `stringi` - CRAN does not contains this package version, but we can upgrade to the latest version.
+        We will simply add this dependency.
+    </TabItem>
+    <TabItem label = "Resolved Config File">
+        <Code code = {renv_resolved} lang="toml" title = "rproject.toml" ins={[8, 13, 14, 15]}/>
+    </TabItem>
+</Tabs>

@@ -1,0 +1,12 @@
+# this config was migrated from renv.lock on 2025-05-22T00:00:00+00:00[Etc/UTC]
+[project]
+name = "renv-demo"
+r_version = "4.4"
+
+repositories = [
+    { alias = "CRAN", url = "https://cran.rstudio.com" },
+]
+
+dependencies = [
+    { name = "glue", repository = "CRAN" },
+]

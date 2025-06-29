@@ -1,0 +1,16 @@
+# this config was migrated from renv.lock on 2025-05-22T00:00:00+00:00[Etc/UTC]
+[project]
+name = "renv-demo"
+r_version = "4.4"
+
+repositories = [
+    { alias = "CRAN", url = "https://cran.rstudio.com" },
+    { alias = "a2-ai", url = "https://a2-ai.r-universe.dev" },
+]
+
+dependencies = [
+    { name = "glue", repository = "CRAN" },
+    { name = "cli", url = "https://cran.rstudio.com/src/contrib/Archive/cli/cli_3.6.3.tar.gz" },
+    "osinfo",
+    "stringi",
+]

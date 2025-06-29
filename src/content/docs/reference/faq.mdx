@@ -1,0 +1,51 @@
+---
+title: Frequently Asked Questions
+---
+
+import { Steps, FileTree } from '@astrojs/starlight/components';
+
+### Why can't I load my package? It is listed my config file and I ran `rv sync`
+
+If you are getting an error like the following:
+```ansi
+> library(dplyr)
+[31mError in `library()`:
+! there is no package called 'dplyr'
+Show Traceback[0m
+```
+
+It is likely because your `.libPaths()` is not set to the `rv` library path.
+
+There are a few reasons this can occur:
+
+<Steps>
+1. Your `.Rprofile` is not sourcing `rv/scripts/activate.R`
+    * Run restart R or run `source(".Rprofile")`. After either, you should see a message containing the following:
+        ```txt
+        rv libpaths active!
+        library paths: 
+            /Users/rv-user/projects/prism-pkg-pub/rv/library/4.4/arm64
+            /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library
+        ```
+    * Ensure `rv/scripts/activate.R` is present in your directory. If it is not, run `rv activate` and restart R.
+    * Ensure `source("rv/scripts/activate.R")` is present in your `.Rprofile`. If it is not, add it as the first line
+
+2. You are launching a background job from a subdirectory that does not contain a `.Rprofile`
+    
+    This often occurs when rendering a quarto document. In this case, add a `.Rprofile` to the subdirectory that sources the project root's `.Rprofile`.
+    
+    For example, if we want to render a quarto document from two subdirectories inside the project, we'd add a `.Rprofile` that contains `source("../../.Rprofile")`
+    <FileTree>
+    - my-project/
+        - scripts/
+            - reports
+                - my-report.qmd
+                - **.Rprofile** contains `source("../../.Rprofile")`
+        - rv/scripts
+            - activate.R
+        - .Rprofile contains `source("rv/scripts/activate.R")
+        - rproject.toml
+    </FileTree>
+
+</Steps>
+

@@ -1,0 +1,27 @@
+---
+title: rvr
+description: The .rv R environment and the R package
+template: doc
+tableOfContents: false
+hero:
+    tagline: "rv for R - The .rv R environment and (future) package"
+    image:
+        file: ../../../assets/images/rvr2.png
+---
+import { Image } from 'astro:assets';
+
+`rvr` is short for `rv` for R, and is the planned name for the R package. In the meantime, `rv` projects are initialized
+with a `.rv` R environment, allowing you to access select dependencies and objects directly from your console and R code.
+
+The `.rv` R environment is small in scope by design, encouraging small, allowing small, common tasks to be performed directly in R,
+but less common commands and options are kept only in the terminal to maintain simplicity.
+
+To access the `.rv` functions, you must be in an activated `rv` project and call `.rv`, followed by a `$`, then your command.
+
+The 4 commands available in `.rv` are:
+* `.rv$sync()`
+* `.rv$add(..., dry_run = FALSE)`, where `...` are the packages to add
+* `.rv$plan()`
+* `.rv$summary(json = FALSE)`
+
+Additionally, `.rv$config_path` will return the path to the config file in the project.

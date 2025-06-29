@@ -1,0 +1,168 @@
+---
+title: Overriding Remote Dependencies
+description: Overriding Remote dependencies in internal/development packages
+---
+
+import { Aside, Tabs, TabItem } from '@astrojs/starlight/components';
+
+Sometimes packages, especially internal or still in development, have dependencies which are not widely available.
+In this case, the package may contain the `Remotes` field to describe where the installer can find these dependencies.
+
+This is great for a lot of scenarios, for example, if you want to install the package, the installer just "knows" how to install a package.
+
+But there are scenarios where a package is contained in a repository and the installer, including `rv`, still prefers the remote dependency
+
+As discussed in [`prefer_repositories_for`](../../config/additional_config/#prefer_repositories_for), `rv` has the power to prefer repositories
+over remotes for explicit dependencies following the conditions mentioned.
+
+In this example, we will try to install the simple example package [`rv.remotes`](https://github.com/a2-ai/rv.remotes), 
+which depends on `tibble >= 3.2.0` and `glue >= 1.7.0`, but has remotes specified for those packages as well. First, we'll look at how the installation
+would occur without additional configuration. Then, we'll add the `prefer_repositories_for` field to the config file and see how it changes.
+
+## Without Additional Configuration
+
+In the initial configuration, we start with a repository which contains `tibble 3.2.1` and `glue 1.8.0` and try to install the `rv.remotes` package
+from the main git branch.
+
+```toml
+// rproject.toml
+[project]
+name = "remotes"
+r_version = "4.4"
+
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/2025-05-01" },
+]
+
+dependencies = [
+    { name = "rv.remotes", git = "https://github.com/a2-ai/rv.remotes", branch = "main" }
+]
+```
+
+We can see in the `summary` and `plan` that we will install `tibble` and `glue` from the specified git remote, and not from the repositories.
+
+<Tabs syncKey="plan-v-summary">
+    <TabItem label="rv summary">
+        ```txt {14, 15, 21, 22}
+        == System Information == 
+        OS: macos (arm64)
+        R Version: 4.4
+
+        Num Workers for Sync: 8 (8 cpus available)
+        Cache Location: /Users/wescummings/projects/rv-docs-playground/cache/rv
+
+        == Dependencies == 
+        Library: rv/library/4.4/arm64
+        Installed: 0/11
+
+        Package Sources: 
+        https://github.com/a2-ai/rv.remotes: 0/1 source packages
+        https://github.com/tidyverse/glue: 0/1 source packages
+        https://github.com/tidyverse/tibble: 0/1 source packages
+        PPM: 0/8 binary packages
+        
+
+        Installation Summary: 
+        https://github.com/a2-ai/rv.remotes: 1/1 in cache (1 to compile)
+        https://github.com/tidyverse/glue: 1/1 in cache (1 to compile)
+        https://github.com/tidyverse/tibble: 1/1 in cache (1 to compile)
+        PPM: 8/8 to download
+        
+        == Remote == 
+        PPM (https://packagemanager.posit.co/cran/latest): 19436 binary packages, 22462 source packages
+        ```
+    </TabItem>
+    <TabItem label="rv plan">
+        ```txt {2, 9}
+        + cli (3.6.5, binary from https://packagemanager.posit.co/cran/latest)
+        + glue (1.8.0, source from https://github.com/tidyverse/glue (commit: 48688f8f720a8f043b0f989b518a42bc32c410f0))
+        + lifecycle (1.0.4, binary from https://packagemanager.posit.co/cran/latest)
+        + magrittr (2.0.3, binary from https://packagemanager.posit.co/cran/latest)
+        + pillar (1.10.2, binary from https://packagemanager.posit.co/cran/latest)
+        + pkgconfig (2.0.3, binary from https://packagemanager.posit.co/cran/latest)
+        + rlang (1.1.6, binary from https://packagemanager.posit.co/cran/latest)
+        + rv.remotes (0.0.1, source from https://github.com/a2-ai/rv.remotes (branch: main))
+        + tibble (3.2.1.9054, source from https://github.com/tidyverse/tibble (commit: 880e9f3aa64d4d02f4fe427016d554a5d1a10c73))
+        + utf8 (1.2.5, binary from https://packagemanager.posit.co/cran/latest)
+        + vctrs (0.6.5, binary from https://packagemanager.posit.co/cran/latest)
+        ```
+    </TabItem>
+</Tabs>
+
+## With Configuration
+
+Since we have packages in the repository that meet the version requirements in `rv.remotes` DESCRIPTION file, we can prefer the repository for those packages.
+
+We do this by first adding it to the config file:
+
+```toml
+// rproject.toml
+[project]
+name = "remotes"
+r_version = "4.4"
+
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/2025-05-01" },
+]
+
+dependencies = [
+    { name = "rv.remotes", git = "https://github.com/a2-ai/rv.remotes", branch = "main" }
+]
+
+prefer_repositories_for = [
+    "glue",
+    "tibble",
+]
+```
+
+We can now see that `tibble` and `glue` are not sourced from GitHub anymore and are sourced from the repository as specified.
+
+<Tabs syncKey="plan-v-summary">
+    <TabItem label="rv summary">
+        ```txt {13, 17}
+        == System Information == 
+        OS: macos (arm64)
+        R Version: 4.4
+
+        Num Workers for Sync: 8 (8 cpus available)
+        Cache Location: /Users/wescummings/projects/rv-docs-playground/cache/rv
+
+        == Dependencies == 
+        Library: rv/library/4.4/arm64
+        Installed: 0/12
+
+        Package Sources: 
+        PPM: 0/11 binary packages
+        https://github.com/a2-ai/rv.remotes: 0/1 source packages
+
+        Installation Summary: 
+        PPM: 11/11 to download
+        https://github.com/a2-ai/rv.remotes: 1/1 in cache (1 to compile)
+
+        == Remote == 
+        PPM (https://packagemanager.posit.co/cran/latest): 19436 binary packages, 22462 source packages
+        ```
+    </TabItem>
+    <TabItem label="rv plan">
+        ```txt {3, 10}
+        + cli (3.6.5, binary from https://packagemanager.posit.co/cran/latest)
+        + fansi (1.0.6, binary from https://packagemanager.posit.co/cran/latest)
+        + glue (1.8.0, binary from https://packagemanager.posit.co/cran/latest)
+        + lifecycle (1.0.4, binary from https://packagemanager.posit.co/cran/latest)
+        + magrittr (2.0.3, binary from https://packagemanager.posit.co/cran/latest)
+        + pillar (1.10.2, binary from https://packagemanager.posit.co/cran/latest)
+        + pkgconfig (2.0.3, binary from https://packagemanager.posit.co/cran/latest)
+        + rlang (1.1.6, binary from https://packagemanager.posit.co/cran/latest)
+        + rv.remotes (0.0.1, source from https://github.com/a2-ai/rv.remotes (branch: main))
+        + tibble (3.2.1, binary from https://packagemanager.posit.co/cran/latest)
+        + utf8 (1.2.5, binary from https://packagemanager.posit.co/cran/latest)
+        + vctrs (0.6.5, binary from https://packagemanager.posit.co/cran/latest)
+        ```
+    </TabItem>
+</Tabs>
+
+<Aside type = "note" title = "An interesting side effect">
+For keen observers, you'll notice the `fansi` package is installed as well when `prefer_repositories_for` is set.
+This is because `fansi` was dropped as a dependencies in [`tibble v3.2.1.9022`](https://github.com/tidyverse/tibble/compare/v3.2.1.9021...v3.2.1.9022).
+Therefore, by installing an earlier version (`3.2.1`) from the repository, we do not have the dependency removed.
+</Aside>
