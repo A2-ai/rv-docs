@@ -8,7 +8,7 @@ export default defineConfig({
 	base: '/rv-docs',
 	integrations: [
 		starlight({
-			title: 'rv 0.6.2',
+			title: 'rv docs',
 			logo: {
 				src: './src/assets/images/rv-logo.png'
 			},
