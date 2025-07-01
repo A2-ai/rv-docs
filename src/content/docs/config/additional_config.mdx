@@ -53,7 +53,18 @@ how packages are installed.
 This is particularly useful if you want a common folder across projects or users.
 
 ```toml {1}
-library = "opt/R/4.4.1"
+library = "/opt/R/4.4.1"
+[project]
+...
+```
+
+### `lockfile_name`
+By default, `rv`s lockfile is named `rv.lock`. For most project situations having one configuration file
+corresponding to one lock file is ideal. But for some more complex situations or administrator tasks,
+having multiple configuration files, each corresponding to a unique lock file is required.
+
+```toml {1}
+lockfile_name = "specific_rv.lock"
 [project]
 ...
 ```

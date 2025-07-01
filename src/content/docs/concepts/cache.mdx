@@ -1,0 +1,151 @@
+---
+title: Caching
+description: How rv uses caching to increase speed
+---
+
+import { FileTree, Tabs, TabItem } from '@astrojs/starlight/components';
+
+`rv` caches aggessively to avoid re-compiling and re-downloading packages and repository databases that have already been used.
+
+Within the cache, each source is its own subdirectory to ensure the correct version of the correct package is installed. 
+
+Before going into details and how to change your caching behavior, lets first consider a quick example:
+
+#### Example
+
+In this example, we'll start with a config file, inspect the output of `rv cache`, and the file tree of the cache as well.
+
+<Tabs>
+    <TabItem label = "Config File">
+        In this config file, we have two CRAN-like repositories and one git repository.
+
+        ```toml
+        // rproject.toml
+        [project]
+        name = "rv-cache"
+        r_version = "4.5"
+
+        repositories = [
+            {alias = "PPM", url = "https://packagemanager.posit.co/cran/2025-01-01"},
+            {alias = "PPM_new", url = "https://packagemanager.posit.co/cran/latest"},
+        ]
+
+        dependencies = [
+            "fansi",
+            { name = "R6", repository = "PPM_new", force_source = true },
+            { name = "osinfo", git = "https://github.com/a2-ai/osinfo", branch = "main" },
+        ]
+        ```
+    </TabItem>
+    <TabItem label = "rv cache output">
+        The `rv cache` command outputs two things:
+        * The cache root - Which in this case is `/Users/rv-user/.cache/rv`
+        * Source subdirectories - This lists all the sources, and their corresponding subdirectories, 
+        from which packages come from. We will discuss the structure of these for each source type later on this page.
+
+        ```txt
+        $ rv cache
+        /Users/rv-user/.cache/rv
+        PPM (https://packagemanager.posit.co/cran/2025-01-01 -> c7c3cf56b9), path: /Users/rv-user/.cache/rv/c7c3cf56b9
+        PPM_new (https://packagemanager.posit.co/cran/latest -> f4780dda90), path: /Users/rv-user/.cache/rv/f4780dda90
+        Git: https://github.com/a2-ai/osinfo, source: /Users/rv-user/.cache/rv/git/8497b6723f, binary: /Users/rv-user/.cache/rv/8497b6723f/4.4/arm64/f815095b7b
+        ```
+    </TabItem>
+    <TabItem label = "Cache File Tree">
+        The cache file structure keeps each repository, R version, architecture, and os flavor (when applicable) isolated to ensure the proper package is 
+        installed each time. Also contained for each repository binary type is a `packages.bin` file, 
+        referred to as the [Repository Database](#repository-database), which contains an index of each package available in the CRAN-like repository.
+
+        <FileTree>
+            - /Users/rv-user/.cache/rv
+                - c7c3cf56b9
+                    - 4.5/arm64
+                        - fansi/1.0.6/
+                            - fansi The unzipped, compiled package
+                        - packages.bin
+                - f4780dda90
+                    - 4.5/arm64
+                        - R6/2.6.1
+                            - R6 The unzipped, compiled package
+                        - packages.bin
+                    - src
+                        - R6/2.6.1
+                            - R6 The unzipped, source package
+                - git
+                    - 8497b6723f Clone of the git repository to build
+                - 8497b6723f
+                    -4.5/arm64
+                        - f815095b7b Git commit sha, not package version
+                            - osinfo The unzipped, compiled package
+
+        </FileTree>
+    </TabItem>
+</Tabs>
+
+## Cache Location
+The cache follows the [XDG Base Directory Specification](https://specifications.freedesktop.org/basedir-spec/latest/) for Unix like systems 
+and the [Known Folder Locations](https://learn.microsoft.com/en-us/windows/win32/shell/known-folders) on Windows.
+Within the cache root, `rv` contains its cache within an `rv` subdirectory.
+
+The cache root can be tuned by setting the `XDG_CACHE_HOME` for Unix like systems and `%LOCALAPPDATA% for Windows.
+
+## Repository Database
+
+[CRAN-type repositories](https://cran.r-project.org/doc/manuals/R-admin.html#Setting-up-a-package-repository-1) use `PACKAGES` files that contain information about each package present in the repository for each package distribution 
+(i.e. source, Mac R 4.5, ubuntu-24.04 R 4.4, etc.). `rv` uses the source PACKAGES file and distribution's binary PACKAGES file
+to create a database for the repository.
+
+This database is cached and times out according to the `PKGCACHE_TIMEOUT` environment variable. This respects the standard
+set by the [`pkgcache` R package](https://github.com/r-lib/pkgcache?tab=readme-ov-file#package-environment-variables) 
+used by [`pak`](https://github.com/r-lib/pak/) and maintains the same default of 1 hr (3600 seconds).
+
+:::note
+Currently, `rv` does not have a direct way to refresh the cached repository databases. 
+To force update, you can set the `PKGCACHE_TIMEOUT` to 0 secs to expire the repository databases.
+
+For example, to check if the version you expect will be installed, you can run the following command
+```shell
+PKGCACHE_TIMEOUT=0 rv plan
+```
+:::
+
+## Packages
+
+Within the `rv` cache, each source is its own subdirectory 
+
+The details of package caching vary based on the [dependency type](../../config/common_config/#dependencies).
+
+#### Repository
+
+A repository cache is broken into two components: source and binaries. The binaries are also separated by their platform, 
+a combination of R version, OS, and architecture. `rv` will source a package to be installed into your library in the following ways:
+
+1. Use the binary package found in the cache
+2. Download the binary package from the resolved source (ignored if `force_source`)
+3. Compile the package from the cached source package
+4. Download the source package from the resolved source and compile
+
+:::caution
+Because the cache is used across projects, if a package was previously downloaded as a binary, a new project would use that downloaded binary,
+even if the `force_source` configuration is used. If the downloaded binary is corrupt or local compilation is preferred, 
+the binary entry in the cache needs to be removed manually, not simply by adding the `force_source` configuration for the package.
+
+CRAN does not guarantee that the binary available for each OS/R version will match the source version. Because of this, 
+`rv` includes the `force_source` flag to ensure the exposed source package version is installed.
+:::
+
+#### Git
+
+`rv` keeps a source clone of the git repository under the `git` subdirectory, but then also maintains compiled binaries based on the git commits used.
+
+#### Url
+
+`rv` keeps the downloaded package in cache, along with the compiled version if a source package. Upon re-installation of the package,
+the package is re-downloaded to ensure the contents match. If they do, the package currently in cache is retained, otherwise, the new version will take its place.
+
+#### Local
+
+`rv` does not keep local packages in the cache. Since the file is already on the system, keeping a cached version is not practical. `rv` does however keep track 
+of the hash of the source file within the compiled package in the library, therefore re-installation only occurs when the source file changes.
+
+

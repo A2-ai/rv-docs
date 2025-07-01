@@ -45,10 +45,17 @@ export default defineConfig({
 				{
 					label: 'Reference',
 					items: [
-						{ label: 'rvr - rv for R', slug: 'reference/rvr' },
-						{ label: 'Difference with renv', slug: 'reference/renv-difference'},
-						{ label: 'Resolution', slug: 'reference/resolution'},
 						{ label: 'FAQ', slug: 'reference/faq'},
+						{ label: 'Difference with renv', slug: 'reference/renv-difference' },
+						{ label: 'Environment Variables', slug: 'reference/env_vars' },
+						{ label: 'rvr - rv for R', slug: 'reference/rvr' },
+					]
+				},
+				{
+					label: 'Concepts',
+					items: [
+						{ label: 'Resolution', slug: 'concepts/resolution'},
+						{ label: 'Caching', slug: 'concepts/cache' },
 					]
 				}
 			],
