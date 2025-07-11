@@ -48,7 +48,7 @@ jobs:
           install_command: "bun install"
           build_directory: dist
       
-      - uses: guibranco/github-status-action-v2@latest
+      - uses: guibranco/github-status-action-v2@main
         with: 
           authToken: ${{secrets.GITHUB_TOKEN}}
           context: "netlify site deploy" 
