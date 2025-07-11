@@ -7,10 +7,15 @@ sidebar:
 
 import { Aside, Card, Badge } from '@astrojs/starlight/components';
 
-`rv` was designed to provide a simple, reproducible way to manage packages, 
-approachable even for those without a computer science background, 
-while still being powerful and flexible enough to fit the most demanding developer needs. 
-To help explore the configurations possible with `rv`, we will first go over the most common configuration options.
+One of the main benefits of using `rv` is the ability to declare the desired project state of the project, 
+instead of iteratively installing packages trying to reach the desired state. To accomplish this, 
+`rv` uses a configuration file, allowing users to declare which packages should be installed into the project,
+as well as how and from where they are installed. 
+
+This configuration file was designed to provide a simple, reproducible way to manage packages, approachable for those 
+without a computer science background, while being powerful and flexible enough to fit the most demanding developer needs.
+
+On this page, we will detail the most common configuration options.
 
 ## `name`
 The `name` field is not used by `rv`, but is required for your own organization. 
@@ -62,6 +67,7 @@ All dependencies types have the following configurations:
     > Default: `false`
 * `dependencies_only` <Badge text="optional" variant="caution"/>: Install only the dependencies of the package, not the package itself. Used primarily for package development. 
     > Default: `false`
+
 ### Repository
 The most common/default type. The packages will be sourced from the CRAN-like repositories listed 
 in the `repositories` section, preferring binaries unless otherwise specified.

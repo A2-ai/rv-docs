@@ -1,0 +1,18 @@
+---
+title: rv cache
+description: List the cache directories
+---
+
+Returns the absolute paths of the cache and which cache subdirectory corresponds to each repository used in the project.
+
+### Usage
+```shell
+rv cache [OPTIONS]
+```
+
+### Example
+```shell {1}
+% rv cache
+/Users/rv-user/.cache/rv
+PPM (https://packagemanager.posit.co/cran/latest -> f4780dda90), path: /Users/rv-user/.cache/rv/f4780dda90
+```

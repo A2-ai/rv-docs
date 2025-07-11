@@ -1,0 +1,72 @@
+---
+title: rv add
+description: Quickly add packages to the config and sync
+---
+
+import { Code, FileTree, Tabs, TabItem } from '@astrojs/starlight/components';
+
+Used to quickly add packages as [simple dependencies](../../config/common_confi#repository) to the config file, 
+then [sync](../sync). 
+
+Using this command may feel similar to `install.packages()` where packages can be iteratively added to the project, 
+just with the additional benefits of provided by `rv`.
+
+## Usage
+```shell
+rv add [packages]... [OPTIONS]
+```
+
+### Arguments
+* `packages` - A list of packages, space or comman separated, to add to the project
+
+### Options
+* `--dry-run` - No changes made to the config or the package library, only reports what would happen if the command was run.
+* `--no-sync` - Packages are added to the config file, but not sync'ed.
+
+## Example
+<Tabs>
+    <TabItem label = "Initial Config">
+        ```toml
+        //rproject.toml
+        [project]
+        name = "my project"
+        r_version = "4.4"
+
+        repositories = [
+            { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" }
+        ]
+
+        dependencies = [
+            "tibble",
+        ]
+        ```
+    </TabItem>
+    <TabItem label = "Command and Output">
+        ```shell {1}
+        % rv add dplyr
+        + dplyr (1.1.4, binary from https://packagemanager.posit.co/cran/latest) in 1ms
+        + generics (0.1.4, binary from https://packagemanager.posit.co/cran/latest) in 1ms
+        + R6 (2.6.1, binary from https://packagemanager.posit.co/cran/latest) in 1ms
+        + tidyselect (1.2.1, binary from https://packagemanager.posit.co/cran/latest) in 0ms
+        + withr (3.0.2, binary from https://packagemanager.posit.co/cran/latest) in 3ms
+        ```
+    </TabItem>
+    <TabItem label = "Updated Config">
+        ```toml ins={12}
+        // rproject.toml
+        [project]
+        name = "my project"
+        r_version = "4.4"
+
+        repositories = [
+            { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" }
+        ]
+
+        dependencies = [
+            "tibble",
+            "dplyr",
+        ]
+        ```
+    </TabItem>
+</Tabs>
+

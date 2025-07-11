@@ -1,0 +1,40 @@
+---
+title: rv sysdeps
+description: Returns a list of system dependencies for a project
+---
+
+Lists the system dependencies needed by the dependency tree. 
+Useful to programmatically determine the system dependencies required for a project.
+**Only available for Ubuntu and Debian.**
+
+### Usage
+```shell
+rv sysdeps [OPTIONS]
+```
+
+#### Options
+* `--only-absent` - Only show the dependencies not detected on the system
+* `--ignore <IGNORE>` - A list of dependencies to not list in the output. For example, if you install pandoc manually 
+without using the OS package manager and do not want to include in this output
+
+### Example
+The sysdeps for the `tidyverse`
+
+```shell {1}
+% rv sysdeps
+libcurl4-openssl-dev
+libfontconfig1-dev
+libfreetype6-dev
+libfribidi-dev
+libharfbuzz-dev
+libicu-dev
+libjpeg-dev
+libpng-dev
+libssl-dev
+libtiff-dev
+libx11-dev
+libxml2-dev
+make
+pandoc
+zlib1g-dev
+```
