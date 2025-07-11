@@ -7,9 +7,7 @@ on:
 
 # Allow this job to clone the repo and create a page deployment
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  statuses: write
 
 jobs:
   # build:
@@ -50,11 +48,10 @@ jobs:
           install_command: "bun install"
           build_directory: dist
       
-      # Creates a status check with link to preview
-      - name: Status check
-        uses: Sibz/github-status-action@v1.1.1
-        with:
-          authToken: ${{ secrets.GITHUB_TOKEN }}
-          context: Netlify preview
-          state: success
-          target_url: ${{ env.NETLIFY_PREVIEW_URL }}
+      - uses: guibranco/github-status-action-v2@latest
+        with: 
+          authToken: ${{secrets.GITHUB_TOKEN}}
+          context: "netlify site deploy" 
+          description: ${{ env.NETLIFY_PREVIEW_URL}}
+          state: 'success'
+          sha: ${{github.event.pull_request.head.sha || github.sha}}
