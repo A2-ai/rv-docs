@@ -6,11 +6,11 @@ sidebar:
 ---
 
 `rv` aims to provide users with commands that make package management and installation simple. To accomplish this,
-we have various "types" of commands which give users the ability to set-up and configure their projects, install packages, and
+we have various "types" of commands which give users the ability to set up and configure their projects, install packages, and
 inspect their project status and other information.
 
 ### Project Creation
-`rv` is able to create new project, initialize an existing project, and even migrate an existing `renv` project. 
+`rv` is able to create new projects, initialize an existing project, and even migrate an existing `renv` project. 
 All of which will set users up with a project that is immediately ready to install packages into isolated, project-specific libraries.
 
 #### Commands
@@ -41,11 +41,11 @@ intended to be manually edited, `rv` allows you to add simple dependencies to th
 In other R tools, packages are installed and any consequence is up to the user to reconcile. With `rv`, users have the
 ability to see what will happen before it occurs, giving power to the users to reconcile any potential issues without 
 changing your current project. This concept persists across other commands, like `add` and `upgrade`, 
-with the `--dry-run` command, but 2 commands to specifically indicate the status of the project, displaying the information
+with the `--dry-run` flag, but two commands to specifically indicate the status of the project, displaying the information
 differently depending on your needs.
 
 #### Commands
-* [`rv plan`](../plan) - Show the results if you were to run `rv sync`. A more granual view.
+* [`rv plan`](../plan) - Show the results if you were to run `rv sync`. A more granular view.
 * [`rv summary`](../summary) - Inspect your project on a global level, indicating information 
 like how packages need to be installed and the source of packages.
 
@@ -60,14 +60,14 @@ In addition to the project's status, `rv` provides commands to see information r
 * [`rv sysdeps`](../sysdeps) - List the system dependencies needed by the dependency tree (only for Ubuntu/Debian)
 
 ### Others
-A few other commands which can be used occassionally to effect your project:
+A few other commands which can be used occasionally to effect your project:
 
 #### Commands
 * [`rv activate`](../activation#rv-activate) - Activate a previously initialized rv project
 * [`rv deactivate`](../activation#rv-deactivate) - Deactivate an rv project
 
 ## Options
-Each command has the following global options unless otherwise noted on the commands page:
+Each command has the following global options:
 * `--config-file` - the path to a config file. Defaults to `rproject.toml` in the current directory. 
 Unless [otherwise specified in the config file](../../config/additional_config#library), the library will be synced at the level of the config file, 
 not in the working directory.

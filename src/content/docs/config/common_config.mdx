@@ -45,7 +45,7 @@ A list of CRAN-like repositories to fetch packages from. The order in which the 
 
 ##### Options:
 * `alias` - Used for self-organization and to specify a dependency to come from a certain repository.
-* `url` - The CRAN-like from which to fetch packages from. Linux binaries are automatically found using the [Posit Package Manager spec](https://docs.posit.co/rspm/admin/serving-binaries.html#using-linux-binary-packages).
+* `url` - The CRAN-like from which to fetch packages from. Linux binaries are auto-detected following the [Posit Package Manager spec](https://docs.posit.co/rspm/admin/serving-binaries.html#using-linux-binary-packages).
 * `force_source` <Badge text="optional" variant="caution"/> - Force all packages coming from the repository to be source. 
     > Default: `false`
 
@@ -90,14 +90,14 @@ dependencies = [
 ```
 
 <Aside type = "note">
-`rv` does not directly support the installation of specify package versions from repositories. 
+`rv` does not directly support the installation of specific package versions from repositories. 
 
 In a CRAN-like repository, only one package version is available at a time. 
-While this is often inconvient, CRAN also provides the guarantee that all packages are compatible with each other at any point in time.
+While this is often inconvenient, CRAN also provides the guarantee that all packages are compatible with each other at any point in time.
 
-In order to take advantage of this stability win, we have conciously decided to not add direct version support yet. 
+In order to take advantage of this stability win, we have consciously decided to not add direct version support yet. 
 Adding additional repository snapshot date(s) containing the versions of interest, and specifying the `repository` 
-arguement can often lead to the same result, in a more stable manner.
+argument can often lead to the same result, in a more stable manner.
 </Aside>
 
 ### Git

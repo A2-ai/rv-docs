@@ -78,6 +78,7 @@ export default defineConfig({
 				{
 					label: 'Cookbook',
 					items: [
+						{ label: 'Introduction', slug: 'cookbook/intro' },
 						{ 
 							label: 'Installing a Specific Version', 
 							items: [

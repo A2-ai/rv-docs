@@ -5,11 +5,11 @@ description: How rv uses caching to increase speed
 
 import { FileTree, Tabs, TabItem } from '@astrojs/starlight/components';
 
-`rv` caches aggessively to avoid re-compiling and re-downloading packages and repository databases that have already been used.
+`rv` cache's aggressively to avoid re-compiling and re-downloading packages and repository databases that have already been used.
 
 Within the cache, each source is its own subdirectory to ensure the correct version of the correct package is installed. 
 
-Before going into details and how to change your caching behavior, lets first consider a quick example:
+Before going into details and how to change your caching behavior, let's first consider a quick example:
 
 #### Example
 

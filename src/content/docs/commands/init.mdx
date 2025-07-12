@@ -25,16 +25,16 @@ rv init [project_directory] [OPTIONS]
 #### Options
 
 * `--r-version` - The R version is set to be the version found on the path by default. 
-Use this flag to set a custom version
+Use this flag to set a custom version.
 
 * `--no-repositories` - The repositories are set to what is found in the current R session,
-in `option("repos")`, by default. this flag sets the repositories field in the config file to blank.
+in `option("repos")`, by default. This flag leaves the repositories field in the config file blank.
 
 * `--add` - The dependency field is blank by default. This flag can be used to add dependencies you know 
-will be needed to the project immediately.
+will be needed to the project immediately. It does not sync these dependencies like [`rv add`](../add).
 
-* `--no_r_environment` - By default, `rv` creates a R enviroment `.rv` to enable `rv` to be called in R code 
-(see [rvr](../../reference/rvr) for more info). This flag will disable this R enviroment
+* `--no_r_environment` - By default, `rv` creates an R environment `.rv` to enable `rv` to be called in R code 
+(see [rvr](../../reference/rvr) for more info). This flag will disable this R environment.
 
 * `--force` - By default, if an `rproject.toml` exists within a directory already, `rv` will not overwrite the file.
 The flag will force the creation of a new config file.
@@ -45,7 +45,7 @@ Please use `--r-version` to ensure the correct R version is used for the project
 
 * `rv` init will not automatically sync your project
 
-* For interactive R sessions, we recommended restarting R after initializing your project to ensure your 
+* For interactive R sessions, we recommend restarting R after initializing your project to ensure your 
 project is activated properly.
 :::
 
@@ -66,7 +66,7 @@ Follow the tabs below to see the changes:
                     - library/
                     - scripts/
                         - activate.R set the library and repositories within R
-                        - rvr.R set-up `.rv`. See [rvr](../../reference/rvr) for more info
+                        - rvr.R set up `.rv`. See [rvr](../../reference/rvr) for more info
                     - .gitignore ignores the library
                 - .Rprofile
                 - rproject.toml

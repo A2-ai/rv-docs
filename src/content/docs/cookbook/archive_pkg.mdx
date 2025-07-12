@@ -6,7 +6,7 @@ description: Installing an older package version from the archive using the `url
 import { Aside } from '@astrojs/starlight/components';
 
 As mentioned in [the repository dependency configuration note](../../config/common_config/#repository),
-`rv` intentially does not have a way to specify a version directly. Instead, you can install a package 
+`rv` intentionally does not have a way to specify a version directly. Instead, you can install a package 
 using the [`url` configuration](../../config/common_config/#url) to install a package from the archive
 or add an older snapshot and specify an out of order repositories, as seen in the
 [older snapshot example](../cookbook/older_snapshot).
@@ -45,7 +45,7 @@ Below is the result of syncing the project. Notice, all other packages (includin
 ```
 
 <Aside type="note">
-Add a package from the archive should be done with caution. CRAN's guarantee for package compatibility is lost by adding a package from a 
+Adding a package from the archive should be done with caution. CRAN's guarantee for package compatibility is lost by adding a package from a 
 different moment in time. Understand what other dependencies rely on the package you are changing and what behavior may change before
 mixing packages.
 </Aside>

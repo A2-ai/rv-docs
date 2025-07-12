@@ -5,7 +5,7 @@ description: Configure the repositories section of the config file
 import { Tabs, TabItem, Icon } from '@astrojs/starlight/components';
 
 Used to add, replace, or remove repositories from the configuration file, 
-while maintaining the files formatting and comments.
+while maintaining the file's formatting and comments.
 
 ## Usage
 ```shell
@@ -50,7 +50,7 @@ dependencies = [
 ### `--first`: Add a repository as the _first_ entry
 
 ```bash
-rv configure repository --alias "PPM_latest" --url "https://packagemanager.posit.co/cran/latest" --first
+rv configure repositories --alias "PPM_latest" --url "https://packagemanager.posit.co/cran/latest" --first
 ```
 
 <Tabs syncKey="configure">
@@ -80,7 +80,7 @@ rv configure repository --alias "PPM_latest" --url "https://packagemanager.posit
 ### `--last`: Add a repository as the _last_ entry
 
 ```bash
-rv configure repository --alias "bioconductor" --url "https://bioconductor.org/packages/3.18/bioc" --last
+rv configure repositories --alias "bioconductor" --url "https://bioconductor.org/packages/3.18/bioc" --last
 ```
 
 <Tabs syncKey="configure">
@@ -110,7 +110,7 @@ rv configure repository --alias "bioconductor" --url "https://bioconductor.org/p
 ### `--before`: Add a repository before an existing one
 
 ```bash
-rv configure repository --alias "PPM_2024_06" --url "https://packagemanager.posit.co/cran/2024-06-01" --before PPM
+rv configure repositories --alias "PPM_2024_06" --url "https://packagemanager.posit.co/cran/2024-06-01" --before PPM
 ```
 
 <Tabs syncKey="configure">
@@ -140,7 +140,7 @@ rv configure repository --alias "PPM_2024_06" --url "https://packagemanager.posi
 ### `--after`: Add a repository, with `force_source`, after an existing one
 
 ```bash
-rv configure repository --alias "PPM_2024_06" --url "https://packagemanager.posit.co/cran/2024-06-01" --force_source --after CRAN
+rv configure repositories --alias "PPM_2024_06" --url "https://packagemanager.posit.co/cran/2024-06-01" --force_source --after CRAN
 ```
 
 <Tabs syncKey="configure">
@@ -151,7 +151,7 @@ rv configure repository --alias "PPM_2024_06" --url "https://packagemanager.posi
         name = "configure"
         repositories = [
             { alias = "CRAN", url = "https://cran.r-project.org" },
-            { alias = "PPM_2024", url = "https://packagemanager.posit.co/cran/2024-06-01", force_source = true },
+            { alias = "PPM_2024_06", url = "https://packagemanager.posit.co/cran/2024-06-01", force_source = true },
             { alias = "PPM", url = "https://packagemanager.posit.co/cran/2025-01-01" },
         ]
         dependencies = [
@@ -170,7 +170,7 @@ rv configure repository --alias "PPM_2024_06" --url "https://packagemanager.posi
 ### `--replace`: Replace an existing repository
 
 ```bash
-rv configure repository --alias "PPM_latest" --url "https://packagemanager.posit.co/cran/2024-01-01" --replace PPM
+rv configure repositories --alias "PPM_latest" --url "https://packagemanager.posit.co/cran/latest" --replace PPM
 ```
 
 <Tabs syncKey="configure">
@@ -199,7 +199,7 @@ rv configure repository --alias "PPM_latest" --url "https://packagemanager.posit
 ### `--remove`: Remove a repository
 
 ```bash
-rv configure repository --remove "CRAN"
+rv configure repositories --remove "CRAN"
 ```
 
 <Tabs syncKey="configure">
@@ -227,7 +227,7 @@ rv configure repository --remove "CRAN"
 ### `--clear`: Clear all repositories
 
 ```bash
-rv configure repository --clear
+rv configure repositories --clear
 ```
 
 <Tabs syncKey="configure">
@@ -257,7 +257,7 @@ rv configure repository --clear
 #### Duplicate alias
 **Command:**
 ```bash
-rv configure repository --alias "CRAN" --url = "https://cran.rstudio.com" --first
+rv configure repositories --alias "CRAN" --url = "https://cran.rstudio.com" --first
 ```
 
 **Output:**
@@ -268,7 +268,7 @@ Repository with alias 'CRAN' already exists
 #### Invalid URL Error
 **Command:**
 ```bash
-rv configure repository --alias "invalid" --url "not-a-valid-url" --first
+rv configure repositories --alias "invalid" --url "not-a-valid-url" --first
 ```
 
 **Output:**

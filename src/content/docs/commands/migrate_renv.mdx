@@ -18,7 +18,7 @@ Some common reasons a dependency may not be able to be migrated
 If you get the error `Package not found in repositories`, this is because the repository source was not
 captured in the `renv.lock` repositories section. 
 
-In order to finish migrating this package, add the package to the `dependencies` field and a repository containg
+In order to finish migrating this package, add the package to the `dependencies` field and a repository containing
 the package to the `repositories` section.
 
 ### Version not found
@@ -47,8 +47,8 @@ rv migrate renv [OPTIONS] [renv_file]
 * `--strict-r-version` - As discussed in the [config `r_version` section](../../config/common_config#r_version), the R version is recommended to only be listed as the major and minor
 components. This flag will include the patch in the R version if needed.
 
-* `--no_r_environment` - By default, `rv` creates a R enviroment `.rv` to enable `rv` to be called in R code 
-(see [rvr](../../reference/rvr) for more info). This flag will disable this R enviroment
+* `--no_r_environment` - By default, `rv` creates a R environment `.rv` to enable `rv` to be called in R code 
+(see [rvr](../../reference/rvr) for more info). This flag will disable this R environment
 
 ## Example
 

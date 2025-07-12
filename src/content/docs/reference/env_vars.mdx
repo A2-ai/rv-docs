@@ -1,6 +1,6 @@
 ---
 title: Environment Variables
-description: Environemt variables used/respected in rv
+description: Environment variables used/respected in rv
 ---
 
 `rv` respects existing environment variables and introduces a few as well. This page contains information about 
@@ -16,17 +16,17 @@ It is in seconds, and defaults to 3600, or 1 hour, and corresponds to the `PKGCA
 (especially in cloud computing environments) setting a cap on the number of CPUs to use may be useful.
 
 ## `RV_NO_CHECK_OPEN_FILE`
-On certian file systems, particularly NFS, packages which are loaded in R are locked and can not be removed until they are unloaded. `rv` by default checks
+On certain file systems, particularly NFS, packages which are loaded in R are locked and can not be removed until they are unloaded. `rv` by default checks
 if any of the packages in the library are open (or in use) and does not allow a sync if any of those packages need to be removed. To override this behavior,
 this variable can be set to `true` or `1` to not check for open files if the file system is known to not have these issues.
 
 ## `RV_SYS_REQ_URL`
-For certain linux distributions, currently Ubuntu and Debian, `rv` will check if the system dependencies for packages are found. To determine each package's system dependencies, 
+For certain Linux distributions, currently Ubuntu and Debian, `rv` will check if the system dependencies for packages are found. To determine each package's system dependencies, 
 `rv` consults [Posit Package Manager's api](https://packagemanager.posit.co/__api__/repos/cran/sysreqs) by default. This environment variable can be used
 to tune where `rv` determines the system dependencies from.
 
 ## `RV_SYS_DEPS_CHECK_IN_PATH`
-For certain linux distributions, currently Ubuntu and Debian, `rv` will check if the system dependencies for packages are found. To check if the system dependencies
+For certain Linux distributions, currently Ubuntu and Debian, `rv` will check if the system dependencies for packages are found. To check if the system dependencies
 required for this project are installed, `rv` consults the [`dpkg` database](https://debian-handbook.info/browse/da-DK/stable/sect.manipulating-packages-with-dpkg.html#sect.dpkg-list),
 a list of [known dependencies on the path](#known-path-dependencies), and any dependencies set by this environment variable in a comma separated list.
 
@@ -35,4 +35,4 @@ a list of [known dependencies on the path](#known-path-dependencies), and any de
 
 ## `RV_LINK_MODE`
 `rv` aggressively [cache's](../../concepts/cache) in order to avoid re-compiling and re-downloading pages. Additionally,
-caching minimizes the disk space used by installed packages. By default, `rv` will hardlink for Windows and Linux and ]copy on write](https://en.wikipedia.org/wiki/Copy-on-write) for Mac
+caching minimizes the disk space used by installed packages. By default, `rv` will hard-link for Windows and Linux and [copy on write](https://en.wikipedia.org/wiki/Copy-on-write) for macOS.
