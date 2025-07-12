@@ -3,53 +3,61 @@ name: Deploy Preview to Netlify
 on:
   # Trigger the workflow every time you push to the `main` branch
   # Using a different branch name? Replace `main` with your branch’s name
-  push:
-
-# Allow this job to clone the repo and create a page deployment
+  pull_request:
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  statuses: write
+  contents: write
+  issues: write
+  deployments: write
+  pull-requests: write
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout your repository using git
-        uses: actions/checkout@v4
-      - name: Install, build, and upload your site
-        uses: withastro/action@v3
-        # with:
-          # path: . # The root location of your Astro project inside the repository. (optional)
-          # node-version: 20 # The specific version of Node that should be used to build your site. Defaults to 20. (optional)
-          # package-manager: pnpm@latest # The Node package manager that should be used to install dependencies and build your site. Automatically detected based on your lockfile. (optional)
-      - name: Upload build files
-        uses: actions/upload-artifact@v4
-        with:
-          name: build
-          path: dist
   deploy:
-    needs: build
+    #needs: build
     runs-on: ubuntu-latest
     environment:
     steps:
-      - name: Download static web files
-        uses: actions/download-artifact@v4
-        with:
-          name: build
-      # Sets the branch name as environment variable
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
       - uses: nelonoel/branch-name@v1.0.1
-      - uses: jsmrcaga/action-netlify-deploy@master
+      - run: bun install 
+      - name: build
+        run: bun run build
+      # since the site is currently on github pages on /rv-docs we need
+      # to shift the dir structure around on netlify to also represent that subpath
+      - name: setup
+        run: |
+          mkdir build
+          mv dist build
+          mv build/dist build/rv-docs
+          cat > build/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <meta http-equiv="refresh" content="0; url=./rv-docs/">
+              <title>Redirecting...</title>
+          </head>
+          <body>
+              <p>Redirecting to documentation...</p>
+              <p>If you are not redirected automatically, <a href="./rv-docs/">click here</a>.</p>
+          </body>
+          </html>
+          EOF
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v3.0
         with:
+          publish-dir: './build'
+          production-branch: main
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions"
+          enable-pull-request-comment: true
+          enable-commit-comment: true
+          overwrites-pull-request-comment: true
+          fails-without-credentials: true
+        env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          deploy_alias: ${{ env.BRANCH_NAME }}
-      
-      # Creates a status check with link to preview
-      - name: Status check
-        uses: Sibz/github-status-action@v1.1.1
-        with:
-          authToken: ${{ secrets.GITHUB_TOKEN }}
-          context: Netlify preview
-          state: success
-          target_url: ${{ env.NETLIFY_PREVIEW_URL }}
+        timeout-minutes: 1      
+
