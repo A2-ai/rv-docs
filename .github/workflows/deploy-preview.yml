@@ -47,14 +47,42 @@ jobs:
           mkdir build
           mv dist build
           mv build/dist build/rv-docs
-      - uses: jsmrcaga/action-netlify-deploy@master
+          cat > build/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <meta http-equiv="refresh" content="0; url=./rv-docs/">
+              <title>Redirecting...</title>
+          </head>
+          <body>
+              <p>Redirecting to documentation...</p>
+              <p>If you are not redirected automatically, <a href="./rv-docs/">click here</a>.</p>
+          </body>
+          </html>
+          EOF
+      # - uses: jsmrcaga/action-netlify-deploy@master
+      #   with:
+      #     NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      #     NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      #     deploy_alias: ${{ env.BRANCH_NAME }}
+      #     build_command: "echo already built"
+      #     install_command: "echo already installed"
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v3.0
         with:
+          publish-dir: './build'
+          production-branch: main
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions"
+          enable-pull-request-comment: false
+          enable-commit-comment: true
+          overwrites-pull-request-comment: true
+        env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-          deploy_alias: ${{ env.BRANCH_NAME }}
-          build_command: "echo already built"
-          install_command: "echo already installed"
-      
+        timeout-minutes: 1      
       - name: Status check
         uses: Sibz/github-status-action@v1.1.1
         with:
