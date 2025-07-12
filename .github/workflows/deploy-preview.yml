@@ -12,38 +12,19 @@ permissions:
   pull-requests: write
 
 jobs:
-  # build:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout your repository using git
-  #       uses: actions/checkout@v4
-  #     - name: Install, build, and upload your site
-  #       uses: withastro/action@v3
-  #       # with:
-  #         # path: . # The root location of your Astro project inside the repository. (optional)
-  #         # node-version: 20 # The specific version of Node that should be used to build your site. Defaults to 20. (optional)
-  #         # package-manager: pnpm@latest # The Node package manager that should be used to install dependencies and build your site. Automatically detected based on your lockfile. (optional)
-  #     - name: Upload build files
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         name: build
-  #         path: dist
   deploy:
     #needs: build
     runs-on: ubuntu-latest
     environment:
     steps:
-      # - name: Download static web files
-      #   uses: actions/download-artifact@v4
-      #   with:
-      #     name: build
-      # Sets the branch name as environment variable
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
       - uses: nelonoel/branch-name@v1.0.1
       - run: bun install 
       - name: build
         run: bun run build
+      # since the site is currently on github pages on /rv-docs we need
+      # to shift the dir structure around on netlify to also represent that subpath
       - name: setup
         run: |
           mkdir build
@@ -64,13 +45,6 @@ jobs:
           </body>
           </html>
           EOF
-      # - uses: jsmrcaga/action-netlify-deploy@master
-      #   with:
-      #     NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-      #     NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-      #     deploy_alias: ${{ env.BRANCH_NAME }}
-      #     build_command: "echo already built"
-      #     install_command: "echo already installed"
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v3.0
         with:
@@ -86,10 +60,4 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         timeout-minutes: 1      
-      # - name: Status check
-      #   uses: Sibz/github-status-action@v1.1.1
-      #   with:
-      #     authToken: ${{ secrets.GITHUB_TOKEN }}
-      #     context: Netlify preview
-      #     state: success
-      #     target_url: ${{ env.NETLIFY_PREVIEW_URL }}
+
