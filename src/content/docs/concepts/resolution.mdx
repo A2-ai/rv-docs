@@ -324,7 +324,7 @@ repository, `repo2`, we choose to use this version. This leads to conflicting re
 AND `bar >= 2.0.0` since `foo 2.0.0`. In this case, we prefer to ignore the lockfile requirement and resolve to `foo 2.0.0` and `bar 2.0.0` from `repo2`.
 
 ##### Example 3.3.2 - Compatible Locked Version
-Like we have discussed in [other sections](../../commands/project_status), one of the benefits of `rv` is the ability to resolve and see what will happen
+Like we have discussed in [other sections](../../commands/intro#project-status), one of the benefits of `rv` is the ability to resolve and see what will happen
 before it actually occurs. `rv plan` will resolve and show what would occur upon calling `rv sync`, as seen below.
 
 ```shell

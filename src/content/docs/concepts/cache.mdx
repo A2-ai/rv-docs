@@ -87,7 +87,7 @@ The cache follows the [XDG Base Directory Specification](https://specifications.
 and the [Known Folder Locations](https://learn.microsoft.com/en-us/windows/win32/shell/known-folders) on Windows.
 Within the cache root, `rv` contains its cache within an `rv` subdirectory.
 
-The cache root can be tuned by setting the `XDG_CACHE_HOME` for Unix like systems and `%LOCALAPPDATA% for Windows.
+The cache root can be tuned by setting the `XDG_CACHE_HOME` for Unix like systems and `%LOCALAPPDATA%` for Windows.
 
 ## Repository Database
 
@@ -95,9 +95,7 @@ The cache root can be tuned by setting the `XDG_CACHE_HOME` for Unix like system
 (i.e. source, Mac R 4.5, ubuntu-24.04 R 4.4, etc.). `rv` uses the source PACKAGES file and distribution's binary PACKAGES file
 to create a database for the repository.
 
-This database is cached and times out according to the `PKGCACHE_TIMEOUT` environment variable. This respects the standard
-set by the [`pkgcache` R package](https://github.com/r-lib/pkgcache?tab=readme-ov-file#package-environment-variables) 
-used by [`pak`](https://github.com/r-lib/pak/) and maintains the same default of 1 hr (3600 seconds).
+This database is cached and times out according to the [`PKGCACHE_TIMEOUT`](../../reference/env_vars) environment variable (default 1 hour). 
 
 :::note
 Currently, `rv` does not have a direct way to refresh the cached repository databases. 
