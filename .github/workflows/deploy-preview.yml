@@ -46,7 +46,7 @@ jobs:
         run: |
           mkdir build
           mv dist build
-          mv build/dist dist/rv-docs
+          mv build/dist build/rv-docs
       - uses: jsmrcaga/action-netlify-deploy@master
         with:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
