@@ -107,13 +107,14 @@ Used to install packages from a git repository from either a branch, tag, or com
 * `name` - The name of the package. Must match the name of the package found in the repository.
 * `git` - The git repository url.
 * `tag` or `commit` or `branch` - Must specify one. `commit` must be the full hash.
-* `path` <Badge text="optional" variant="caution"/> - a path to a subdirectory inside of the repository containing the R package
+* `directory` <Badge text="optional" variant="caution"/> - a (sub)directory inside of the repository containing the R package, 
+if the package is not at the respository root
     > Default: `None`
 ```toml
 dependencies = [
     { name = "git-tag", git = "https://github.com/a2-ai/git-tag", tag = "v1.0.0" },
     { name = "git-commit", git = "https://github.com/a2-ai/git-commit", commit = "bc50e550e432c3c620714f30dd59115801f89995" },
-    { name = "git-branch", git = "https://github.com/a2-ai/git-branch", branch = "main", path = "r" },
+    { name = "git-branch", git = "https://github.com/a2-ai/git-branch", branch = "main", directory = "r" },
 ]
 ```
 
