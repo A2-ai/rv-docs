@@ -16,13 +16,13 @@ As discussed in other sections, `rv` is a declarative package manager, which mea
 ## Dependencies
 `rv` has two "types" of dependencies:
 
-* ***Direct** Dependencies* - These are the packages explicity stated in the [dependencies section](../../config/common_config/#dependencies)
+* ***Direct** Dependencies* - These are the packages explicitly stated in the [dependencies section](../../config/common_config/#dependencies)
  of your config file. Direct dependencies can have [additional configurations](../../config/common_config/#dependencies), 
  which determines the initial list of requirements.
 
 * ***Recursive** Dependencies* - These are the additional dependencies required by the direct dependencies in the config file. 
-Most packages depend on additional packages to work correctly. Packages define their dependencies as requirements, often a pacakage and 
-acceptable version constraint, and occassionally [a remote source](https://r-pkgs.org/dependencies-in-practice.html#depending-on-the-development-version-of-a-package).
+Most packages depend on additional packages to work correctly. Packages define their dependencies as requirements, often a package and 
+acceptable version constraint, and occasionally [a remote source](https://r-pkgs.org/dependencies-in-practice.html#depending-on-the-development-version-of-a-package).
 
 `rv` will resolve the complete dependency tree to ensure all direct and recursive dependency requirements are met before installing packages.
 
@@ -33,7 +33,7 @@ Which means to install different versions, different sources must be specified.
 We'll see this in the following examples:
 
 ### Example 1 - Single Repository
-Lets consider the following dependency and repository information:
+Let's consider the following dependency and repository information:
 
 <Card title = "Package and Repository Information">
     ###### Repositories Content
@@ -70,7 +70,7 @@ Since there is only one source, the resolution is `foo 1.0.0` and `bar 1.0.0` fr
 ### Example 2 - Two Repositories
 Example 1 was simple, `foo` and `bar` MUST be sourced from `repo` since it is the only option. But `rv` allows for multiple repositories.
 
-Lets consider the following dependency and repository information:
+Let's consider the following dependency and repository information:
 <Card title = "Package and Repository Information">
     ###### Repositories Content
     <FileTree>
@@ -114,11 +114,11 @@ Given this set-up, we have the following requirements:
     * `bar >= 1.0.0` if `foo 1.0.0`
 
 Since `repo1` is first in the config file, we prefer packages to be sourced from that repository. If we try `foo 1.0.0` from `repo1`, we keep the requirement
-that `bar >= 1.0.0`, meaning `bar 1.0.0` can be also be sourced from `repo1`, the preferred repository. 
+that `bar >= 1.0.0`, meaning `bar 1.0.0` can also be sourced from `repo1`, the preferred repository. 
 Therefore, we end up with the same resolution as Example 1: `foo 1.0.0` and `bar 1.0.0` from `repo1`.
 
 ##### Example 2.1.2 - `repo2` first
-Lets now switch the repositories section so that `repo2` is first:
+Let's now switch the repositories section so that `repo2` is first:
 ```toml {3}
 //rproject.toml
 repositories = [ 
@@ -143,7 +143,7 @@ but since the preferred repository `repo2` contains `bar 2.0.0` the resolution i
 #### Example 2.2 - Specific Repositories
 
 ##### Example 2.2.1 - Resolvable
-Lets return to [Example 2.1.1](#example-211---repo1-first) where `repo1` is first, but this time ensuring I get `foo 2.0.0` from `repo2`:
+Let's return to [Example 2.1.1](#example-211---repo1-first) where `repo1` is first, but this time ensuring I get `foo 2.0.0` from `repo2`:
 ```toml {7}
 //rproject.toml
 repositories = [ 
@@ -196,16 +196,18 @@ Therefore, we cannot resolve this configuration.
 
 ## Lockfile
 
-In addition to the configuration file, `rv` keeps a lockfile to track the package version and source to recreate the enviroment.
-When a lockfile is present, the source tracked in the lockfile takes precedent over the configuration file. The few exceptions are:
+In addition to the configuration file, `rv` keeps a lockfile to track the package version and source to recreate the environment.
+When a lockfile is present, the source tracked in the lockfile takes precedence over the configuration file. The few exceptions are:
 * The config file no longer contains the repository the package is locked as.
 * The dependency has a different source specified, or the specified source is removed.
+
+If a lockfile is not needed for your project, set the `[use_lockfile]`(../../config/additional_config#use_lockfile) config option to false.
 
 The following examples will show how the lockfile works:
 
 ### Example 3 - Locked Package
 
-Lets consider the same package and repository information as [Example 2](#example-2---two-repositories):
+Let's consider the same package and repository information as [Example 2](#example-2---two-repositories):
 <Card title = "Package and Repository Information">
     ###### Repositories Content
     <FileTree>
@@ -267,7 +269,7 @@ requirements:
 Since all requirements are met by using the version in the lockfile, the resolution ends up being `bar 1.0.0` from `repo1`.
 
 #### Example 3.2 - Dropped Repository
-Lets now remove `repo1` from the config file. By removing the repository from the config file, you are communicating to `rv` packages should not
+Let's now remove `repo1` from the config file. By removing the repository from the config file, you are communicating to `rv` packages should not
 be sourced from `repo1` anymore.
 
 ```toml del={4}
@@ -319,14 +321,14 @@ Since `foo` is not within the lockfile, we consult the repository and get these 
 
 Since `repo2` is listed first, we prefer packages to be sourced from that repository. Since `foo 2.0.0` meets all requirements and comes from the preferred
 repository, `repo2`, we choose to use this version. This leads to conflicting requirements on `bar` since `bar 1.0.0` cannot come from `repo1` 
-AND `bar >= 2.0.0` since `foo 2.0.0`. In this case, we prefer to ingore the lockfile requirement and resolve to `foo 2.0.0` and `bar 2.0.0` from `repo2`.
+AND `bar >= 2.0.0` since `foo 2.0.0`. In this case, we prefer to ignore the lockfile requirement and resolve to `foo 2.0.0` and `bar 2.0.0` from `repo2`.
 
 ##### Example 3.3.2 - Compatible Locked Version
-Like we have discussed in [other sections](../../commands/project_status), one of the benefits of `rv` is the ability to resolve and see what will happen
+Like we have discussed in [other sections](../../commands/intro#project-status), one of the benefits of `rv` is the ability to resolve and see what will happen
 before it actually occurs. `rv plan` will resolve and show what would occur upon calling `rv sync`, as seen below.
 
 ```shell
-$ rv plan
+% rv plan
 + bar (2.0.0, binary from https://cran-like-repo.com/repo2)
 + foo (2.0.0, binary from https://cran-like-repo.com/repo2)
 ```
@@ -345,7 +347,7 @@ repositories = [
 ]
 dependencies = [
     "bar",
-    { name = "foo", alias = "repo1" },
+    { name = "foo", repository = "repo1" },
 ]
 ```
 
@@ -367,7 +369,7 @@ In [Overriding Remotes](../../cookbook/remotes) and [`prefer_repositories_for`](
 we have discussed Remotes resolution, but we'll discuss further in this section. 
 
 Within a package's DESCRIPTION file, the Remotes field can be set to install a dependencies from a nonstandard place. This often occurs when developing one package
-alongside a development version of another. This is dicussed further in the [R package book](https://r-pkgs.org/dependencies-in-practice.html#sec-dependencies-nonstandard).
+alongside a development version of another. This is discussed further in the [R package book](https://r-pkgs.org/dependencies-in-practice.html#sec-dependencies-nonstandard).
 
 `rv` always respects the Remotes field of a package, unless the [`prefer_repositories_for`](../../config/additional_config/#prefer_repositories_for) configuration is specified.
 
@@ -375,7 +377,7 @@ We'll see how this resolution works in the following example:
 
 ### Example 4 - Remote Dependencies
 
-Lets consider the following package and information:
+Let's consider the following package and information:
 <Card title = "Package and Repository Information">
     ###### Repositories Content
     <FileTree>

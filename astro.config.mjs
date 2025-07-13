@@ -27,11 +27,58 @@ export default defineConfig({
 				},
 				{
 					label: 'Commands',
-					autogenerate: { directory: 'commands' },
+					items: [
+						{ label: 'Introduction and Global Options', slug: 'commands/intro' },
+						{
+							label: 'Project Initialization',
+							items: [
+								{ label: 'rv init', slug: 'commands/init' },
+								{ label: 'rv migrate renv', slug: 'commands/migrate_renv' },
+							]
+						},
+						{
+							label: 'Package Installation',
+							items: [
+								{ label: 'rv sync', slug: 'commands/sync' },
+								{ label: 'rv upgrade', slug: 'commands/upgrade' }
+							]
+						},
+						{
+							label: 'Project Configuration',
+							items: [
+								{ label: 'rv add', slug: 'commands/add' },
+								// { label: 'rv configure repositories', slug: 'commands/configure_repos'}
+							]
+						},
+						{
+							label: 'Project Status',
+							items: [
+								{ label: 'rv plan', slug: 'commands/plan' },
+								{ label: 'rv summary', slug: 'commands/summary' }
+							]
+						},
+						{
+							label: 'Project Information',
+							items: [
+								{ label: 'rv tree', slug: 'commands/tree' },
+								{ label: 'rv cache', slug: 'commands/cache' },
+								{ label: 'rv library', slug: 'commands/library' },
+								{ label: 'rv info', slug: 'commands/info' },
+								{ label: 'rv sysdeps', slug: 'commands/sysdeps' },
+							]
+						},
+						{
+							label: 'Other',
+							items: [
+								{ label: 'rv activate & rv deactivate', slug: 'commands/activation' }
+							]
+						}
+					],
 				},
 				{
 					label: 'Cookbook',
 					items: [
+						{ label: 'Introduction', slug: 'cookbook/intro' },
 						{ 
 							label: 'Installing a Specific Version', 
 							items: [
@@ -45,10 +92,17 @@ export default defineConfig({
 				{
 					label: 'Reference',
 					items: [
-						{ label: 'rvr - rv for R', slug: 'reference/rvr' },
-						{ label: 'Difference with renv', slug: 'reference/renv-difference'},
-						{ label: 'Resolution', slug: 'reference/resolution'},
 						{ label: 'FAQ', slug: 'reference/faq'},
+						{ label: 'Difference with renv', slug: 'reference/renv-difference' },
+						{ label: 'Environment Variables', slug: 'reference/env_vars' },
+						{ label: 'rvr - rv for R', slug: 'reference/rvr' },
+					]
+				},
+				{
+					label: 'Concepts',
+					items: [
+						{ label: 'Resolution', slug: 'concepts/resolution'},
+						{ label: 'Caching', slug: 'concepts/cache' },
 					]
 				}
 			],

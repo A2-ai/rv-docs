@@ -1,0 +1,75 @@
+---
+title: rv sync
+description: The basic command to install packages using rv
+---
+
+import { Code, FileTree, Tabs, TabItem } from '@astrojs/starlight/components';
+
+Synchronize the config file, lock file, and project library, by removing and/or adding packages, to reach the desired project state.
+
+## Usage
+```shell
+rv sync [OPTIONS]
+```
+
+### Options
+* `--save-install-logs-in`: Directory in which the install logs for packages compiled from source should be copied to. By default is kept in cache.
+
+## Example
+<Tabs>
+    <TabItem label = "Config File">
+        ```toml
+        //rproject.toml
+        [project]
+        name = "my project"
+        r_version = "4.4"
+
+        repositories = [
+            { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" }
+        ]
+
+        dependencies = [
+            "tibble",
+        ]
+        ```
+    </TabItem>
+    <TabItem label = "Command and Output">
+        `rv sync` installs the `tibble` package and all of its dependencies, indicating which version, from where, and
+        the time it took for each installed package.
+        ```shell {1}
+        % rv sync
+        + cli (3.6.5, binary from https://packagemanager.posit.co/cran/latest) in 1ms
+        + fansi (1.0.6, binary from https://packagemanager.posit.co/cran/latest) in 1ms
+        + glue (1.8.0, binary from https://packagemanager.posit.co/cran/latest) in 1ms
+        + lifecycle (1.0.4, binary from https://packagemanager.posit.co/cran/latest) in 0ms
+        + magrittr (2.0.3, binary from https://packagemanager.posit.co/cran/latest) in 0ms
+        + pillar (1.10.2, binary from https://packagemanager.posit.co/cran/latest) in 0ms
+        + pkgconfig (2.0.3, binary from https://packagemanager.posit.co/cran/latest) in 0ms
+        + rlang (1.1.6, binary from https://packagemanager.posit.co/cran/latest) in 1ms
+        + tibble (3.2.1, binary from https://packagemanager.posit.co/cran/latest) in 0ms
+        + utf8 (1.2.5, binary from https://packagemanager.posit.co/cran/latest) in 0ms
+        + vctrs (0.6.5, binary from https://packagemanager.posit.co/cran/latest) in 0ms
+        ```
+    </TabItem>
+    <TabItem label = "File Tree">
+        <FileTree>
+            - my-project
+                - rv/
+                    - scripts/
+                    - library/4.4/\{arch\}/ the installed packages
+                        - cli
+                        - fansi
+                        - glue
+                        - lifecycle
+                        - magrittr
+                        - pillar
+                        - pkgconfig
+                        - rlang
+                        - tibble
+                        - utf8
+                        - vctrs
+                - rproject.toml
+                - rv.lock an `rv.lock` file generated to track the package's sources
+        </FileTree>
+    </TabItem>
+</Tabs>

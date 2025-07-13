@@ -1,0 +1,46 @@
+---
+title: rv plan
+description: See the results of rv sync, without sync-ing
+---
+
+`rv plan` will show you what [`sync`](../sync) would do, without sync-ing anything. This is useful to see how the changes to
+the configuration file will impact your project before performing any action.
+
+## Usage
+```bash
+rv plan [OPTIONS]
+```
+
+### Options
+* `--r-version` - Specify an R version different than the one in the config. This allows you to see what would occur if
+the project was changed to a different R version. The R version does not need to be on the system
+* `--upgrade` - The same as [`rv upgrade --dry-run`](../upgrade)
+
+## Example
+In this example, we start out with `tibble` installed and want to install the dev version of `dplyr` from GitHub.
+
+```toml ins={12}
+//rproject.toml
+[project]
+name = "example"
+r_version = "4.4"
+
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+]
+
+dependencies = [
+    "tibble",
+    { name = "dplyr", git = "https://github.com/tidyverse/dplyr", branch = "main" },
+]
+```
+
+The plan will then show us how the project library would change:
+```txt {1}
+% rv plan
++ dplyr (1.1.4.9000, source from https://github.com/tidyverse/dplyr (branch: main))
++ generics (0.1.4, binary from https://packagemanager.posit.co/cran/latest)
++ R6 (2.6.1, binary from https://packagemanager.posit.co/cran/latest)
++ tidyselect (1.2.1, binary from https://packagemanager.posit.co/cran/latest)
++ withr (3.0.2, binary from https://packagemanager.posit.co/cran/latest)
+```

@@ -1,0 +1,66 @@
+---
+title: rv summary
+description: Summary of the project
+---
+
+`rv summary` is a way to inspect your project on a global level. It indicates information about the detected system 
+(including R version), how many packages are installed, how many packages need to be installed/removed, where packages come from,
+and how many packages are available in the repositories.
+
+### Usage
+```shell
+rv summary [OPTIONS]
+```
+
+#### Options
+* `--r-version` - Specify an R version different than the one in the config. This allows you to see what would occur if
+the project was changed to a different R version. The R version does not need to be on the system
+
+### Example
+In this example, we start out with `tibble` installed and want to install the dev version of `dplyr` from GitHub.
+
+```toml ins={12}
+//rproject.toml
+[project]
+name = "example"
+r_version = "4.4"
+
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+]
+
+dependencies = [
+    "tibble",
+    { name = "dplyr", git = "https://github.com/tidyverse/dplyr", branch = "main" },
+]
+```
+
+The summary will then show a summary of the state of the project, including information about the system, dependency status, 
+and the repositories listed in the config.
+```txt {1}
+% rv summary
+== System Information == 
+OS: macos (arm64)
+R Version: 4.4
+
+Num Workers for Sync: 8 (8 cpus available)
+Cache Location: /Users/rv-user/.cache/rv
+
+== Dependencies == 
+Library: rv/library/4.4/arm64
+Installed: 10/15
+
+Package Sources: 
+  https://github.com/tidyverse/dplyr: 0/1 source packages
+  PPM: 10/14 binary packages
+
+Installation Summary: 
+  https://github.com/tidyverse/dplyr: 1/1 in cache (1 to compile)
+  PPM: 1/4 in cache, 3/4 to download
+
+== Remote == 
+PPM (https://packagemanager.posit.co/cran/latest): 19546 binary packages, 22373 source packages
+```
+
+Additionally, on Ubuntu and Debian OS's, a summary of how many system dependencies required by the dependencies are found, 
+and a list of any missing is included.

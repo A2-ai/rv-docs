@@ -19,22 +19,25 @@ rv init hello_world
     - rv/
         - library/
         - scripts/
-            - activate.R  sets .libPaths and option("repos")
+            - activate.R  sets .libPaths and options("repos")
             - rvr.R  sets up .rv environment
         - .gitignore  ignores library/
-    - .Rprofile  used to run rv/scripts/* to set-up project
+    - .Rprofile  used to run rv/scripts/* to set up project
     - **rproject.toml**
 </FileTree>
 
-We will discuss the other files in a later section, but will focus on the `rproject.toml` first. 
+We will first focus on the `rproject.toml` file, as it is what users primarily interact with, while 
+the other files will be discussed in additional sections.
 
-Below is a example config file which is pre-populated with these fields:
+The `rproject.toml` is the default name for `rv`'s configuration file, which allows users to declare and configure their
+desired project environment. During project initialization, the `rproject.toml` is pre-populated with information found in 
+your R session.
+
+Below is what the `rproject.toml` in the project initialized above may look like:
 
 import init_config from '../../../configs/init_config.toml?raw';
 
 <Code code = {init_config} lang="toml" title = "rproject.toml" />
-
-This is called the config file, and it allows you to configure which packages you'd like to install, from where they are sourced, and how they are installed.
 
 ## Config File Basics
 
@@ -49,19 +52,19 @@ The R version for the project. During `rv init`, this is set by default to the v
 WARNING: If using RStudio/Positron, the R version on the path does not always match the version selected.
 
 #### `repositories`
-The repositories dependencies are sourced from by default. During `rv init` defaults to the repositories set in `options("repos")` when possible.
+The repositories dependencies are sourced from unless otherwise specified. During `rv init` defaults to the repositories set in `options("repos")` when possible.
 
 #### `dependencies`
-The main element of the file. This is where you specify your dependencies, and options are how and from where they are installed.
+The main element of the file. This is where you specify the packages (known as dependencies) used in your project, and options about how and from where they are installed.
 
 <Aside type="note" title="Info">
-For addtional information about the configuration file, continue to the configuration section
+More information about the available configurations can be found on this page:
 <LinkCard title="Configuration File" href="../../config/common_config" />
 </Aside>
 
 ## Installing a Package
 
-Instead of individual, iterative package installation, `rv` takes a wholistic approach.
+Instead of individual, iterative package installation, `rv` takes a holistic approach.
 Dependencies are "synchronized" across the config file, lock file, and project library 
 to ensure the project is in the expected, working state at all times. 
 
@@ -75,8 +78,8 @@ import first_dplyr from '../../../configs/first_dplyr.toml?raw';
 
 Then we will run `rv sync`, which will install `dplyr` and all of its dependencies:
 
-```bash
-rv sync
+```bash {1}
+% rv sync
 + cli (3.6.5, binary from https://packagemanager.posit.co/cran/latest) in 530ms
 + dplyr (1.1.4, binary from https://packagemanager.posit.co/cran/latest) in 509ms
 + fansi (1.0.6, binary from https://packagemanager.posit.co/cran/latest) in 421ms
@@ -95,6 +98,11 @@ rv sync
 + withr (3.0.2, binary from https://packagemanager.posit.co/cran/latest) in 401ms
 ```
 
+<Aside type="note" title="Info">
+additional information about commands to installing packages, and other commands, can be found in this section:
+<LinkCard title="Commands" href="../../commands/intro" />
+</Aside>
+
 Additionally, a lock file is generated within the project, containing information about each package installed, 
 including the version, dependencies, and source, making the project directory look like the following:
 <FileTree>
@@ -110,7 +118,4 @@ including the version, dependencies, and source, making the project directory lo
     - **rv.lock**
 </FileTree>
 
-<Aside type="note" title="Info">
-For addtional information about the cli commands, continue to the commands section
-<LinkCard title="Commands" href="../../commands/intro" />
-</Aside>
+For more information on how the lock file impacts package installation, see the [resolution section](../../concepts/resolution#lockfile)

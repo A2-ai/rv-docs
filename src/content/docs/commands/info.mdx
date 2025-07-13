@@ -1,0 +1,25 @@
+---
+title: rv info
+description: Returns simple information about the project
+---
+
+List simple information regarding the project depending on the flags. Used primarily to properly set the library path and
+repositories during project activation in R.
+
+### Usage
+```shell
+rv info [OPTIONS]
+```
+
+#### Options
+* `--library` - Returns the relative path of the library in UNIX format, even on Windows  (alias: `rv library`)
+* `--r-version` - The R version specified in the config
+* `--repositories` - The repositories specified in the config
+
+### Example
+```shell {1}
+% rv info --library --r-version --repositories
+library: src/configs/rv/library/4.4/arm64
+r-version: 4.4
+repositories: (PPM, https://packagemanager.posit.co/cran/latest)
+```

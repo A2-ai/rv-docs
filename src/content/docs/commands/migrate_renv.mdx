@@ -1,0 +1,181 @@
+---
+title: rv migrate renv
+description: Migrate a renv project to rv
+---
+
+import { Badge, Code, FileTree, Tabs, TabItem } from '@astrojs/starlight/components';
+
+`rv migrate renv` will initialize an existing renv project by:
+1. Setting up the project infrastructure, including the project library and activation scripts.
+2. Migrating your renv.lock file to a `rv` config file.
+
+We cannot guarantee `rv` will migrate your renv project in its entirety, but any dependencies not fully migrated will be logged.
+
+## Common Migration Issues
+Some common reasons a dependency may not be able to be migrated
+
+###  Package not found
+If you get the error `Package not found in repositories`, this is because the repository source was not
+captured in the `renv.lock` repositories section. 
+
+In order to finish migrating this package, add the package to the `dependencies` field and a repository containing
+the package to the `repositories` section.
+
+### Version not found
+If you get the error `Package version (1.2.3) not found in repositories Found version 2.3.4 in https://cran.rstudio.com`,
+this is because the package version of interest is in the archive and not in any of the repositories directly.
+
+This is the most common error when dealing with `renv` migration. Because `rv` does not support version pinning within the
+config file, versions not found to be sourced directly from the repository cannot be specified in the config file. 
+
+In order to finish migrating this package:
+1. If the exact version is required and can be found in a different repository, add both the dependency and repository to the config
+2. If the exact version is required and cannot be found in a different repository, use the [url dependency format](../../config/common_config#url) to directly access the archive
+3. If the exact version is not required, simply add the dependency to the config
+
+## Usage
+```shell
+rv migrate renv [OPTIONS] [renv_file]
+```
+
+### Arguments
+* `renv_file` <Badge text="optional" variant="caution"/> - Path to a `renv` lock file to migrate to an `rv` config file in the current working directory.
+
+    > Default: `./renv.lock`
+
+### Options
+* `--strict-r-version` - As discussed in the [config `r_version` section](../../config/common_config#r_version), the R version is recommended to only be listed as the major and minor
+components. This flag will include the patch in the R version if needed.
+
+* `--no_r_environment` - By default, `rv` creates a R environment `.rv` to enable `rv` to be called in R code 
+(see [rvr](../../reference/rvr) for more info). This flag will disable this R environment
+
+## Example
+
+Let's start with the following `renv.lock`:
+
+```json
+{
+  "R": {
+    "Version": "4.4.0",
+    "Repositories": [
+      {
+        "Name": "CRAN",
+        "URL": "https://cloud.r-project.org"
+      }
+    ]
+  },
+  "Packages": {
+    "cli": {
+      "Package": "cli",
+      "Version": "3.6.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "utils"
+      ],
+      "Hash": "b21916dd77a27642b447374a5d30ecf3"
+    },
+    "glue": {
+      "Package": "glue",
+      "Version": "1.7.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "methods"
+      ],
+      "Hash": "e0b3a53876554bd45879e596cdb10a52"
+    },
+    "osinfo": {
+        "Package": "osinfo",
+        "Version": "0.0.1",
+        "Source": "Repository",
+        "Repository": "a2-ai",
+        "Requirements": [],
+        "Hash": "854424f3156e9456886cda02d488ddd1"
+    },
+    "stringi": {
+      "Package": "stringi",
+      "Version": "1.8.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "stats",
+        "tools",
+        "utils"
+      ],
+      "Hash": "39e1144fd75428983dc3f63aa53dfa91"
+    }
+  }
+}
+
+```
+
+In the project containing this `renv.lock` file, we'll run the following command:
+```txt {1}
+% rv migrate renv
+renv.lock was migrated to rproject.toml with 3 unresolved packages: 
+    `cli` could not be resolved due to: 
+        "Package version (3.6.3) not found in repositories. Found version 3.6.5 in https://cran.rstudio.com"
+    `osinfo` could not be resolved due to: 
+        "Package not found in repositories."
+    `stringi` could not be resolved due to: 
+        "Package version (1.8.4) not found in repositories. Found version 1.8.7 in https://cran.rstudio.com"
+```
+
+In this case, `rv` was not able to migrate 3 of 4 packages, but provided some important information to aid us in how to 
+add those packages to our project and added the successfully migrated package to the config:
+
+```{toml}
+// rproject.toml
+# this config was migrated from renv.lock on 2025-05-22T00:00:00+00:00[Etc/UTC]
+[project]
+name = "renv-demo"
+r_version = "4.4"
+
+repositories = [
+    { alias = "CRAN", url = "https://cran.rstudio.com" },
+]
+
+dependencies = [
+    { name = "glue", repository = "CRAN" },
+]
+```
+
+We see the repository and R version listed in the `renv.lock` have both been migrated to the config file. 
+`glue` was also added to the config since the available version in the repository at the time of migration 
+is the same as the locked version. Note, the repository field is listed explicitly on all migrated packages 
+to ensure reproducibility from `renv`.
+
+Next, we'll address the issues and how we'll choose to resolve them:
+* `cli` - CRAN does contain this package, but at a higher version. We determine we cannot upgrade to the latest version available,
+therefore we will add this package as a [URL dependency](../../config/common_config#url), pointing to the archive.
+* `osinfo` - CRAN does not contain this package, but A2-Ai's R-universe does. Therefore, we will add a new repository 
+and this package to the config.
+* `stringi` - CRAN does contain this package, but at a higher version. We determine we can upgrade to the latest version, 
+therefore can simply add the package to the config file.
+
+After making these changes, we get the following config file:
+
+```toml ins = {9, 14-16}
+// rproject.toml
+# this config was migrated from renv.lock on 2025-05-22T00:00:00+00:00[Etc/UTC]
+[project]
+name = "renv-demo"
+r_version = "4.4"
+
+repositories = [
+    { alias = "CRAN", url = "https://cran.rstudio.com" },
+    { alias = "a2-ai", url = "https://a2-ai.r-universe.dev" },
+]
+
+dependencies = [
+    { name = "glue", repository = "CRAN" },
+    { name = "cli", url = "https://cran.rstudio.com/src/contrib/Archive/cli/cli_3.6.3.tar.gz" },
+    "osinfo",
+    "stringi",
+]
+```

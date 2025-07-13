@@ -1,0 +1,279 @@
+---
+title: rv configure repositories
+description: Configure the repositories section of the config file
+---
+import { Tabs, TabItem, Icon } from '@astrojs/starlight/components';
+
+Used to add, replace, or remove repositories from the configuration file, 
+while maintaining the file's formatting and comments.
+
+## Usage
+```shell
+rv configure repositories [OPTIONS]
+```
+
+### Options
+
+##### Repository Information
+* `--alias` - Repository alias to be added
+* `--url` - Repository url
+* `--force_source` - Enable force_source for the added repository 
+
+##### Position Control
+* `--first` -- Add the repository as the first entry
+* `--last` - Add the repository as the last entry
+* `--before` - Add the repository before the specified alias
+* `--after` - Add the repository after the specified alias
+
+##### Repository Management
+* `--replace` - Replace the existing repository with the specified alias
+* `--remove` - Remove the existing repository with the specified alias
+* `--clear` - Clear all repositories
+
+## Examples
+
+All of the examples will start with the following initial configuration:
+```
+//rproject.toml
+[project]
+name = "configure"
+repositories = [
+    { alias = "CRAN", url = "https://cran.r-project.org" },
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/2025-01-01" },
+]
+dependencies = [
+    "dplyr",
+    "ggplot2",
+]
+```
+
+### `--first`: Add a repository as the _first_ entry
+
+```bash
+rv configure repositories --alias "PPM_latest" --url "https://packagemanager.posit.co/cran/latest" --first
+```
+
+<Tabs syncKey="configure">
+    <TabItem label = "Updated Config File">
+        ```
+        //rproject.toml
+        [project]
+        name = "configure"
+        repositories = [
+            { alias = "PPM_latest", url = "packagemanager.posit.co/cran/latest" },
+            { alias = "CRAN", url = "https://cran.r-project.org" },
+            { alias = "PPM", url = "https://packagemanager.posit.co/cran/2025-01-01" },
+        ]
+        dependencies = [
+            "dplyr",
+            "ggplot2",
+        ]
+        ```
+    </TabItem>
+    <TabItem label = "Command Output">
+        ```
+        Repository 'PPM_latest' added successfully with URL: https://packagemanager.posit.co/cran/latest
+        ```
+    </TabItem>
+</Tabs>
+
+### `--last`: Add a repository as the _last_ entry
+
+```bash
+rv configure repositories --alias "bioconductor" --url "https://bioconductor.org/packages/3.18/bioc" --last
+```
+
+<Tabs syncKey="configure">
+    <TabItem label = "Updated Config File">
+        ```
+        //rproject.toml
+        [project]
+        name = "configure"
+        repositories = [
+            { alias = "CRAN", url = "https://cran.r-project.org" },
+            { alias = "PPM", url = "https://packagemanager.posit.co/cran/2025-01-01" },
+            { alias = "bioconductor", url = "https://bioconductor.org/packages/3.18/bioc" },
+        ]
+        dependencies = [
+            "dplyr",
+            "ggplot2",
+        ]
+        ```
+    </TabItem>
+    <TabItem label = "Command Output">
+        ```
+        Repository 'bioconductor' added successfully with URL: https://bioconductor.org/packages/3.18/bioc
+        ```
+    </TabItem>
+</Tabs>
+
+### `--before`: Add a repository before an existing one
+
+```bash
+rv configure repositories --alias "PPM_2024_06" --url "https://packagemanager.posit.co/cran/2024-06-01" --before PPM
+```
+
+<Tabs syncKey="configure">
+    <TabItem label = "Updated Config File">
+        ```
+        //rproject.toml
+        [project]
+        name = "configure"
+        repositories = [
+            { alias = "CRAN", url = "https://cran.r-project.org" },
+            { alias = "PPM_2024_06", url = "https://packagemanager.posit.co/cran/2024-06-01" },
+            { alias = "PPM", url = "https://packagemanager.posit.co/cran/2025-01-01" },
+        ]
+        dependencies = [
+            "dplyr",
+            "ggplot2",
+        ]
+        ```
+    </TabItem>
+    <TabItem label = "Command Output">
+        ```
+        Repository 'PPM_2024_06' added successfully with URL: https://packagemanager.posit.co/cran/2024-06-01
+        ```
+    </TabItem>
+</Tabs>
+
+### `--after`: Add a repository, with `force_source`, after an existing one
+
+```bash
+rv configure repositories --alias "PPM_2024_06" --url "https://packagemanager.posit.co/cran/2024-06-01" --force_source --after CRAN
+```
+
+<Tabs syncKey="configure">
+    <TabItem label = "Updated Config File">
+        ```
+        //rproject.toml
+        [project]
+        name = "configure"
+        repositories = [
+            { alias = "CRAN", url = "https://cran.r-project.org" },
+            { alias = "PPM_2024_06", url = "https://packagemanager.posit.co/cran/2024-06-01", force_source = true },
+            { alias = "PPM", url = "https://packagemanager.posit.co/cran/2025-01-01" },
+        ]
+        dependencies = [
+            "dplyr",
+            "ggplot2",
+        ]
+        ```
+    </TabItem>
+    <TabItem label = "Command Output">
+        ```
+        Repository 'PPM_2024_06' added successfully with URL: https://packagemanager.posit.co/cran/2024-06-01
+        ```
+    </TabItem>
+</Tabs>
+
+### `--replace`: Replace an existing repository
+
+```bash
+rv configure repositories --alias "PPM_latest" --url "https://packagemanager.posit.co/cran/latest" --replace PPM
+```
+
+<Tabs syncKey="configure">
+    <TabItem label = "Updated Config File">
+        ```
+        //rproject.toml
+        [project]
+        name = "configure"
+        repositories = [
+            { alias = "CRAN", url = "https://cran.r-project.org" },
+            { alias = "PPM_latest", url = "https://packagemanager.posit.co/cran/latest" },
+        ]
+        dependencies = [
+            "dplyr",
+            "ggplot2",
+        ]
+        ```
+    </TabItem>
+    <TabItem label = "Command Output">
+        ```
+        Repository replaced successfully - new alias: 'PPM_latest', URL: https://packagemanager.posit.co/cran/latest
+        ```
+    </TabItem>
+</Tabs>
+
+### `--remove`: Remove a repository
+
+```bash
+rv configure repositories --remove "CRAN"
+```
+
+<Tabs syncKey="configure">
+    <TabItem label = "Updated Config File">
+        ```
+        //rproject.toml
+        [project]
+        name = "configure"
+        repositories = [
+            { alias = "PPM", url = "https://packagemanager.posit.co/cran/2025-01-01" },
+        ]
+        dependencies = [
+            "dplyr",
+            "ggplot2",
+        ]
+        ```
+    </TabItem>
+    <TabItem label = "Command Output">
+        ```
+        Repository 'CRAN' removed successfully
+        ```
+    </TabItem>
+</Tabs>
+
+### `--clear`: Clear all repositories
+
+```bash
+rv configure repositories --clear
+```
+
+<Tabs syncKey="configure">
+    <TabItem label = "Updated Config File">
+        ```
+        //rproject.toml
+        [project]
+        name = "configure"
+        repositories = [
+
+        ]
+        dependencies = [
+            "dplyr",
+            "ggplot2",
+        ]
+        ```
+    </TabItem>
+    <TabItem label = "Command Output">
+        ```
+        All repositories cleared successfully
+        ```
+    </TabItem>
+</Tabs>
+
+### Error Examples
+
+#### Duplicate alias
+**Command:**
+```bash
+rv configure repositories --alias "CRAN" --url = "https://cran.rstudio.com" --first
+```
+
+**Output:**
+```
+Repository with alias 'CRAN' already exists
+```
+
+#### Invalid URL Error
+**Command:**
+```bash
+rv configure repositories --alias "invalid" --url "not-a-valid-url" --first
+```
+
+**Output:**
+```
+relative URL without a base
+```
+
+
