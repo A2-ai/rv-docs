@@ -31,7 +31,7 @@ rv configure repository add <ALIAS> --url <URL> [OPTIONS]
 * `--before <alias>` - Add before the specified alias
 * `--after <alias>` - Add after the specified alias
 
-### Example
+### Examples
 All examples on this page will start with the following configuration:
 
 ```toml
@@ -227,12 +227,13 @@ rv configure repository <ALIAS> [OPTIONS]
 * `ALIAS` - repository alias to remove
 
 ### Example 
-We will once again start with the same initial configuration file:
+We start with the same configuration file as [the first example](#example), then to remove CRAN as a repository
+entry, we will use the following command:
 
-To remove CRAN as a repository entry we will use the following command:
 ```shell
 rv configure repository remove CRAN
 ```
+
 <Tabs syncKey="configure">
     <TabItem label = "Updated Config File">
         ```toml
@@ -260,20 +261,10 @@ Clear all repositories
 rv configure repository clear [OPTIONS]
 ```
 
-### Example 4 - Clear the repositories section
-We will once again start with the same initial configuration file:
+### Example
+We start with the same configuration file as [the first example](#example), then to clear the repositories section,
+we run the following command:
 
-```toml
-//rproject.toml
-[project]
-name = "configure"
-repositories = [
-    { alias = "CRAN", url = "https://cran.r-project.org" },
-    { alias = "PPM", url = "https://packagemanager.posit.co/cran/2025-01-01" },
-]
-```
-
-To clear the repositories section we will use the following command:
 ```shell
 rv configure repository clear
 ```
