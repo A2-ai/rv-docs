@@ -47,7 +47,7 @@ export default defineConfig({
 							label: 'Project Configuration',
 							items: [
 								{ label: 'rv add', slug: 'commands/add' },
-								// { label: 'rv configure repositories', slug: 'commands/configure_repos'}
+								{ label: 'rv configure repository', slug: 'commands/configure_repos'}
 							]
 						},
 						{
