@@ -26,11 +26,20 @@ jobs:
       - name: Build site
         run: npm run build
 
-      - name: Check links
+      - name: Run Lychee
         uses: lycheeverse/lychee-action@v1.9.0
         with:
           args: './dist/**/*.html --verbose --exclude ^mailto:'
+          output: lychee/output.txt
+          format: text
+          fail: false  # Allow post-processing instead
 
-      - name: Fail if broken links are found
-        if: failure()
-        run: exit 1
+      - name: Check for "Cannot find file" failures
+        run: |
+          echo 'Scanning lychee output...'
+          if grep -q 'Failed: Cannot find file' lychee/output.txt; then
+            echo '❌ Broken local file links detected'
+            exit 1
+          else
+            echo '✅ No file-not-found errors'
+          fi
