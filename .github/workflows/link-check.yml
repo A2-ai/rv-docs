@@ -30,15 +30,16 @@ jobs:
         uses: lycheeverse/lychee-action@v1.9.0
         with:
           args: './dist/**/*.html --verbose --exclude ^mailto:'
-          output: lychee/output.txt
-          format: text
-          fail: false  # Allow post-processing instead
+          output: lychee/output.json
+          format: json
+          fail: false
+          lycheeVersion: 0.14.0
 
-      - name: Check for "Cannot find file" failures
+      - name: Fail only on "Cannot find file" errors
         run: |
-          echo 'Scanning lychee output...'
-          if grep -q 'Failed: Cannot find file' lychee/output.txt; then
-            echo '❌ Broken local file links detected'
+          echo 'Scanning lychee output for missing local files...'
+          if jq -e '.failures[] | select(.error | test("Cannot find file"))' lychee/output.json > /dev/null; then
+            echo '❌ Found broken local file links ("Cannot find file")'
             exit 1
           else
             echo '✅ No file-not-found errors'
