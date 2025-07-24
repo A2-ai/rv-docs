@@ -16,9 +16,8 @@ As discussed in other sections, `rv` is a declarative package manager, which mea
 ## Dependencies
 `rv` has two "types" of dependencies:
 
-* ***Direct** Dependencies* - These are the packages explicitly stated in the [dependencies section](../../config/common_config/#dependencies)
- of your config file. Direct dependencies can have [additional configurations](../../config/common_config/#dependencies), 
- which determines the initial list of requirements.
+* ***Direct** Dependencies* - These are the packages explicitly stated in the [dependencies section](../../config/dependencies)
+of your config file. Direct dependencies can have additional configurations, which determines the initial list of requirements.
 
 * ***Recursive** Dependencies* - These are the additional dependencies required by the direct dependencies in the config file. 
 Most packages depend on additional packages to work correctly. Packages define their dependencies as requirements, often a package and 
@@ -201,7 +200,7 @@ When a lockfile is present, the source tracked in the lockfile takes precedence 
 * The config file no longer contains the repository the package is locked as.
 * The dependency has a different source specified, or the specified source is removed.
 
-If a lockfile is not needed for your project, set the `[use_lockfile]`(../../config/additional_config#use_lockfile) config option to false.
+If a lockfile is not needed for your project, set the `[use_lockfile]`(../../config/use_lockfile) config option to false.
 
 The following examples will show how the lockfile works:
 
@@ -365,13 +364,13 @@ Since `foo` is specified to come from `repo1`, we start with `foo 1.0.0`. This g
 therefore the locked version of `bar 1.0.0` is compatible with the rest of the requirements, making the resolution `foo 1.0.0` and `bar 1.0.0` from `repo1`.
 
 ## Remotes
-In [Overriding Remotes](../../cookbook/remotes) and [`prefer_repositories_for`](../../config/additional_config/#prefer_repositories_for),
+In [Overriding Remotes](../../cookbook/remotes) and [`prefer_repositories_for`](../../config/prefer_repositories_for),
 we have discussed Remotes resolution, but we'll discuss further in this section. 
 
 Within a package's DESCRIPTION file, the Remotes field can be set to install a dependencies from a nonstandard place. This often occurs when developing one package
 alongside a development version of another. This is discussed further in the [R package book](https://r-pkgs.org/dependencies-in-practice.html#sec-dependencies-nonstandard).
 
-`rv` always respects the Remotes field of a package, unless the [`prefer_repositories_for`](../../config/additional_config/#prefer_repositories_for) configuration is specified.
+`rv` always respects the Remotes field of a package, unless the [`prefer_repositories_for`](../../config/prefer_repositories_for) configuration is specified.
 
 We'll see how this resolution works in the following example:
 
@@ -454,7 +453,7 @@ dependencies = [
 ```
 
 Despite a compatible version now being available in the repository, the resolution is the exact same as [Example 4.1](#example-41---installing-from-remotes)! 
-If a remote is listed, `rv` will install the dependency from the remote, unless that dependency is listed in [`prefer_repositories_for`](../../config/additional_config/#prefer_repositories_for).
+If a remote is listed, `rv` will install the dependency from the remote, unless that dependency is listed in [`prefer_repositories_for`](../../config/prefer_repositories_for).
 
 #### Example 4.3 - Installing from Repository
 There are a number of reasons to not want to install a dependency from a remote, and also plenty of reasons to want to install from the remote.
@@ -462,7 +461,7 @@ One of the reasons may be that the dependency is now available in a repository a
 This is the scenario we started to see in the [example above](#example-42---satisfying-package-version-in-repository).
 
 Starting with the same repository/package information and config file as [above](#example-42---satisfying-package-version-in-repository), we'll add `bar` to the 
-[`prefer_repositories_for`](../../config/additional_config/#prefer_repositories_for) section in the config file.
+[`prefer_repositories_for`](../../config/prefer_repositories_for) section in the config file.
 
 ```toml ins={3}
 // rproject.toml
@@ -486,7 +485,7 @@ The requirements now become:
     * `bar >= 2.0.0.9000`
 
 We now have two source requirements for `bar`. In order for the configuration requirement to "overrule" the Remote, we need to ensure the conditions
-for [`prefer_repositories_for`](../../config/additional_config/#prefer_repositories_for) are met:
+for [`prefer_repositories_for`](../../config/prefer_repositories_for) are met:
     1. ✅ The dependency has a version requirement within the DESCRIPTION file
         - `bar >= 2.0.0.9000` is within the `baz` DESCRIPTION file
     2. ✅ There exists a package matching that version requirement within a repository

@@ -36,3 +36,8 @@ a list of [known dependencies on the path](#known-path-dependencies), and any de
 ## `RV_LINK_MODE`
 `rv` aggressively [cache's](../../concepts/cache) in order to avoid re-compiling and re-downloading pages. Additionally,
 caching minimizes the disk space used by installed packages. By default, `rv` will hard-link for Windows and Linux and [copy on write](https://en.wikipedia.org/wiki/Copy-on-write) for macOS.
+
+## `RV_SUBMODULE_UPDATE_DISABLE`
+By default, when using Git sources, `rv` will run `git submodule update --init --recursive` after checking out a commit to ensure all required submodules are initialized.
+This behavior ca be disabled by setting this variable to `true` or `1` to skip updating submodules entirely. This can be useful in cases where submodules are not needed 
+or when working in network-constrained or CI environments.

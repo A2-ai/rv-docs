@@ -1,0 +1,33 @@
+---
+title: r_version
+description: Specify which R version to use for the project.
+---
+
+The R version to install packages for, containing at least the major and minor versions.
+
+## Finding the Executable
+The R version is found on the system according to the following guidelines:
+
+### Version Matching
+`rv` utilizes a flexible version matching approach, similar to [Posit Connect's `major-minor`](https://docs.posit.co/connect/admin/r/#r-version-matching) approach. 
+If the patch version is specified, it will perform an exact match. If the patch version is not specified, it will match to any R version found 
+with the same major and minor version. 
+
+For example, if R `4.5.0` and `4.5.1` are found on the system, the following matches will occur:
+* `r_version = "4.5"` → `4.5.0` and `4.5.1`
+* `r_version = "4.5.0"` → `4.5.0`
+
+Since R packages are compatible across patch versions of R, it is recommended to specify only the major and minor version
+to increase cross-system compatibility.
+
+### Known Binary Locations
+`rv` will look to find the specified versions of R first on the path, then in the following locations based on OS:
+* **Linux** - Searches within the subdirectories of `/opt/R` (i.e. `/opt/R/4.5.0/bin/R`)
+* **MacOs** - [rig](https://github.com/r-lib/rig) keeps all installed versions of R on the path as `R-<MAJOR>.<MINOR>-arch`.
+If the executable exists, will check the version to ensure it matches the specified version, even if it is not the version selected by rig.
+* **Windows** - [rig](https://github.com/r-lib/rig) keeps the installed/selected version as R.bat, therefore we check for `R.bat` on the path as well.
+
+:::note
+For interactive sessions of R in an rv project, if the R version does not match the R version in your config, a warning will appear.
+`rv` does not use the current R session, so packages may be installed for versions of R that your session is not currently using.
+:::

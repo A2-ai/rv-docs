@@ -1,0 +1,28 @@
+---
+title: use_lockfile
+description: A configuration whether to use a lockfile or not
+---
+
+By default, `rv` uses a lockfile to ensure packages are sourced from the same location with the same version on each installation and
+across systems. While `rv` is designed at its core to be a project package manager, it can also be used as a package installer.
+In this case, `use_lockfile` can be set to `false` and no lockfile will be used during [dependency resolution](../../concepts/resolution).
+
+Without this configuration option, `rv` will completely invalidate a project library and re-sync if a lockfile is not present since it is 
+unable to track the source with full confidence. This is because `rv` was designed with reproducibility at front of mind. In `rv`, opting out of 
+using the lockfile is equivalent to opting out of the reproducibility guarantees and therefore does not invalidate a project library 
+when the lockfile is absent.
+
+## Example
+```toml ins={2}
+//rproject.toml
+use_lockfile = false
+[project]
+name = "no lockfile"
+r_version = "4.5"
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+]
+dependencies = [
+    "dplyr",
+]
+```

@@ -1,0 +1,24 @@
+---
+title: lockfile_name
+description: Set a custom lockfile name
+---
+
+By default, `rv`'s lockfile name is `rv.lock`. For most project situations having one configuration file corresponding to one lockfile is ideal.
+But since `rv` allows for custom configuration file names, which opens the door for multiple configuration files in the same directory, a custom
+lockfile name can be useful to keep the lock file's separate from each other.
+
+## Example
+
+```toml ins={2}
+//rproject.toml
+lockfile_name = "custom.lock"
+[project]
+name = "custom lockfile name"
+r_version = "4.5"
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+]
+dependencies = [
+    "dplyr",
+]
+```

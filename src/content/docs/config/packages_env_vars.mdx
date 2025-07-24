@@ -1,0 +1,34 @@
+---
+title: packages_env_vars
+description: Environment variables used for individual package compilation
+---
+
+While `rv` is primarily a project specific package manager, it is continually being developed to powerfully install packages
+in ways not possible with other R package installers. Other package installers use global environment variables during compilation, 
+which is an acceptable option with iterative package installers. Since `rv` takes a holistic approach, tuning environment 
+variables per package is more important, even required in certain scenarios.
+
+This flag will not have any impact if a package is available as a binary and the `force_source` flag is not used. 
+
+:::caution
+As discussed in the [Cache Concept Section](../../concepts/cache), changing the compilation of a package may effect other projects. If 
+the desired behavior is to keep the compilation change isolated to this project, we recommend setting your cache directory 
+(using `XDG_CACHE_HOME` for unix-like systems) to a separate directory to ensure this does not impact other projects.
+:::
+
+## Example
+```toml ins={12-13}
+//rproject.toml
+[project]
+name = "env vars"
+r_version = "4.5"
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+]
+dependencies = [
+    { name = "data.table", force_source = true },
+]
+
+[project.packages_env_vars."data.table"]
+OPENMP_CFLAGS = ''
+```

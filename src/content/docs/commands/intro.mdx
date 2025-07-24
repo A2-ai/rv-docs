@@ -30,12 +30,13 @@ the new state of the project library.
 * [`rv upgrade`](../upgrade) - Install packages while ignoring the lockfile
 
 ### Project Configuration
-As mentioned in the [Configuration File section](../../config/common_config), `rv` uses a configuration file to 
+As mentioned in the [Configuration File section](../../config/intro), `rv` uses a configuration file to 
 provide users a way to declare the desired state of the project. While this configuration file was designed and
 intended to be manually edited, `rv` allows you to add simple dependencies to the config file.
 
 #### Commands
 * [`rv add`](../add) - Quickly add packages to the config file and sync
+* [`rv configure repository`](../configure_repos) - Configure the repositories section of the config file
 
 ### Project Status
 In other R tools, packages are installed and any consequence is up to the user to reconcile. With `rv`, users have the
@@ -69,7 +70,7 @@ A few other commands which can be used occasionally to effect your project:
 ## Options
 Each command has the following global options:
 * `--config-file` - the path to a config file. Defaults to `rproject.toml` in the current directory. 
-Unless [otherwise specified in the config file](../../config/additional_config#library), the library will be synced at the level of the config file, 
+Unless [otherwise specified in the config file](../../config/library), the library will be synced at the level of the config file, 
 not in the working directory.
 * `--verbose` (`-v`) - increase the logging verbosity
 * `--quiet` (`-q`) - decrease logging verbosity

@@ -5,16 +5,16 @@ description: Installing an older package version from the archive using the `url
 
 import { Aside } from '@astrojs/starlight/components';
 
-As mentioned in [the repository dependency configuration note](../../config/common_config/#repository),
+As mentioned in [the repository dependency configuration note](../../config/dependencies#repository),
 `rv` intentionally does not have a way to specify a version directly. Instead, you can install a package 
-using the [`url` configuration](../../config/common_config/#url) to install a package from the archive
-or add an older snapshot and specify an out of order repositories, as seen in the
+using the [`url` configuration](../../config/dependencies#url) to install a package from the archive
+or add an older snapshot and [specify an out of order repositories](../../config/repositories#detailed), as seen in the
 [older snapshot example](../cookbook/snapshot_pkg).
 
 In this example we would like to install `jsonlite 1.9.1` and `cli`, but `jsonlite 2.0.0` is the version available in the repository.
 ### Config File
 
-In the config file, we add the dependency using the [`url` configuration](../../config/common_config/#url) to point to the Archive.
+In the config file, we add the dependency using the [`url` configuration](../../config/dependencies#url) to point to the Archive.
 In a CRAN-like repository, packages are found in the archive in the pattern `{repo url}/src/contrib/Archive/{pkg name}/{pkg name}_{pkg version}.tar.gz`
 
 ```toml {14}

@@ -1,0 +1,15 @@
+---
+title: name
+description: The name of the project
+---
+
+The `rv` config file requires the name field to be present. `rv` does not actively use the name field,
+but is required for the users organization. 
+
+In [`rv init`](../../commands/init) and [`rv migrate renv`](../../commands/migrate_renv), the name field 
+defaults to the name of the directory, which is the recommended, but not required, behavior for development.
+
+## Example
+```toml
+name = "project name"
+```

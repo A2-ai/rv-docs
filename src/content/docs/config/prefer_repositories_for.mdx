@@ -1,0 +1,38 @@
+---
+title: prefer_repositories_for
+description: Prefer repositories for dependencies over a remote
+---
+
+In packages, especially non-public packages, the `remotes` field in the DESCRIPTION file is used to specify
+where a dependency should be sourced from.
+
+By default, `rv` will always follow the remotes defined in a DESCRIPTION file, but it is sometimes useful to override this
+behavior. Therefore, `rv` provides a way to override this behavior by adding the package name to this array. 
+
+In order for the override to take effect, the following conditions must be met:
+1. The dependency has a version requirement within the DESCRIPTION file
+2. There exists a package matching that version requirement within a repository
+
+If a package does not list a version requirement in the DESCRIPTION file, we will ALWAYS install from the remote.
+
+For more information and a detailed example of how this works and how to use it refer to the [Remotes Cookbook](../../cookbook/remotes)
+
+## Example
+In this example, package `foo` depends on `bar >= 0.0.1` and has a Remotes field of `org/foo@main`. In order to install `bar` 
+from `my-repo`, we specify it in `prefer_repositories_for`.
+
+```toml
+//rproject.toml
+name = "project"
+r_version = "4.5"
+repositories = [
+    { alias = "my-repo", url = "https://my-repo.com" },
+]
+dependencies = [
+    { name = "foo", git = "https://github.com/org/foo", branch = "main" },
+]
+
+prefer_repositories_for = [
+    "bar"
+]
+```
