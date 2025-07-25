@@ -1,0 +1,95 @@
+---
+title: Introduction to Project Configuration
+description: Introduction to the various options available within the rv configuration file.
+---
+
+One of the main benefits to using `rv` is the ability to declare the desired state of the project, instead of iterative installations trying to reach the desired state.
+To accomplish this, `rv` uses a configuration file, allowing users to declare:
+* **What** packages should be installed
+* **Where** each package should be installed **from**
+* **Where** the packages should be installed **to**
+* **How** each packages is installed
+
+The configuration file was designed to provide a simple, reproducible way to manage packages, approachable and simple for easy adoption, 
+but powerful and flexible enough to fit the most demanding needs.
+
+In this section, we will go into each configuration, sorting them based on need and functionality:
+
+### Required Fields
+The first set of configurations are the fields that are required and most commonly used. These options must be under the `[project]` header.
+
+#### Options
+
+* [`name`](../name) - A name for your project
+* [`r_version`](../r_version) - The R version for which to install packages
+* [`repositories`](../repositories) - A list of CRAN-like repositories to fetch packages from. The order matters!
+* [`dependencies`](../dependencies) - A list of dependencies to install
+
+#### Example Simple Config File
+```toml
+//rproject.toml
+[project]
+name = "simple"
+r_version = "4.5"
+
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+]
+
+dependencies = [
+    "dplyr",
+    "ggplot2",
+]
+```
+
+### Metadata
+Like the `name` field, the following fields have been reserved to provide you the flexibility to make the config file the centralized hub of your project, 
+but are not used by `rv` at this point.
+
+* `description`
+* `license`
+* `authors`
+* `keywords`
+* `urls`
+
+#### Example Metadata Config File
+```toml ins = {13-22}
+//rproject.toml
+[project]
+name = "metadata"
+r_version = "4.5"
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+]
+dependencies = [
+    "dplyr",
+    "ggplot2",
+]
+
+description = "This example project shows the additional reserved metadata fields"
+license = "MIT License"
+authors = [
+    { name = "my name", email = "my-email@email.com", maintainer = true },
+    { name = "their name", email = "their-email@email.com" },
+]
+
+[project.urls]
+homepage = "https://my-website.com"
+issues = "https://my-website.com/issues"
+```
+
+### Package Compilation
+On top of the [`dependencies`](../dependencies) section configuration available, `rv` provides additional configurations and controls for package installation.
+
+* [`prefer_repositories_for`](../prefer_repositories_for) - Used to prefer repositories for dependencies that may be listed as `Remotes` in another package.
+* [`packages_env_vars`](../packages_env_vars) - Used to specify package specific environment variables for compilation. Has no effect if the package is sourced as a binary.
+* [`configure_args`](../configure_args) - Used to specify package specific configure.args. Can be tuned by OS and arch. Has no effect if the package is sourced as a binary.
+
+> `dev_dependencies` and `suggests` are reserved fields for further dependency control, but are not yet implemented.
+
+### Project Options
+`rv` provides configurations for the project as well, including the ability to tune the lock file and a custom library location. These are used outside of the `[project]` header.
+
+* [`library`](../library) - Specify a custom library location
+* [`use_lockfile`](../use_lockfile) - Whether to use a lockfile or not
+* [`lockfile_name`](../lockfile_name) - The name of the lockfile corresponding to the config file

@@ -1,0 +1,29 @@
+---
+title: library
+description: A custom library path
+---
+
+By default, `rv` install packages within the project directory, in the subdirectory `rv/library`, which is further name spaced by
+R version, arch, and, for linux OS, the OS codename. Therefore, the default library path is `<project directory>/rv/library/<R version>/<arch>/<linux codename>`.
+
+However, packages can be installed to any directory using the `library` configuration. `rv` will not do any name spacing, so the burden is on
+the user to ensure the correct set of packages is used across R versions and systems. 
+
+To increase reproducibility, `rv` does not consider a package as installed if this option is set since tracking how packages are installed is not as well controlled.
+
+## Example
+```toml ins={2}
+//rproject.toml
+library = "/opt/rpkgs/4.5"
+[project]
+name = "custom library"
+r_version = "4.5"
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+]
+dependencies = [
+    "dplyr",
+]
+```
+
+

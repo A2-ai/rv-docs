@@ -3,7 +3,10 @@ title: rv library
 description: List the library directory
 ---
 
-Returns the relative path of the library in UNIX format, even on Windows.
+Returns the relative path of the library in UNIX format, even on Windows. 
+
+The library is by default `rv/library/<R version>/<arch>/<linux codename>` (with the linux codename only appearing on linux OSs).
+This can be tuned using the [`library`](../../config/library) configuration.
 
 ### Usage
 ```shell

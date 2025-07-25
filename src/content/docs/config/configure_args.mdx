@@ -1,0 +1,49 @@
+---
+title: configure_args
+name: Package and system specific configure.args
+---
+
+import { Badge } from '@astrojs/starlight/components';
+
+Similar to [`packages_env_vars`](../packages_env_vars), `rv` aims to powerfully install packages, with package specific configuration
+available. Similar to R's [`install.packages()`](https://www.rdocumentation.org/packages/utils/versions/3.6.2/topics/install.packages), 
+`rv` allows you to set `configure.args` per package, but it additionally gives the ability to provide different `configure.args` per OS and arch.
+
+:::caution
+As discussed in the [Cache Concept Section](../../concepts/cache), changing the compilation of a package may effect other projects. If 
+the desired behavior is to keep the compilation change isolated to this project, we recommend setting your cache directory 
+(using `XDG_CACHE_HOME` for unix-like systems) to a separate directory to ensure this does not impact other projects.
+:::
+
+## Options
+* `name` - Name of the package for which the configure args impact
+* `args` - The `configure.args` for the package compilation
+* `os` <Badge text="optional" variant="caution"/> - Operating system for which to apply the `configure.args`
+    > Default: All
+* `arch` <Badge text="optional" variant="caution"/> - The system architecture for which to apply the `configure.args`
+    > Default: All
+
+## Example
+```toml ins={13-21}
+// rproject.toml
+[project]
+name = "env vars"
+r_version = "4.5"
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+]
+dependencies = [
+    { name = "foo", force_source = true },
+    { name = "bar", force_source = true },
+]
+
+[project.configure_args]
+"foo" = [
+    { os = "macos", args = ["--some-flag"] },
+    { arch = "x86_64", args = ["--some-other-flag"] },
+]
+"bar" = [
+    { args = ["--this-flag"] },
+    { os = "macos", arch = "arm64", args = ["--that-flag"] },
+]
+```

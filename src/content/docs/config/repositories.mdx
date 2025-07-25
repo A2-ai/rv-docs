@@ -1,0 +1,58 @@
+---
+title: repositories
+description: Specify which repositories to install packages from
+---
+
+import { Badge } from '@astrojs/starlight/components';
+
+A list of CRAN=like repositories to fetch packages from. Packages will be installed from the first repository
+a resolvable version is found in, thus the **order matters**!! For more information, refer to the [Resolution section.](../../concepts/resolution)
+By default, packages are fetched as binaries when possible.
+
+## Options
+* `alias` - Used for self-organization and to specify a certain repository source for a [dependency](../dependencies#repository)
+* `url` - The URL to the CRAN-like repository from which to fetch packages
+* `force_source` <Badge text="optional" variant="caution"/> - Force all packages coming from the repository to be source
+    > Default: `false`
+
+:::tip
+To improve reproducibility across systems, linux binaries are fetched using the pattern set by [Posit Package Manager](https://docs.posit.co/rspm/admin/serving-binaries.html#using-linux-binary-packages).
+Therefore, it is recommended to not include the additional linux path elements required in base R.
+:::
+
+## Example
+```toml
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+    { alias = "BioCsoft", url = "https://bioconductor.org/packages/3.21/bioc", force_source = true },
+]
+```
+
+## Other Repositories
+Currently, `rv` is tuned to best support CRAN and PPM style repositories, but there are a few specific repositories to call out:
+
+### Bioconductor
+Bioconductor is _just_ a collection of CRAN-like repositories. In R itself, tools like `BiocManager` expands the repositories and sets them,
+so that when you call `install.packages()` it will search through them to find the package of interest.
+
+While it is likely, we will include a configuration to handle the repository expansion internally, the onus remains on the user.
+
+
+Below is an example expansion, where the [bioconductor version](https://www.bioconductor.org/about/release-announcements/) 
+and [which repositories](https://www.bioconductor.org/packages/release/BiocViews.html) to include can vary based on the R version and 
+packages of interest:
+
+```toml
+repositories = [
+    { alias = "BioCsoft", url = "https://bioconductor.org/packages/3.21/bioc" },
+    { alias = "BioCann", url = "https://bioconductor.org/packages/3.21/data/annotation" },
+    { alias = "BioCexp", url = "https://bioconductor.org/packages/3.21/data/experiment" },
+    { alias = "BioCworkflows", url = "https://bioconductor.org/packages/3.21/workflows" },
+]
+```
+
+### R-Universe
+R-Universe is formatted like a CRAN-like repository, but is missing a critical component: there is [no archive](https://docs.r-universe.dev/install/reproducibility.html#does-r-universe-archive-old-versions-of-packages-how-does-it-work-with-renv).
+Since reproducibility is at the forefront of design considerations with `rv`, we currently consider packages sourced from R-universe 
+as [git dependencies](../dependencies#git) from the beginning. While this may lead to a temporary slow down due to compilation, it is more reproducible.
+We may consider downloading compiled binaries for available packages in the future if the need arises.

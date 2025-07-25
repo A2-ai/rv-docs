@@ -3,6 +3,8 @@ title: rv cache
 description: List the cache directories
 ---
 
+import { LinkCard } from '@astrojs/starlight/components';
+
 Returns the cache root and shows the sub-directory that corresponds to each repository.
 
 ### Usage
@@ -16,3 +18,11 @@ rv cache [OPTIONS]
 /Users/rv-user/.cache/rv
 PPM (https://packagemanager.posit.co/cran/latest -> f4780dda90), path: /Users/rv-user/.cache/rv/f4780dda90
 ```
+
+
+
+:::note
+More information about how `rv` utilizes the cache to increase speed and decrease storage can be found at the following page.
+
+<LinkCard title="Caching in rv" href = "../../concepts/cache"/>
+:::

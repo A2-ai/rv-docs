@@ -43,7 +43,7 @@ In this example, we'll start with a config file, inspect the output of `rv cache
         * Source subdirectories - This lists all the sources, and their corresponding subdirectories, 
         from which packages come from. We will discuss the structure of these for each source type later on this page.
 
-        ```txt
+        ```toml
         % rv cache
         /Users/rv-user/.cache/rv
         PPM (https://packagemanager.posit.co/cran/2025-01-01 -> c7c3cf56b9), path: /Users/rv-user/.cache/rv/c7c3cf56b9
@@ -111,12 +111,12 @@ PKGCACHE_TIMEOUT=0 rv plan
 
 Within the `rv` cache, each source is its own subdirectory 
 
-The details of package caching vary based on the [dependency type](../../config/common_config/#dependencies).
+The details of package caching vary based on the [dependency type](../../config/dependencies).
 
 #### Repository
 
 A repository cache is broken into two components: source and binaries. The binaries are also separated by their platform, 
-a combination of R version, OS, and architecture. `rv` will source a package to be installed into your library in the following ways:
+a combination of R version, OS, and architecture. `rv` will fetch a package to be installed into your library in the following ways:
 
 1. Use the binary package found in the cache
 2. Download the binary package from the resolved source (ignored if `force_source`)
@@ -124,12 +124,11 @@ a combination of R version, OS, and architecture. `rv` will source a package to 
 4. Download the source package from the resolved source and compile
 
 :::caution
-Because the cache is used across projects, if a package was previously downloaded as a binary, a new project would use that downloaded binary,
-even if the `force_source` configuration is used. If the downloaded binary is corrupt or local compilation is preferred, 
-the binary entry in the cache needs to be removed manually, not simply by adding the `force_source` configuration for the package.
+An important caveat to the above, if a binary is present but was downloaded and not compiled from source, if a dependency indicates `force_source`
+a new source compilation will occur and replace the downloaded binary. 
 
-CRAN does not guarantee that the binary available for each OS/R version will match the source version. Because of this, 
-`rv` includes the `force_source` flag to ensure the exposed source package version is installed.
+This is something to always consider when using `force_source`, [`packages_env_vars`](../../config/packages_env_vars), and [`configure_args`](../../config/configure_args)
+as changing the compiled binary will effect other packages using the same package binary. 
 :::
 
 #### Git

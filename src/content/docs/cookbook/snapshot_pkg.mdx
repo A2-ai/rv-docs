@@ -5,10 +5,10 @@ description: Installing an older package version from a repository snapshot
 
 import { Aside } from '@astrojs/starlight/components';
 
-As mentioned in [the repository dependency configuration note](../../config/common_config/#repository),
+As mentioned in [the repository dependency configuration note](../../config/dependencies#repository),
 `rv` intentionally does not have a way to specify a version directly. Instead, you can add an older snapshot 
-and [specify an out of order repository](../../config/common_config/#repository) or install a package 
-using the `url` configuration to install a package from the archive, as seen in the [archive package example.](../archive_pkg)
+and [specify an out of order repository](../../config/dependencies#detailed) or install a package 
+using the [`url` configuration](../../config/dependencies#url) to install a package from the archive, as seen in the [archive package example.](../archive_pkg)
 
 In this example we would like to install `jsonlite 1.9.1` and `cli`, but `jsonlite 2.0.0` is the version available in the repository.
 

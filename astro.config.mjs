@@ -22,8 +22,35 @@ export default defineConfig({
 					],
 				},
 				{
-					label: 'Configuration File',
-					autogenerate: { directory: 'config' },
+					label: 'Project Configuration',
+					items: [
+						{ label: 'Introduction', slug: 'config/intro' },
+						{ 
+							label: 'Required Fields',
+							items: [
+								{ label: 'name', slug: 'config/name' },
+								{ label: 'r_version', slug: 'config/r_version' },
+								{ label: 'repositories', slug: 'config/repositories' },
+								{ label: 'dependencies', slug: 'config/dependencies' },
+							]
+						},
+						{
+							label: 'Package Compilation',
+							items: [
+								{ label: 'prefer_repositories_for', slug: 'config/prefer_repositories_for' },
+								{ label: 'packages_env_vars', slug: 'config/packages_env_vars' },
+								{ label: 'configure_args', slug: 'config/configure_args' }
+							]
+						},
+						{
+							label: 'Project Options',
+							items: [
+								{ label: 'library', slug: 'config/library' },
+								{ label: 'use_lockfile', slug: 'config/use_lockfile' },
+								{ label: 'lockfile_name', slug: 'config/lockfile_name' },
+							]
+						}
+					]
 				},
 				{
 					label: 'Commands',
