@@ -35,8 +35,7 @@ Currently, `rv` is tuned to best support CRAN and PPM style repositories, but th
 Bioconductor is _just_ a collection of CRAN-like repositories. In R itself, tools like `BiocManager` expands the repositories and sets them,
 so that when you call `install.packages()` it will search through them to find the package of interest.
 
-While it is likely, we will include a configuration to handle the repository expansion internally, the onus remains on the user.
-
+While it is likely we will include a configuration to handle the repository expansion internally, the onus currently is on the user.
 
 Below is an example expansion, where the [bioconductor version](https://www.bioconductor.org/about/release-announcements/) 
 and [which repositories](https://www.bioconductor.org/packages/release/BiocViews.html) to include can vary based on the R version and 
