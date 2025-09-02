@@ -105,6 +105,7 @@ export default defineConfig({
 							label: 'Other',
 							collapsed: true,
 							items: [
+								{ label: 'rv fmt', slug: 'commands/fmt' },
 								{ label: 'rv activate & rv deactivate', slug: 'commands/activation' }
 							]
 						}

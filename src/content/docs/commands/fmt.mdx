@@ -1,0 +1,26 @@
+---
+title: rv fmt
+description: Format the config file with consistent styling, while maintaining spacing and comments
+---
+
+Used to format the config file to have consistent styling, while preserving comments and spacing within the toml file.
+
+### Usage
+```
+rv fmt [OPTIONS]
+```
+
+#### Options
+`--check` - checks the formatting without changing the file
+
+### Example
+```shell {1, 4, 7}
+% rv fmt --check
+Config file is not formatted correctly
+
+% rv fmt
+Config file successfully formatted
+
+% rv fmt --check
+Config file is already formatted
+```
