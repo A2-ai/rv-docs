@@ -1,0 +1,88 @@
+---
+title: "Using rv with Quarto"
+description: "How to use rv package management with Quarto projects"
+tableOfContents:
+  maxHeadingLevel: 4
+---
+
+import { Steps, FileTree } from '@astrojs/starlight/components';
+
+`rv` works well with [Quarto](https://quarto.org/) documents and projects, but there are a few important considerations when using the two together.
+
+## Packages Not Found During Render
+`rv` sets the R session's library paths using a `.Rprofile` file at the project root. Therefore, when an R session starts from that directory,
+the `.Rprofile` is sourced and the library paths are set. 
+
+This becomes an issue when rendering Quarto documents from subdirectories. The R sessions to render the R code start within the subdirectory,
+thus do not properly source the project root's `.Rprofile`. 
+
+### Recommended Fix
+
+In order to resolve this issue, a `.Rprofile` must be present within the subdirectory which sources the project root `.Rprofile` (i.e. `source("../.Rprofile")`).
+
+For example, if the quarto doc of interest is two subdirectories within the project, a .Rprofile containing `source("../../.Rprofile")` 
+must be added.
+
+<FileTree>
+- my-project/
+    - scripts/
+        - reports
+            - my-report.qmd
+            - **.Rprofile** contains `source("../../.Rprofile")`
+    - rv/scripts
+        - activate.R
+    - .Rprofile contains `source("rv/scripts/activate.R")
+    - rproject.toml
+</FileTree>
+
+## `quarto render` Renders Package Documentation
+
+By default, `quarto render` [recursively scans all subdirectories in your project](https://quarto.org/docs/projects/quarto-projects.html#render-targets), 
+including the `rv/` directory. The issue arises when it finds `.Rmd` files for package documentation within the `rv/library/` and attempts
+to render them using your current R environment. This can cause errors when those documentation files reference packages not available in your project,
+but can also just be a nuisance to have to render even when they render without error.
+
+:::note
+For users coming from `renv`, you may be wondering why this did not occur in your `renv` projects. Simply put, `renv` is ignored
+by `quarto` _magically_. We aim to work with the Quarto developers to either be included in the _magic_ or develop a more flexible way to ignore
+directories from rendering.
+:::
+
+### Recommended Fix
+
+#### Option 1: Exclude the `rv` library within your `_quarto.yaml` (Recommended)
+
+The simplest solution is to exclude the `rv/` directory from Quarto's rendering process by adding it to your `_quarto.yml` configuration:
+
+```yaml
+project:
+  type: default
+  render:
+    - "*.qmd"
+    - "!rv/"
+```
+
+This works great for simple projects, but can become bulky and complex for larger projects like multi-page websites.
+
+#### Option 2: Project Structure Reorganization
+
+Alternatively, restructuring the project so that the Quarto content is within a subdirectory will keep `rv` from the discoverable path.
+
+<FileTree>
+- my-project/
+  - rv/
+  - rproject.toml
+  - .Rprofile
+  - **quarto-content/**
+    - _quarto.yml
+    - index.qmd
+    - **.Rprofile**
+</FileTree>
+
+:::caution
+Ensure the subdirectory contains a `.Rprofile` with the following content to properly source the packages as described [above](#packages-not-found-during-render):
+
+```r
+source("../.Rprofile")
+```
+:::
