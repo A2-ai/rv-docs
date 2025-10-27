@@ -1,0 +1,28 @@
+/* Custom layout adjustments for rv docs */
+
+/* Increase content width and adjust sidebar proportions on larger screens */
+@media (min-width: 72rem) {
+  :root {
+    /* Increase main content width from default 45rem to 55rem */
+    --sl-content-width: 55rem;
+  }
+
+  /* Narrow the right sidebar (table of contents) */
+  .right-sidebar-container {
+    /* Override the calculated width to make TOC narrower */
+    width: 12rem !important;
+  }
+}
+
+/* Further increase content width on extra large screens */
+@media (min-width: 90rem) {
+  :root {
+    /* Increase main content width to 65rem on very large screens */
+    --sl-content-width: 65rem;
+  }
+
+  /* Keep TOC compact on extra large screens */
+  .right-sidebar-container {
+    width: 12rem !important;
+  }
+}

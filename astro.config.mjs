@@ -13,6 +13,9 @@ export default defineConfig({
 				src: './src/assets/images/rv-logo.png'
 			},
 			social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/a2-ai/rv' }],
+			customCss: [
+				'./src/styles/custom.css',
+			],
 			sidebar: [
 				{
 					label: 'Introduction',
@@ -116,13 +119,8 @@ export default defineConfig({
 					collapsed: true,
 					items: [
 						{ label: 'Introduction', slug: 'cookbook/intro' },
-						{ 
-							label: 'Installing a Specific Version', 
-							items: [
-								{ label: 'From Snapshot', slug: 'cookbook/snapshot_pkg' },
-								{ label: 'From Archive', slug: 'cookbook/archive_pkg' },
-							]
-						},
+						{ label: 'rv add examples', slug: 'cookbook/rv_add_examples' },
+						{ label: 'Installing a Specific Package Version', slug: 'cookbook/pkg_version' },
 						{ label: 'Overriding Remotes', slug: 'cookbook/remotes' },
 					]
 				},

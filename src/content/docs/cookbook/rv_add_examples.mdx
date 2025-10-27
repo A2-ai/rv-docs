@@ -1,0 +1,144 @@
+---
+title: rv add examples
+description: Examples demonstrating the various options and capabilities of rv add
+---
+
+The `rv add` command supports a wide range of options for adding packages to your project. This page demonstrates various ways to use `rv add` with different package sources and configuration options.
+
+## Simple Package Addition
+
+Add a package using the default behavior - creates a simple string dependency entry:
+
+```shell
+rv add dplyr
+```
+
+**Result in rproject.toml:**
+```toml
+dependencies = ["dplyr"]
+```
+
+## Specifying a Repository
+
+Add a package from a specific repository using the `--repository` flag:
+
+```shell
+rv add polars --repository RMV25Q3
+```
+
+**Result in rproject.toml:**
+```toml
+dependencies = [
+    { name = "polars", repository = "RMV25Q3" }
+]
+```
+
+This is useful when you need to install a package from a non-default repository, such as [R-multiverse](https://r-multiverse.org/) snapshots.
+
+## Force Source Installation
+
+Force installation from source for all repositories:
+
+```shell
+rv add dplyr --force-source
+```
+
+**Result in rproject.toml:**
+```toml
+dependencies = [
+    { name = "dplyr", force_source = true }
+]
+```
+
+## Combining Multiple Options
+
+Combine repository targeting, force source, and install suggestions:
+
+```shell
+rv add dplyr --repository cran --force-source --install-suggestions
+```
+
+**Result in rproject.toml:**
+```toml
+dependencies = [
+    { name = "dplyr", repository = "cran", force_source = true, install_suggestions = true }
+]
+```
+
+## Git Repository with Tag
+
+Install from a git repository with a specific tag:
+
+```shell
+rv add my-pkg --git https://github.com/user/repo --tag v1.0.0
+```
+
+**Result in rproject.toml:**
+```toml
+dependencies = [
+    { name = "my-pkg", git = "https://github.com/user/repo", tag = "v1.0.0" }
+]
+```
+
+## Git Repository with All Options
+
+Install from a git repository with branch, subdirectory, and additional options:
+
+```shell
+rv add my-pkg --git https://github.com/user/repo --branch main --directory subpkg --install-suggestions --dependencies-only
+```
+
+**Result in rproject.toml:**
+```toml
+dependencies = [
+    { name = "my-pkg", git = "https://github.com/user/repo", branch = "main",
+      directory = "subpkg", install_suggestions = true, dependencies_only = true }
+]
+```
+
+## Local Path
+
+Install a package from a local path:
+
+```shell
+rv add my-pkg --path ../my-package
+```
+
+**Result in rproject.toml:**
+```toml
+dependencies = [
+    { name = "my-pkg", path = "../my-package" }
+]
+```
+
+## Package Archive URL
+
+Install from a direct URL to a package archive:
+
+```shell
+rv add dplyr --url https://cran.r-project.org/src/contrib/Archive/dplyr/dplyr_1.1.3.tar.gz
+```
+
+**Result in rproject.toml:**
+```toml
+dependencies = [
+    { name = "dplyr", url = "https://cran.r-project.org/src/contrib/Archive/dplyr/dplyr_1.1.3.tar.gz" }
+]
+```
+
+## Dependencies-Only Mode
+
+Install only the dependencies of a package without installing the package itself. This is particularly useful when actively developing a package:
+
+```shell
+rv add my-dev-pkg --path . --dependencies-only
+```
+
+**Result in rproject.toml:**
+```toml
+dependencies = [
+    { name = "my-dev-pkg", path = ".", dependencies_only = true }
+]
+```
+
+This installs all dependencies of `my-dev-pkg` but not `my-dev-pkg` itself, which is ideal for development workflows.
