@@ -133,6 +133,7 @@ export default defineConfig({
 						{ label: 'FAQ', slug: 'reference/faq'},
 						{ label: 'Difference with renv', slug: 'reference/renv-difference' },
 						{ label: 'Environment Variables', slug: 'reference/env_vars' },
+						{ label: 'rv with quarto', slug: 'reference/rv-quarto'},
 						{ label: 'rvr - rv for R', slug: 'reference/rvr' },
 					]
 				},
