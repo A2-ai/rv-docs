@@ -1,6 +1,6 @@
 ---
-title: Installing an Older Package Version from a Snapshot
-description: Installing an older package version from a repository snapshot
+title: Installing a Specific Package Version
+description: Installing a specific package version through an older snapshot or archived package version
 ---
 
 import { Aside } from '@astrojs/starlight/components';
@@ -10,12 +10,10 @@ As mentioned in [the repository dependency configuration note](../../config/depe
 and [specify an out of order repository](../../config/dependencies#detailed) or install a package 
 using the a direct [`url` configuration](../../config/dependencies#url). 
 
-<Aside type="note">
-Consider the scenario where we would like to install `jsonlite 1.9.1` but `jsonlite 2.0.0` is the version available in the repository
+On this page, we will consider the scenario where we would like to install `jsonlite 1.9.1` but `jsonlite 2.0.0` is the version available in the repository
 used by other packages.
-</Aside>
 
-### Through an Older Snapshot 
+## Through an Older Snapshot 
 
 We must first determine a snapshot that contains the version of interest. 
 Looking at [`jsonlite` in Posit Package Manager](https://packagemanager.posit.co/client/#/repos/cran/packages/overview?search=jsonlite), 
@@ -43,7 +41,7 @@ dependencies = [
 
 ### Installation Results
 Below is the result of syncing the project.By utilizing a snapshot repository, we are able to still get a binary, 
-which is much faster than source compilation of an archive version as seen in the [archive example](../archive_pkg).
+which is much faster than source compilation of an archive version as seen in the [archive example](#through-an-archivetarball).
 
 ```shell
 % rv sync
@@ -54,27 +52,18 @@ which is much faster than source compilation of an archive version as seen in th
 Additionally, by adding the older snapshot date, if dependency constraints from the older package version cannot be met
 in the newer repository, dependencies can come from the older repository. 
 
-<Aside type="note">
+:::caution
 Mixing repository dates should be done with caution. CRAN's guarantee for package compatibility is lost by adding a package from a 
 different moment in time. Understand what other dependencies rely on the package you are changing and what behavior may change before
 mixing packages.
-</Aside>
+:::
 
 ## Through an Archive/Tarball
 
-As mentioned in [the repository dependency configuration note](../../config/dependencies#repository),
-`rv` intentionally does not have a way to specify a version directly. Instead, you can install a package 
-using the [`url` configuration](../../config/dependencies#url) to install a package from the archive
-or add an older snapshot and [specify an out of order repositories](../../config/repositories#detailed), as seen in the
-[older snapshot example](../snapshot_pkg).
-
-In this example we would like to install `jsonlite 1.9.1` and `cli`, but `jsonlite 2.0.0` is the version available in the repository.
-### Config File
-
-In the config file, we add the dependency using the [`url` configuration](../../config/dependencies#url) to point to the Archive.
+If adding a different snapshot is not desired, we can add the dependency using the [`url` configuration](../../config/dependencies#url) to point to the Archive.
 In a CRAN-like repository, packages are found in the archive in the pattern `{repo url}/src/contrib/Archive/{pkg name}/{pkg name}_{pkg version}.tar.gz`
 
-```toml {14}
+```toml {13}
 // rproject.toml
 [project]
 name = "archive"
@@ -100,7 +89,7 @@ Below is the result of syncing the project. Notice, all other packages (includin
 + jsonlite (1.9.1, source from https://cran.r-project.org/src/contrib/Archive/jsonlite/jsonlite_1.9.1.tar.gz) in 2549ms
 ```
 
-<Aside type="caution">
+:::caution
 Adding a package from the archive will always be a source compilation, thus if you want binaries for speed, consider using the
 older snapshot method instead, though that is less clear as to why you are targeting an entire repository.
-</Aside>
+:::

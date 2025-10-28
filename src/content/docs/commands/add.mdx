@@ -36,7 +36,7 @@ rv add [packages]... [OPTIONS]
 * `--url <URL>` - Install from a URL to a package archive. Creates a table entry with the `url` field.
 
 #### Installation Behavior Options
-* `--force-source` - Force installation from source. Adds `force_source = true` to the dependency entry.
+* `--force-source` - Forces the package to be fetched and installed as source from a repository. Adds `force_source = true` to the dependency entry.
 * `--install-suggestions` - Install suggested packages. Adds `install_suggestions = true` to the dependency entry.
 * `--dependencies-only` - Install only the dependencies of the package, not the package itself. Adds `dependencies_only = true` to the dependency entry. Useful when developing a package locally.
 
