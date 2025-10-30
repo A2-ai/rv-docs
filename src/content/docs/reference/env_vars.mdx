@@ -21,12 +21,12 @@ if any of the packages in the library are open (or in use) and does not allow a 
 this variable can be set to `true` or `1` to not check for open files if the file system is known to not have these issues.
 
 ## `RV_SYS_REQ_URL`
-For certain Linux distributions, currently Ubuntu and Debian, `rv` will check if the system dependencies for packages are found. To determine each package's system dependencies, 
+For certain Linux distributions, currently Ubuntu, Debian, and RHEL-like, `rv` will check if the system dependencies for packages are found. To determine each package's system dependencies, 
 `rv` consults [Posit Package Manager's api](https://packagemanager.posit.co/__api__/repos/cran/sysreqs) by default. This environment variable can be used
 to tune where `rv` determines the system dependencies from.
 
 ## `RV_SYS_DEPS_CHECK_IN_PATH`
-For certain Linux distributions, currently Ubuntu and Debian, `rv` will check if the system dependencies for packages are found. To check if the system dependencies
+For certain Linux distributions, currently Ubuntu, Debian, and RHEL-like, `rv` will check if the system dependencies for packages are found. To check if the system dependencies
 required for this project are installed, `rv` consults the [`dpkg` database](https://debian-handbook.info/browse/da-DK/stable/sect.manipulating-packages-with-dpkg.html#sect.dpkg-list),
 a list of [known dependencies on the path](#known-path-dependencies), and any dependencies set by this environment variable in a comma separated list.
 
@@ -41,3 +41,8 @@ caching minimizes the disk space used by installed packages. By default, `rv` wi
 By default, when using Git sources, `rv` will run `git submodule update --init --recursive` after checking out a commit to ensure all required submodules are initialized.
 This behavior ca be disabled by setting this variable to `true` or `1` to skip updating submodules entirely. This can be useful in cases where submodules are not needed 
 or when working in network-constrained or CI environments.
+
+## `RV_CACHE_DIR`
+By default, `rv` respects [XDG Base Directory Specification](https://specifications.freedesktop.org/basedir-spec/latest/) for Unix like systems 
+and the [Known Folder Locations](https://learn.microsoft.com/en-us/windows/win32/shell/known-folders) on Windows. Setting this environment variable will override the default and allows for
+flexibility.
