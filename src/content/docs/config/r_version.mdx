@@ -28,6 +28,8 @@ If the executable exists, will check the version to ensure it matches the specif
 * **Windows** - [rig](https://github.com/r-lib/rig) keeps the installed/selected version as R.bat, therefore we check for `R.bat` on the path as well.
 
 :::note
-For interactive sessions of R in an rv project, if the R version does not match the R version in your config, a warning will appear.
+* For interactive sessions of R in an rv project, if the R version does not match the R version in your config, a warning will appear.
 `rv` does not use the current R session, so packages may be installed for versions of R that your session is not currently using.
+
+* When adding an R version to the path, the R executable is often within a `bin/` directory
 :::
