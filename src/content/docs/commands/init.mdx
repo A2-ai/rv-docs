@@ -27,7 +27,7 @@ rv init [project_directory] [OPTIONS]
 * `--r-version` - The R version is set to be the version found on the path by default. 
 Use this flag to set a custom version.
 
-* `--no-repositories` - The repositories are set to what is found in the current R session,
+* `--no-repositories` - The repositories are set to what is found in the current R profile,
 in `option("repos")`, by default. This flag leaves the repositories field in the config file blank.
 
 * `--add` - The dependency field is blank by default. This flag can be used to add dependencies you know 
@@ -43,10 +43,14 @@ The flag will force the creation of a new config file.
 * For RStudio/Positron users, the R version on the path does NOT always match the version set for the session. 
 Please use `--r-version` to ensure the correct R version is used for the project.
 
-* `rv` init will not automatically sync your project
+* `rv init` will not automatically sync your project
 
 * For interactive R sessions, we recommend restarting R after initializing your project to ensure your 
 project is activated properly.
+
+* To determine the default repositories, an `Rscript` command is launched from the working directory. 
+Depending on the locations of your [`.Rprofile`s](https://docs.posit.co/ide/user/ide/guide/environments/r/managing-r.html#rprofile), 
+this may affect the repositories found.
 :::
 
 ### Example
