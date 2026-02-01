@@ -27,7 +27,7 @@ to tune where `rv` determines the system dependencies from.
 
 ## `RV_SYS_DEPS_CHECK_IN_PATH`
 For certain Linux distributions, currently Ubuntu, Debian, and RHEL-like, `rv` will check if the system dependencies for packages are found. To check if the system dependencies
-required for this project are installed, `rv` consults the [`dpkg` database](https://debian-handbook.info/browse/da-DK/stable/sect.manipulating-packages-with-dpkg.html#sect.dpkg-list),
+required for this project are installed, `rv` consults the [`dpkg`](https://debian-handbook.info/browse/da-DK/stable/sect.manipulating-packages-with-dpkg.html#sect.dpkg-list),
 a list of [known dependencies on the path](#known-path-dependencies), and any dependencies set by this environment variable in a comma separated list.
 
 #### Known Path Dependencies
@@ -43,6 +43,12 @@ This behavior ca be disabled by setting this variable to `true` or `1` to skip u
 or when working in network-constrained or CI environments.
 
 ## `RV_CACHE_DIR`
-By default, `rv` respects [XDG Base Directory Specification](https://specifications.freedesktop.org/basedir-spec/latest/) for Unix like systems 
+By default, `rv` respects [XDG Base Directory Specification](https://specifications.freedesktop.org/basedir-spec/latest/) for Unix like systems
 and the [Known Folder Locations](https://learn.microsoft.com/en-us/windows/win32/shell/known-folders) on Windows. Setting this environment variable will override the default and allows for
 flexibility.
+
+## `RV_COPY_THREADS`
+`rv` uses multiple threads when copying files to improve performance. This variable allows overriding the default thread count used for file operations. **Only set this variable if you are experiencing known file system performance issues, particularly on slow NFS drives.** In most cases, the default behavior will provide optimal performance.
+
+## `RV_GLOBAL_CACHE_DIR` (v0.18.0+)
+This environment variable specifies a global cache directory location, allowing for flexibility in cache placement across systems. This works in conjunction with `RV_CACHE_DIR` to provide multi-level caching strategy options.

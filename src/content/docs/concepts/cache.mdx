@@ -144,7 +144,35 @@ the package is re-downloaded to ensure the contents match. If they do, the packa
 
 #### Local
 
-`rv` does not keep local packages in the cache. Since the file is already on the system, keeping a cached version is not practical. `rv` does however keep track 
+`rv` does not keep local packages in the cache. Since the file is already on the system, keeping a cached version is not practical. `rv` does however keep track
 of the hash of the source file within the compiled package in the library, therefore re-installation only occurs when the source file changes.
+
+## Global Cache
+
+:::info
+The global cache feature is available as of `rv` v0.18.0.
+:::
+
+The global cache is a shared cache that organizations can configure to reduce the number of copies of packages across multiple machines and projects. Instead of each project and user maintaining their own complete copy of packages, projects can link against a centralized global cache, significantly reducing disk space usage and redundant downloads.
+
+### How It Works
+
+The global cache works in conjunction with your local cache using a multi-level caching strategy:
+
+1. **Global Cache** - A shared cache (`RV_GLOBAL_CACHE_DIR`) that is consulted first. If a package is present in the global cache, it is referenced directly from there
+2. **Local Cache** - Your project-specific cache (`RV_CACHE_DIR`) serves as a fallback for packages not found in the global cache
+
+**Linking** - `rv` uses the same linking mechanism (hard-links, copy-on-write, or copying) to link packages from the global cache into your project, avoiding duplication
+
+### Configuration
+
+The global cache is generally configured by system administrators. It can be set using the [`RV_GLOBAL_CACHE_DIR`](../../reference/env_vars/#rv_global_cache_dir) environment variable to point to a shared location accessible to all users and machines.
+
+For example, an administrator might configure:
+```bash
+export RV_GLOBAL_CACHE_DIR=/mnt/shared/rv-cache
+```
+
+This allows all users and projects on the organization to benefit from a shared pool of pre-compiled packages, reducing network bandwidth and storage costs while maintaining isolation through the local cache layer.
 
 
