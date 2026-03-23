@@ -3,57 +3,69 @@ title: Environment Variables
 description: Environment variables used/respected in rv
 ---
 
-`rv` respects existing environment variables and introduces a few as well. This page contains information about 
+`rv` respects existing environment variables and introduces a few as well. This page contains information about
 what each does and how it effects `rv`:
 
 ## `PKGCACHE_TIMEOUT`
+
 `rv` keeps a cached version of the [repository database](../../concepts/cache/#repository-database), which tracks which package versions are available in the repository.
-It is in seconds, and defaults to 3600, or 1 hour, and corresponds to the `PKGCACHE_TIMEOUT` environment variable in 
+It is in seconds, and defaults to 3600, or 1 hour, and corresponds to the `PKGCACHE_TIMEOUT` environment variable in
 [`pkgcache`](https://github.com/r-lib/pkgcache?tab=readme-ov-file#package-environment-variables).
 
 ## `RV_NUM_CPUS`
+
 `rv` parallelizes as much as possible. By default, `rv` will use all CPUs available to make the installation as fast as possible, but for some users
 (especially in cloud computing environments) setting a cap on the number of CPUs to use may be useful.
 
 ## `RV_NO_CHECK_OPEN_FILE`
+
 On certain file systems, particularly NFS, packages which are loaded in R are locked and can not be removed until they are unloaded. `rv` by default checks
 if any of the packages in the library are open (or in use) and does not allow a sync if any of those packages need to be removed. To override this behavior,
 this variable can be set to `true` or `1` to not check for open files if the file system is known to not have these issues.
 
 ## `RV_SYS_REQ_URL`
-For certain Linux distributions, currently Ubuntu, Debian, and RHEL-like, `rv` will check if the system dependencies for packages are found. To determine each package's system dependencies, 
+
+For certain Linux distributions, currently Ubuntu, Debian, and RHEL-like, `rv` will check if the system dependencies for packages are found. To determine each package's system dependencies,
 `rv` consults [Posit Package Manager's api](https://packagemanager.posit.co/__api__/repos/cran/sysreqs) by default. This environment variable can be used
 to tune where `rv` determines the system dependencies from.
 
 ## `RV_SYS_DEPS_CHECK_IN_PATH`
+
 For certain Linux distributions, currently Ubuntu, Debian, and RHEL-like, `rv` will check if the system dependencies for packages are found. To check if the system dependencies
 required for this project are installed, `rv` consults the [`dpkg`](https://debian-handbook.info/browse/da-DK/stable/sect.manipulating-packages-with-dpkg.html#sect.dpkg-list),
 a list of [known dependencies on the path](#known-path-dependencies), and any dependencies set by this environment variable in a comma separated list.
 
 #### Known Path Dependencies
+
 `rv` declares the "known" dependencies on the path as: `rustc`, `cargo`, `pandoc`, `texlive`, `chromium`, and `google-chrome`.
 
 ## `RV_LINK_MODE`
+
 `rv` aggressively [cache's](../../concepts/cache) in order to avoid re-compiling and re-downloading pages. Additionally,
 caching minimizes the disk space used by installed packages. By default, `rv` will hard-link for Windows and Linux and [copy on write](https://en.wikipedia.org/wiki/Copy-on-write) for macOS.
 
 ## `RV_SUBMODULE_UPDATE_DISABLE`
+
 By default, when using Git sources, `rv` will run `git submodule update --init --recursive` after checking out a commit to ensure all required submodules are initialized.
-This behavior ca be disabled by setting this variable to `true` or `1` to skip updating submodules entirely. This can be useful in cases where submodules are not needed 
+This behavior ca be disabled by setting this variable to `true` or `1` to skip updating submodules entirely. This can be useful in cases where submodules are not needed
 or when working in network-constrained or CI environments.
 
 ## `RV_CACHE_DIR`
+
 By default, `rv` respects [XDG Base Directory Specification](https://specifications.freedesktop.org/basedir-spec/latest/) for Unix like systems
 and the [Known Folder Locations](https://learn.microsoft.com/en-us/windows/win32/shell/known-folders) on Windows. Setting this environment variable will override the default and allows for
 flexibility.
 
 ## `RV_COPY_THREADS`
+
 `rv` uses multiple threads when copying files to improve performance. This variable allows overriding the default thread count used for file operations. **Only set this variable if you are experiencing known file system performance issues, particularly on slow NFS drives.** In most cases, the default behavior will provide optimal performance.
 
-## `RV_LIBRARY_DIR` (v0.19.0+)
+## `RV_LIBRARY_DIR` (v0.20.0+)
+
 By default, `rv` stores the project library under `rv/library/` within the project directory, or at the path specified by the `library` field in `rproject.toml`.
 Setting this environment variable overrides both defaults. Absolute paths are used as-is, while relative paths are resolved against the project directory.
 This takes precedence over the `library` field in `rproject.toml`.
 
 ## `RV_GLOBAL_CACHE_DIR` (v0.18.0+)
+
 This environment variable specifies a global cache directory location, allowing for flexibility in cache placement across systems. This works in conjunction with `RV_CACHE_DIR` to provide multi-level caching strategy options.
