@@ -50,5 +50,10 @@ flexibility.
 ## `RV_COPY_THREADS`
 `rv` uses multiple threads when copying files to improve performance. This variable allows overriding the default thread count used for file operations. **Only set this variable if you are experiencing known file system performance issues, particularly on slow NFS drives.** In most cases, the default behavior will provide optimal performance.
 
+## `RV_LIBRARY_DIR` (v0.19.0+)
+By default, `rv` stores the project library under `rv/library/` within the project directory, or at the path specified by the `library` field in `rproject.toml`.
+Setting this environment variable overrides both defaults. Absolute paths are used as-is, while relative paths are resolved against the project directory.
+This takes precedence over the `library` field in `rproject.toml`.
+
 ## `RV_GLOBAL_CACHE_DIR` (v0.18.0+)
 This environment variable specifies a global cache directory location, allowing for flexibility in cache placement across systems. This works in conjunction with `RV_CACHE_DIR` to provide multi-level caching strategy options.
