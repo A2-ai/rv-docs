@@ -43,7 +43,9 @@ export default defineConfig({
 							items: [
 								{ label: 'prefer_repositories_for', slug: 'config/prefer_repositories_for' },
 								{ label: 'packages_env_vars', slug: 'config/packages_env_vars' },
-								{ label: 'configure_args', slug: 'config/configure_args' }
+								{ label: 'configure_args', slug: 'config/configure_args' },
+								{ label: 'no_strip', slug: 'config/no_strip' },
+								{ label: 'git_shorthand_base_url', slug: 'config/git_shorthand_base_url' }
 							]
 						},
 						{

@@ -33,3 +33,22 @@ If the executable exists, will check the version to ensure it matches the specif
 
 * When adding an R version to the path, the R executable is often within a `bin/` directory
 :::
+
+## `use_devel`
+If you are running an R-devel build (identified by a non-empty `status` field in R's `Rversion.h`), set `use_devel = true` alongside
+`r_version` so `rv` matches against that devel installation instead of a released version with the same major/minor version.
+
+```toml ins={4}
+[project]
+name = "devel project"
+r_version = "4.6"
+use_devel = true
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+]
+dependencies = [
+    "dplyr",
+]
+```
+
+> Default: `false`

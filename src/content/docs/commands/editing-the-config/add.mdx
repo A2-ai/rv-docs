@@ -35,6 +35,14 @@ rv add [packages]... [OPTIONS]
 * `--path <PATH>` - Install from a local path. Creates a table entry with the `path` field.
 * `--url <URL>` - Install from a URL to a package archive. Creates a table entry with the `url` field.
 
+##### `owner/repo` shorthand
+As a shortcut for `--git`, a package argument in the form `owner/repo` is treated as a git source, resolved against `https://github.com`
+(or [`git_shorthand_base_url`](../../../config/git_shorthand_base_url) if configured):
+* `rv add r-lib/cli` - installs from the repository's default branch
+* `rv add r-lib/cli@v3.6.2` - installs from a tag, branch, or commit SHA (auto-detected)
+* `rv add r-lib/cli@branch:main`, `@tag:v3.6.2`, or `@commit:9a8c5d2` - explicitly typed reference
+* `rv add r-lib/usethis@tag:v2.2.3:r-package` - reference plus a subdirectory within the repo
+
 #### Installation Behavior Options
 * `--force-source` - Forces the package to be fetched and installed as source from a repository. Adds `force_source = true` to the dependency entry.
 * `--install-suggestions` - Install suggested packages. Adds `install_suggestions = true` to the dependency entry.

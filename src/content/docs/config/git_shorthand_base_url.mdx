@@ -1,0 +1,30 @@
+---
+title: git_shorthand_base_url
+description: Override the base URL used by the rv add owner/repo shorthand
+---
+
+[`rv add`](../../commands/editing-the-config/add) supports an `owner/repo` shorthand for installing packages straight from a git
+repository, without writing out the full `--git` configuration (e.g. `rv add r-lib/cli`). By default, this shorthand resolves
+against `https://github.com`.
+
+`git_shorthand_base_url` overrides that base URL, which is useful for organizations hosting their packages on GitHub Enterprise
+or another self-hosted git server.
+
+## Example
+```toml ins={8}
+//rproject.toml
+[project]
+name = "custom git shorthand"
+r_version = "4.5"
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+]
+git_shorthand_base_url = "https://git.mycompany.com/scm"
+dependencies = [
+    { name = "my-pkg", git = "https://git.mycompany.com/scm/my-team/my-pkg", branch = "main" },
+]
+```
+
+With this configuration, `rv add my-team/my-pkg` resolves to `https://git.mycompany.com/scm/my-team/my-pkg`.
+
+> Default: `https://github.com`

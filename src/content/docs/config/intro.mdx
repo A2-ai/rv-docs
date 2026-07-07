@@ -21,7 +21,7 @@ The first set of configurations are the fields that are required and most common
 #### Options
 
 * [`name`](../name) - A name for your project
-* [`r_version`](../r_version) - The R version for which to install packages
+* [`r_version`](../r_version) - The R version for which to install packages. See [`use_devel`](../r_version#use_devel) if you're running R-devel.
 * [`repositories`](../repositories) - A list of CRAN-like repositories to fetch packages from. The order matters!
 * [`dependencies`](../dependencies) - A list of dependencies to install
 
@@ -84,12 +84,14 @@ On top of the [`dependencies`](../dependencies) section configuration available,
 * [`prefer_repositories_for`](../prefer_repositories_for) - Used to prefer repositories for dependencies that may be listed as `Remotes` in another package.
 * [`packages_env_vars`](../packages_env_vars) - Used to specify package specific environment variables for compilation. Has no effect if the package is sourced as a binary.
 * [`configure_args`](../configure_args) - Used to specify package specific configure.args. Can be tuned by OS and arch. Has no effect if the package is sourced as a binary.
+* [`no_strip`](../no_strip) - Disable stripping of debug symbols (passed by default to `R CMD INSTALL`) for specific packages.
+* [`git_shorthand_base_url`](../git_shorthand_base_url) - Override the base URL used by the [`rv add owner/repo` shorthand](../../commands/editing-the-config/add#ownerrepo-shorthand).
 
 > `dev_dependencies` and `suggests` are reserved fields for further dependency control, but are not yet implemented.
 
 ### Project Options
 `rv` provides configurations for the project as well, including the ability to tune the lock file and a custom library location. These are used outside of the `[project]` header.
 
-* [`library`](../library) - Specify a custom library location
+* [`library`](../library) - Specify a custom library location, optionally templated by R version or project name
 * [`use_lockfile`](../use_lockfile) - Whether to use a lockfile or not
 * [`lockfile_name`](../lockfile_name) - The name of the lockfile corresponding to the config file

@@ -26,4 +26,28 @@ dependencies = [
 ]
 ```
 
+## Templating
+Since the burden of name spacing falls on the user with a custom `library` path, `rv` supports two placeholders to make it easier to keep
+libraries separated by R version or project: `{r_version}` and `{name}`. These are expanded using the project's `r_version` (major.minor)
+and `name` fields.
+
+```toml ins={2}
+//rproject.toml
+library = "/opt/rpkgs/{r_version}/{name}"
+[project]
+name = "templated_library"
+r_version = "4.5"
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+]
+dependencies = [
+    "dplyr",
+]
+```
+
+In this example, packages would be installed to `/opt/rpkgs/4.5/templated_library`.
+
+## Overriding with `RV_LIBRARY_DIR`
+The [`RV_LIBRARY_DIR`](../../reference/env_vars#rv_library_dir-v0200) environment variable overrides the `library` field (and the default `rv/library` path)
+entirely, taking precedence over whatever is set in the config file.
 
