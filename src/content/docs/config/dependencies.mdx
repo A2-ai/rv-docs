@@ -82,6 +82,10 @@ dependencies = [
 ## Local
 Install a package from a local source. Can be a directory or archive containing a source or binary R package.
 
+:::note
+Starting in v0.21.0, locally sourced packages are built using `R CMD build` before installation.
+:::
+
 ### Configurations
 * `name` - The name of the package. Must match the name of the package found at the path.
 * `path` - The path pointing to the package directory or archive
