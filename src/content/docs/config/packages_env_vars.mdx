@@ -11,7 +11,7 @@ variables per package is more important, even required in certain scenarios.
 This flag will not have any impact if a package is available as a binary and the `force_source` flag is not used. 
 
 :::caution
-As discussed in the [Cache Concept Section](../../concepts/cache), changing the compilation of a package may effect other projects. If 
+As discussed in the [Cache Concept Section](../../concepts/cache), changing the compilation of a package may affect other projects. If 
 the desired behavior is to keep the compilation change isolated to this project, we recommend setting your cache directory 
 (using `XDG_CACHE_HOME` for unix-like systems) to a separate directory to ensure this does not impact other projects.
 :::

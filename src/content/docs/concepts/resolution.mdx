@@ -190,7 +190,7 @@ With this configuration, we have an additional requirement for the source of `ba
     * `bar >= 1.0.0` if `foo 1.0.0`
 
 Since `foo 2.0.0` is in `repo2`, we keep the restrictive requirement that `bar >= 2.0.0`. The only way to meet that requirement would be to install
-`bar 2.0.0` from `repo2`, but that is in direct conflict with the conflict `bar` must be sourced from `repo1`. 
+`bar 2.0.0` from `repo2`, but that is in direct conflict with the constraint `bar` must be sourced from `repo1`. 
 Therefore, we cannot resolve this configuration.
 
 ## Lockfile
@@ -478,7 +478,7 @@ prefer_repositories_for = [
 
 The requirements now become:
 * Direct Dependencies:
-    * `baz` from `my-org@main`
+    * `baz` from `my-org/baz@main`
     * **`bar` from repository**
 * Recursive Dependencies:
     * **`bar` from `my-org/baz`**

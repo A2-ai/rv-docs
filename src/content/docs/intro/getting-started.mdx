@@ -12,7 +12,7 @@ To start a new project, use `rv init`:
 rv init hello_world
 ```
 
-`rv init` will create generate the following project structure:
+`rv init` will create the following project structure:
 
 <FileTree>
 - hello_world/
@@ -51,7 +51,9 @@ The R version for the project. During `rv init`, this is set by default to the v
 
 The [`r_version` page](../../config/r_version) contains additional information on how `rv` finds the [R executable.](../../config/r_version/#finding-the-executable)
 
-WARNING: If using RStudio/Positron, the R version on the path does not always match the version selected.
+:::caution
+If using RStudio/Positron, the R version on the path does not always match the version selected.
+:::
 
 #### `repositories`
 The repositories dependencies are sourced from unless otherwise specified. During `rv init` defaults to the repositories set in `options("repos")` when possible.

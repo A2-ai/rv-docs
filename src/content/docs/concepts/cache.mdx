@@ -48,7 +48,7 @@ In this example, we'll start with a config file, inspect the output of `rv cache
         /Users/rv-user/.cache/rv
         PPM (https://packagemanager.posit.co/cran/2025-01-01 -> c7c3cf56b9), path: /Users/rv-user/.cache/rv/c7c3cf56b9
         PPM_new (https://packagemanager.posit.co/cran/latest -> f4780dda90), path: /Users/rv-user/.cache/rv/f4780dda90
-        Git: https://github.com/a2-ai/osinfo, source: /Users/rv-user/.cache/rv/git/8497b6723f, binary: /Users/rv-user/.cache/rv/8497b6723f/4.4/arm64/f815095b7b
+        Git: https://github.com/a2-ai/osinfo, source: /Users/rv-user/.cache/rv/git/8497b6723f, binary: /Users/rv-user/.cache/rv/8497b6723f/4.5/arm64/f815095b7b
         ```
     </TabItem>
     <TabItem label = "Cache File Tree">
@@ -74,7 +74,7 @@ In this example, we'll start with a config file, inspect the output of `rv cache
                 - git
                     - 8497b6723f Clone of the git repository to build
                 - 8497b6723f
-                    -4.5/arm64
+                    - 4.5/arm64
                         - f815095b7b Git commit sha, not package version
                             - osinfo The unzipped, compiled package
 
@@ -89,7 +89,7 @@ Within the cache root, `rv` contains its cache within an `rv` subdirectory.
 
 The cache root can be tuned by setting the `XDG_CACHE_HOME` for Unix like systems and `%LOCALAPPDATA%` for Windows.
 
-For additional tunability, use the [`GHQC_CACHE_DIR` env var](../../reference/env_vars/#rv_cache_dir).
+For additional tunability, use the [`RV_CACHE_DIR` env var](../../reference/env_vars/#rv_cache_dir).
 
 ## Repository Database
 
@@ -130,7 +130,7 @@ An important caveat to the above, if a binary is present but was downloaded and 
 a new source compilation will occur and replace the downloaded binary. 
 
 This is something to always consider when using `force_source`, [`packages_env_vars`](../../config/packages_env_vars), and [`configure_args`](../../config/configure_args)
-as changing the compiled binary will effect other packages using the same package binary. 
+as changing the compiled binary will affect other packages using the same package binary. 
 :::
 
 #### Git
