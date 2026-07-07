@@ -3,6 +3,8 @@ title: Environment Variables
 description: Environment variables used/respected in rv
 ---
 
+import { Badge } from '@astrojs/starlight/components';
+
 `rv` respects existing environment variables and introduces a few as well. This page contains information about
 what each does and how it effects `rv`:
 
@@ -57,6 +59,9 @@ with the following priority: `RV_LINK_MODE` env var → network file system dete
 (e.g. a hardlink across file systems), `rv` falls back to `copy` for that package.
 
 ## `RV_INSECURE`
+<Badge text = "Introduced in rv 0.22.0" variant = "note"/>
+<br/>
+<br/>
 
 Setting this variable to `true` or `1` disables TLS certificate verification for all HTTP requests `rv` makes. This is an escape
 hatch for environments where valid certificates aren't available, such as behind a corporate proxy with a custom CA that isn't
@@ -80,19 +85,25 @@ By default, `rv` respects [XDG Base Directory Specification](https://specificati
 and the [Known Folder Locations](https://learn.microsoft.com/en-us/windows/win32/shell/known-folders) on Windows. Setting this environment variable will override the default and allows for
 flexibility.
 
-## `RV_COPY_THREADS`
-
-`rv` uses multiple threads when copying files to improve performance. This variable allows overriding the default thread count used for file operations. **Only set this variable if you are experiencing known file system performance issues, particularly on slow NFS drives.** In most cases, the default behavior will provide optimal performance.
-
-## `RV_LIBRARY_DIR` (v0.20.0+)
-
-By default, `rv` stores the project library under `rv/library/` within the project directory, or at the path specified by the `library` field in `rproject.toml`.
-Setting this environment variable overrides both defaults. Absolute paths are used as-is, while relative paths are resolved against the project directory.
-This takes precedence over the `library` field in `rproject.toml`.
-
-## `RV_GLOBAL_CACHE_DIR` (v0.18.0+)
+## `RV_GLOBAL_CACHE_DIR`
+<Badge text = "Introduced in rv 0.18.0" variant = "note"/>
+<br/>
+<br/>
 
 This environment variable specifies a global cache directory location, allowing for flexibility in cache placement across systems. This works in conjunction with `RV_CACHE_DIR` to provide multi-level caching strategy options.
 
 The directory must already exist. If it doesn't (or isn't accessible), `rv` logs a warning and silently falls back to using only
 the local cache, without a global cache layer.
+
+## `RV_COPY_THREADS`
+
+`rv` uses multiple threads when copying files to improve performance. This variable allows overriding the default thread count used for file operations. **Only set this variable if you are experiencing known file system performance issues, particularly on slow NFS drives.** In most cases, the default behavior will provide optimal performance.
+
+## `RV_LIBRARY_DIR`
+<Badge text = "Introduced in rv 0.20.0" variant = "note"/>
+<br/>
+<br/>
+
+By default, `rv` stores the project library under `rv/library/` within the project directory, or at the path specified by the `library` field in `rproject.toml`.
+Setting this environment variable overrides both defaults. Absolute paths are used as-is, while relative paths are resolved against the project directory.
+This takes precedence over the `library` field in `rproject.toml`.

@@ -5,6 +5,8 @@ sidebar:
     order: 1
 ---
 
+import { Code, FileTree, Tabs, TabItem, Badge } from '@astrojs/starlight/components';
+
 `rv` aims to provide users with commands that make package management and installation simple. To accomplish this,
 we have various "types" of commands which give users the ability to set up and configure their projects, install packages, and
 inspect their project status and other information.
@@ -61,4 +63,4 @@ not in the working directory.
 * `--verbose` (`-v`) - increase the logging verbosity
 * `--quiet` (`-q`) - decrease logging verbosity
 * `--json` - print the output as JSON format. This will ignore the `--verbose` and `--quiet` flag and not log anything.
-* `--emit-events` - stream progress as NDJSON to stdout instead of normal output, suppressing everything else. Intended for IDE/GUI integrations driving `rv` programmatically rather than interactive use. Conflicts with `--json`.
+* `--emit-events` - stream progress as NDJSON to stdout instead of normal output, suppressing everything else. Intended for IDE/GUI integrations driving `rv` programmatically rather than interactive use. Conflicts with `--json`. <Badge text = "Introduced in rv 0.22.0" variant = "note"/>

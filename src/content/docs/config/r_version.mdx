@@ -3,6 +3,8 @@ title: r_version
 description: Specify which R version to use for the project.
 ---
 
+import { Badge } from '@astrojs/starlight/components';
+
 The R version to install packages for, containing at least the major and minor versions.
 
 ## Finding the Executable
@@ -35,6 +37,8 @@ If the executable exists, will check the version to ensure it matches the specif
 :::
 
 ## `use_devel`
+<Badge text = "Introduced in rv v0.18.0" variant = "note" />
+
 If you are running an R-devel build (identified by a non-empty `status` field in R's `Rversion.h`), set `use_devel = true` alongside
 `r_version` so `rv` matches against that devel installation instead of a released version with the same major/minor version.
 

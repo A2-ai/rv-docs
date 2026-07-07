@@ -3,6 +3,9 @@ title: no_strip
 description: Disable stripping of debug symbols for specific packages
 ---
 
+:::note[Introduced in `rv` v0.19.0]
+:::
+
 By default, `rv` passes `--strip` and `--strip-lib` to `R CMD INSTALL`, which strips debug symbols from compiled shared objects to
 reduce their size. `no_strip` lists packages for which this stripping should be disabled, installing them without those flags.
 

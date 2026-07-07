@@ -3,6 +3,8 @@ title: library
 description: A custom library path
 ---
 
+import { Badge } from '@astrojs/starlight/components';
+
 By default, `rv` install packages within the project directory, in the subdirectory `rv/library`, which is further name spaced by
 R version, arch, and, for linux OS, the OS codename. Therefore, the default library path is `<project directory>/rv/library/<R version>/<arch>/<linux codename>`.
 
@@ -27,6 +29,10 @@ dependencies = [
 ```
 
 ## Templating
+<Badge text = "Introduced in rv v0.22.0" variant = "note" />
+<br/>
+<br/>
+
 Since the burden of name spacing falls on the user with a custom `library` path, `rv` supports two placeholders to make it easier to keep
 libraries separated by R version or project: `{r_version}` and `{name}`. These are expanded using the project's `r_version` (major.minor)
 and `name` fields.

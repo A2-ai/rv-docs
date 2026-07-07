@@ -3,7 +3,7 @@ title: rv sync
 description: The basic command to install packages using rv
 ---
 
-import { Code, FileTree, Tabs, TabItem } from '@astrojs/starlight/components';
+import { Code, FileTree, Tabs, TabItem, Badge } from '@astrojs/starlight/components';
 
 Synchronize the config file, lock file, and project library, by removing and/or adding packages, to reach the desired project state.
 
@@ -14,9 +14,12 @@ rv sync [OPTIONS]
 
 ### Options
 * `--save-install-logs-in`: Directory in which the install logs for packages compiled from source should be copied to. By default is kept in cache.
-* `--locked`: Fail instead of updating the lockfile.
+* `--locked`: Fail instead of updating the lockfile. <Badge text = "Introduced in rv 0.22.0" variant = "note"/>
 
 ## Using `--locked` for CI
+<Badge text = "Introduced in rv 0.22.0" variant = "note"/>
+<br/>
+<br/>
 By default, `rv sync` will create or update the lockfile as needed to match the config file. `--locked` is intended for CI and other
 reproducible-install contexts where an unexpected lockfile change should be treated as an error rather than silently applied:
 * If the lockfile would need to be created or updated to match the config, `rv sync --locked` fails instead of writing it.

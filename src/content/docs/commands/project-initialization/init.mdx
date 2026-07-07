@@ -34,6 +34,10 @@ in `option("repos")`, by default. This flag leaves the repositories field in the
 will be needed to the project immediately. It does not sync these dependencies like [`rv add`](../../editing-the-config/add).
 This flag is repeatable (`--add pkg1 --add pkg2`) to add multiple dependencies, rather than taking a single space-separated list.
 
+:::note
+Prior to `rv` 0.21.0, `--add` accepted a list of space-separated package names to be added to the configuration file. To ensure clarity, `--add` must be specified for each package individually.
+:::
+
 * `--no-r-environment` - By default, `rv` creates an R environment `.rv` to enable `rv` to be called in R code 
 (see [rvr](../../../reference/rvr) for more info). This flag will disable this R environment.
 
