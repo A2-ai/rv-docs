@@ -15,6 +15,8 @@ rv plan [OPTIONS]
 * `--r-version` - Specify an R version different than the one in the config. This allows you to see what would occur if
 the project was changed to a different R version. The R version does not need to be on the system
 * `--upgrade` - The same as [`rv upgrade --dry-run`](../../package-installation/upgrade)
+* `--locked` - Fail instead of reporting a plan that would update the lockfile. Conflicts with `--upgrade`. Intended for the same
+CI/reproducibility use case as [`rv sync --locked`](../../package-installation/sync#using---locked-for-ci).
 
 ## Example
 In this example, we start out with `tibble` installed and want to install the dev version of `dplyr` from GitHub.

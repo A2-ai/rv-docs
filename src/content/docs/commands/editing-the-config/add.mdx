@@ -29,8 +29,9 @@ rv add [packages]... [OPTIONS]
 #### Package Source Options
 * `--repository <ALIAS>` - Specify which repository to install from (e.g., `cran`, `bioc`). Creates a table entry with the `repository` field.
 * `--git <URL>` - Install from a git repository. Creates a table entry with the `git` field.
-  * `--tag <TAG>` - Specify a git tag (requires `--git`)
-  * `--branch <BRANCH>` - Specify a git branch (requires `--git`)
+  * `--tag <TAG>` - Specify a git tag (requires `--git`, conflicts with `--commit`/`--branch`)
+  * `--branch <BRANCH>` - Specify a git branch (requires `--git`, conflicts with `--commit`/`--tag`)
+  * `--commit <SHA>` - Specify a git commit SHA (requires `--git`, conflicts with `--tag`/`--branch`)
   * `--directory <DIR>` - Specify subdirectory within git repo (requires `--git`)
 * `--path <PATH>` - Install from a local path. Creates a table entry with the `path` field.
 * `--url <URL>` - Install from a URL to a package archive. Creates a table entry with the `url` field.

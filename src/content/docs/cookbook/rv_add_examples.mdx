@@ -96,6 +96,86 @@ dependencies = [
 ]
 ```
 
+## Git Repository Pinned to a Commit
+
+Install from a git repository pinned to a specific commit SHA, using `--commit` instead of `--tag`/`--branch`:
+
+```shell
+rv add my-pkg --git https://github.com/user/repo --commit 9a8c5d2
+```
+
+**Result in rproject.toml:**
+```toml
+dependencies = [
+    { name = "my-pkg", git = "https://github.com/user/repo", commit = "9a8c5d2" }
+]
+```
+
+## `owner/repo` Shorthand
+
+As a shortcut for `--git`, a positional argument in the form `owner/repo` is resolved as a git source against
+`https://github.com` (or [`git_shorthand_base_url`](../../config/git_shorthand_base_url) if configured). A reference and
+subdirectory can be appended with `@`. Since the package name isn't given explicitly, `rv` fetches the repository's
+`DESCRIPTION` file to determine it:
+
+```shell
+rv add r-lib/cli@v3.6.2
+```
+
+**Result in rproject.toml:**
+```toml
+dependencies = [
+    { name = "cli", git = "https://github.com/r-lib/cli", tag = "v3.6.2" }
+]
+```
+
+A typed reference plus subdirectory can be combined with `tag:`/`branch:`/`commit:`:
+
+```shell
+rv add r-lib/usethis@tag:v2.2.3:r-package
+```
+
+**Result in rproject.toml:**
+```toml
+dependencies = [
+    { name = "usethis", git = "https://github.com/r-lib/usethis", tag = "v2.2.3", directory = "r-package" }
+]
+```
+
+See the [`rv add` shorthand reference](../../commands/editing-the-config/add#ownerrepo-shorthand) for the full syntax, including
+plain `owner/repo` (defaults to the repo's `HEAD`).
+
+### With a Custom `git_shorthand_base_url`
+
+If [`git_shorthand_base_url`](../../config/git_shorthand_base_url) is set in `rproject.toml` (e.g. for a GitHub Enterprise host),
+the shorthand resolves against that base URL instead of `https://github.com`:
+
+```toml
+//rproject.toml
+[project]
+name = "example"
+r_version = "4.5"
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+]
+git_shorthand_base_url = "https://git.mycompany.com/scm"
+dependencies = [
+    "dplyr",
+]
+```
+
+```shell
+rv add my-team/my-pkg@v1.2.0
+```
+
+**Result in rproject.toml:**
+```toml
+dependencies = [
+    "dplyr",
+    { name = "my-pkg", git = "https://git.mycompany.com/scm/my-team/my-pkg", tag = "v1.2.0" }
+]
+```
+
 ## Local Path
 
 Install a package from a local path:

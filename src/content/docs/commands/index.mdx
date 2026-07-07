@@ -61,3 +61,4 @@ not in the working directory.
 * `--verbose` (`-v`) - increase the logging verbosity
 * `--quiet` (`-q`) - decrease logging verbosity
 * `--json` - print the output as JSON format. This will ignore the `--verbose` and `--quiet` flag and not log anything.
+* `--emit-events` - stream progress as NDJSON to stdout instead of normal output, suppressing everything else. Intended for IDE/GUI integrations driving `rv` programmatically rather than interactive use. Conflicts with `--json`.
