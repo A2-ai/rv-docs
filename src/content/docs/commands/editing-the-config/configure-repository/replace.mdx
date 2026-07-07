@@ -2,25 +2,25 @@
 title: rv configure repository replace
 description: Replace an existing repository entry in the config file
 ---
-import { Badge, Tabs, TabItem } from '@astrojs/starlight/components';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 Replace an existing repository entry, keeping the original alias unless otherwise specified.
 
-### Usage
+## Usage
 
 ```
 rv configure repository replace <OLD_ALIAS> --url <URL> [OPTIONS]
 ```
 
-#### Arguments
-* `OLD_ALIAS` - the repository alias to replace
+### Arguments
+* `OLD_ALIAS` - The repository alias to replace
 
-#### Options
-* `--url <URL>` <Badge text="required" variant="tip"/> - the url of the repository to replace
-* `--alias <ALIAS>` - new repository alias. Will keep the original alias if not specified. 
-* `--force-source` - enable/disable `force_source` for this repository
+### Options
+* `--url <URL>` - The url of the repository to replace
+* `--alias <ALIAS>` - New repository alias. Will keep the original alias if not specified. 
+* `--force-source` - Enable `force_source` for this repository
 
-### Example
+## Example
 
 Starting with the following configuration:
 

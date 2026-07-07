@@ -5,8 +5,8 @@ description: Run an Rscript command with the project library configured
 
 import { Badge } from '@astrojs/starlight/components';
 
-:::note[Introduced in `rv` v0.22.0]
-:::
+<Badge text="Introduced in rv v0.22.0" variant="note"/>
+<br/><br/>
 
 Runs an `Rscript` invocation with the project's library paths configured, so scripts execute against the packages managed
 by `rv` without needing to activate the project first.
@@ -19,14 +19,14 @@ runs against a library that matches the config and lock files.
 rv run [--no-sync] [args]...
 ```
 
+### Arguments
+* `args` - The `Rscript` arguments to run, e.g. a script path and any arguments it takes. Everything after `rv run` (and
+  `--no-sync`, if present) is passed through to `Rscript` unmodified.
+
 ### Options
 * `--no-sync` <Badge text="must be first" variant="caution"/> - Skip syncing the project library before running the command.
   Because all other arguments are passed through to `Rscript` as-is, this flag must be given as the very first argument or it
   will be treated as an argument to your script instead.
-
-### Arguments
-* `args` - The `Rscript` arguments to run, e.g. a script path and any arguments it takes. Everything after `rv run` (and
-  `--no-sync`, if present) is passed through to `Rscript` unmodified.
 
 ## Example
 ```shell

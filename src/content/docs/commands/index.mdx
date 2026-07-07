@@ -1,8 +1,6 @@
 ---
 title: Overview and Global Options
 description: Overview of the different commands
-sidebar:
-    order: 1
 ---
 
 import { Code, FileTree, Tabs, TabItem, Badge } from '@astrojs/starlight/components';
@@ -44,7 +42,7 @@ Inspect information about the project.
 * [`rv cache`](./project-information/cache) - Returns the cache directories used in the project
 * [`rv library`](./project-information/library) - Returns the relative path to the library in UNIX-format
 * [`rv info`](./project-information/info) - Returns simple information about the project. Primarily used for project activation
-* [`rv sysdeps`](./project-information/sysdeps) - List the system dependencies needed by the dependency tree (only for Ubuntu/Debian)
+* [`rv sysdeps`](./project-information/sysdeps) - List the system dependencies needed by the dependency tree (Ubuntu, Debian, RHEL-family, and openSUSE/SLE only)
 
 ### [Other](./other/)
 A few other commands which can be used to control your project:
@@ -63,4 +61,4 @@ not in the working directory.
 * `--verbose` (`-v`) - increase the logging verbosity
 * `--quiet` (`-q`) - decrease logging verbosity
 * `--json` - print the output as JSON format. This will ignore the `--verbose` and `--quiet` flag and not log anything.
-* `--emit-events` - stream progress as NDJSON to stdout instead of normal output, suppressing everything else. Intended for IDE/GUI integrations driving `rv` programmatically rather than interactive use. Conflicts with `--json`. <Badge text = "Introduced in rv 0.22.0" variant = "note"/>
+* `--emit-events` - stream progress as NDJSON to stdout instead of normal output, suppressing everything else. Intended for IDE/GUI integrations driving `rv` programmatically rather than interactive use. Conflicts with `--json`. <Badge text="Introduced in rv v0.22.0" variant="note"/>

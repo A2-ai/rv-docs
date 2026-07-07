@@ -22,13 +22,13 @@ rv add [packages]... [OPTIONS]
 ```
 
 ### Arguments
-* `packages` - A list of packages, space or comma separated, to add to the project
+* `packages` - A list of packages to add to the project, given as separate arguments (e.g. `rv add dplyr tidyr`)
 
 ### Options
 
 #### General Options
 * `--dry-run` - No changes made to the config or the package library, only reports what would happen if the command was run.
-* `--no-sync` - Packages are added to the config file, but not sync'ed.
+* `--no-sync` - Packages are added to the config file, but not synced.
 
 #### Package Source Options
 * `--repository <ALIAS>` - Specify which repository to install from (e.g., `cran`, `bioc`). Creates a table entry with the `repository` field.
@@ -40,10 +40,14 @@ rv add [packages]... [OPTIONS]
 * `--path <PATH>` - Install from a local path. Creates a table entry with the `path` field.
 * `--url <URL>` - Install from a URL to a package archive. Creates a table entry with the `url` field.
 
+:::note
+When using `--git` on its own (without the `owner/repo` shorthand), exactly one of `--tag`, `--branch`, or `--commit` is required.
+:::
+
 ##### `owner/repo` shorthand
-<Badge text = "Introduced in rv v0.22.0" variant = "note" />
-<br />
-<br />
+<Badge text="Introduced in rv v0.22.0" variant="note"/>
+<br/>
+<br/>
 As a shortcut for `--git`, a package argument in the form `owner/repo` is treated as a git source, resolved against `https://github.com`
 (or [`git_shorthand_base_url`](../../../config/git_shorthand_base_url) if configured):
 * `rv add r-lib/cli` - installs from the repository's default branch

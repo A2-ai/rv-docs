@@ -7,14 +7,14 @@ import { Badge, Code, FileTree, Tabs, TabItem } from '@astrojs/starlight/compone
 
 `rv migrate renv` will initialize an existing renv project by:
 1. Setting up the project infrastructure, including the project library and activation scripts.
-2. Migrating your renv.lock file to a `rv` config file.
+2. Migrating your `renv.lock` file to an `rv` config file.
 
 We cannot guarantee `rv` will migrate your renv project in its entirety, but any dependencies not fully migrated will be logged.
 
 ## Common Migration Issues
 Some common reasons a dependency may not be able to be migrated
 
-###  Package not found
+### Package not found
 If you get the error `Package not found in repositories`, this is because the repository source was not
 captured in the `renv.lock` repositories section. 
 
@@ -47,7 +47,7 @@ rv migrate renv [OPTIONS] [renv_file]
 * `--strict-r-version` - As discussed in the [config `r_version` section](../../../config/r_version), the R version is recommended to only be listed as the major and minor
 components. This flag will include the patch in the R version if needed.
 
-* `--no_r_environment` - By default, `rv` creates a R environment `.rv` to enable `rv` to be called in R code 
+* `--no-r-environment` - By default, `rv` creates a R environment `.rv` to enable `rv` to be called in R code 
 (see [rvr](../../../reference/rvr) for more info). This flag will disable this R environment
 
 ## Example

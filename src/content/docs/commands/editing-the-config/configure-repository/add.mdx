@@ -2,28 +2,30 @@
 title: rv configure repository add
 description: Add a repository to the config file
 ---
-import { Badge, Tabs, TabItem } from '@astrojs/starlight/components';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 Adds a new repository to the repositories section of the config file.
 
-### Usage
+## Usage
 
 ```
 rv configure repository add <ALIAS> --url <URL> [OPTIONS]
 ```
 
-#### Arguments
-* `ALIAS` - the repository alias to add
+### Arguments
+* `ALIAS` - The repository alias to add
 
-#### Options
-* `--url <URL>` <Badge text="required" variant="tip"/> - the url of the repository to add
-* `--force-source` - enable `force_source` for this repository
-* `--first` -- Add as first repository entry
-* `--last` <Badge text="default" variant="note"/> - Add as last repository entry
+### Options
+* `--url <URL>` - The url of the repository to add
+* `--force-source` - Enable `force_source` for this repository
+* `--first` - Add as first repository entry
+* `--last` - Add as last repository entry
+
+    > Default: `--last`
 * `--before <alias>` - Add before the specified alias
 * `--after <alias>` - Add after the specified alias
 
-### Examples
+## Examples
 All examples on this page will start with the following configuration:
 
 ```toml
@@ -36,7 +38,7 @@ repositories = [
 ]
 ```
 
-#### Add repository as last entry
+### Add Repository as Last Entry
 
 ```bash
 rv configure repository add "bioconductor" --url "https://bioconductor.org/packages/3.18/bioc"
@@ -64,7 +66,7 @@ rv configure repository add "bioconductor" --url "https://bioconductor.org/packa
     </TabItem>
 </Tabs>
 
-#### Add a repository with `force_source` as the middle repository
+### Add a Repository with `force_source` as the Middle Repository
 
 ```bash
 rv configure repository add "bioconductor" --url "https://bioconductor.org/packages/3.18/bioc" --force-source --after CRAN

@@ -3,8 +3,10 @@ title: no_strip
 description: Disable stripping of debug symbols for specific packages
 ---
 
-:::note[Introduced in `rv` v0.19.0]
-:::
+import { Badge } from '@astrojs/starlight/components';
+
+<Badge text="Introduced in rv v0.19.0" variant="note"/>
+<br/><br/>
 
 By default, `rv` passes `--strip` and `--strip-lib` to `R CMD INSTALL`, which strips debug symbols from compiled shared objects to
 reduce their size. `no_strip` lists packages for which this stripping should be disabled, installing them without those flags.

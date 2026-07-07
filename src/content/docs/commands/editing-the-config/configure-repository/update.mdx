@@ -6,24 +6,24 @@ import { Tabs, TabItem } from '@astrojs/starlight/components';
 
 Update an existing repository's fields
 
-### Usage
+## Usage
 ```shell
 rv configure repository update <TARGET_ALIAS> [OPTIONS]
 ```
 
-#### Arguments
+### Arguments
 * `TARGET_ALIAS` - The alias of the repository to update. Required unless using `--match-url`
 
-#### Options
+### Options
 * `--match-url <URL>` - Match repository based on the URL instead of the alias
 * `--alias <ALIAS>` - The new repository alias
 * `--url <URL>` - The new repository url
 * `--force-source` - Enable `force_source`
 * `--no-force-source` - Disable `force_source`
 
-### Examples
+## Examples
 
-#### Updating a repositories snapshot date
+### Updating a Repositories Snapshot Date
 ```bash
 rv configure repository update PPM --url "https://packagemanager.posit.co/cran/2025-05-01"
 ```
@@ -47,7 +47,7 @@ rv configure repository update PPM --url "https://packagemanager.posit.co/cran/2
     </TabItem>
 </Tabs>
 
-#### Updating a CRAN URL
+### Updating a CRAN URL
 
 ```
 rv configure repository update --match-url https://cran.r-project.org --url https://cran.rstudio.com

@@ -27,13 +27,13 @@ this variable can be set to `true` or `1` to not check for open files if the fil
 
 ## `RV_SYS_REQ_URL`
 
-For certain Linux distributions, currently Ubuntu, Debian, and RHEL-like, `rv` will check if the system dependencies for packages are found. To determine each package's system dependencies,
+For certain Linux distributions, currently Ubuntu (20.04/22.04/24.04), Debian 12, RHEL-family (RHEL/CentOS/Rocky/AlmaLinux 7-9), and openSUSE/SLE 15, `rv` will check if the system dependencies for packages are found. To determine each package's system dependencies,
 `rv` consults [Posit Package Manager's api](https://packagemanager.posit.co/__api__/repos/cran/sysreqs) by default. This environment variable can be used
 to tune where `rv` determines the system dependencies from.
 
 ## `RV_SYS_DEPS_CHECK_IN_PATH`
 
-For certain Linux distributions, currently Ubuntu, Debian, and RHEL-like, `rv` will check if the system dependencies for packages are found. To check if the system dependencies
+For certain Linux distributions, currently Ubuntu (20.04/22.04/24.04), Debian 12, RHEL-family (RHEL/CentOS/Rocky/AlmaLinux 7-9), and openSUSE/SLE 15, `rv` will check if the system dependencies for packages are found. To check if the system dependencies
 required for this project are installed, `rv` consults the [`dpkg`](https://debian-handbook.info/browse/da-DK/stable/sect.manipulating-packages-with-dpkg.html#sect.dpkg-list),
 a list of [known dependencies on the path](#known-path-dependencies), and any dependencies set by this environment variable in a comma separated list.
 
@@ -59,7 +59,7 @@ with the following priority: `RV_LINK_MODE` env var → network file system dete
 (e.g. a hardlink across file systems), `rv` falls back to `copy` for that package.
 
 ## `RV_INSECURE`
-<Badge text = "Introduced in rv 0.22.0" variant = "note"/>
+<Badge text="Introduced in rv v0.22.0" variant="note"/>
 <br/>
 <br/>
 
@@ -86,7 +86,7 @@ and the [Known Folder Locations](https://learn.microsoft.com/en-us/windows/win32
 flexibility.
 
 ## `RV_GLOBAL_CACHE_DIR`
-<Badge text = "Introduced in rv 0.18.0" variant = "note"/>
+<Badge text="Introduced in rv v0.18.0" variant="note"/>
 <br/>
 <br/>
 
@@ -100,10 +100,13 @@ the local cache, without a global cache layer.
 `rv` uses multiple threads when copying files to improve performance. This variable allows overriding the default thread count used for file operations. **Only set this variable if you are experiencing known file system performance issues, particularly on slow NFS drives.** In most cases, the default behavior will provide optimal performance.
 
 ## `RV_LIBRARY_DIR`
-<Badge text = "Introduced in rv 0.20.0" variant = "note"/>
+<Badge text="Introduced in rv v0.20.0" variant="note"/>
 <br/>
 <br/>
 
 By default, `rv` stores the project library under `rv/library/` within the project directory, or at the path specified by the `library` field in `rproject.toml`.
 Setting this environment variable overrides both defaults. Absolute paths are used as-is, while relative paths are resolved against the project directory.
 This takes precedence over the `library` field in `rproject.toml`.
+
+Like the [`library`](../../config/library) config field, this variable's value supports `{r_version}`/`{name}` placeholder templating, since both go
+through the same templating logic.

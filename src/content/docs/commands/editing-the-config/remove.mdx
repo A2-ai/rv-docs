@@ -5,8 +5,8 @@ description: Quickly remove packages from the config and sync
 
 import { Code, FileTree, Tabs, TabItem, Badge } from '@astrojs/starlight/components';
 
-:::note[Introduced in `rv` v0.22.0]
-:::
+<Badge text="Introduced in rv v0.18.0" variant="note"/>
+<br/><br/>
 
 Used to quickly remove packages from the config file, then [sync](../../package-installation/sync).
 
@@ -20,11 +20,11 @@ rv remove [packages]... [OPTIONS]
 ```
 
 ### Arguments
-* `packages` - A list of package names, space or comma separated, to remove from the project
+* `packages` - A list of package names to remove from the project, given as separate arguments (e.g. `rv remove dplyr tidyr`)
 
 ### Options
 * `--dry-run` - No changes made to the config or the package library, only reports what would happen if the command was run.
-* `--no-sync` - Packages are removed from the config file, but not sync'ed.
+* `--no-sync` - Packages are removed from the config file, but not synced.
 
 ## Example
 ```shell

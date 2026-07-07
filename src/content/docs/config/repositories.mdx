@@ -50,8 +50,8 @@ repositories = [
 ]
 ```
 
-### R-Universe
-R-Universe is formatted like a CRAN-like repository, but is missing a critical component: there is [no archive](https://docs.r-universe.dev/install/reproducibility.html#does-r-universe-archive-old-versions-of-packages-how-does-it-work-with-renv).
+### R-universe
+R-universe is formatted like a CRAN-like repository, but is missing a critical component: there is [no archive](https://docs.r-universe.dev/install/reproducibility.html#does-r-universe-archive-old-versions-of-packages-how-does-it-work-with-renv).
 Since reproducibility is at the forefront of design considerations with `rv`, we currently consider packages sourced from R-universe 
 as [git dependencies](../dependencies#git) from the beginning. While this may lead to a temporary slow down due to compilation, it is more reproducible.
 We may consider downloading compiled binaries for available packages in the future if the need arises.

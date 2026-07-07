@@ -6,17 +6,17 @@ description: Returns simple information about the project
 List simple information regarding the project depending on the flags. Used primarily to properly set the library path and
 repositories during project activation in R.
 
-### Usage
+## Usage
 ```shell
 rv info [OPTIONS]
 ```
 
-#### Options
+### Options
 * `--library` - Returns the relative path of the library in UNIX format, even on Windows  (alias: `rv library`)
 * `--r-version` - The R version specified in the config
 * `--repositories` - The repositories specified in the config
 
-### Example
+## Example
 ```shell {1}
 % rv info --library --r-version --repositories
 library: rv/library/4.4/arm64

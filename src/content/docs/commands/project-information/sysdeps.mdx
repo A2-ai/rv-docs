@@ -6,19 +6,19 @@ description: Returns a list of system dependencies for a project
 Lists the system dependencies needed by the dependency tree. 
 Useful to programmatically determine the system dependencies required for a project.
 
-**Only available for Ubuntu, Debian, and RHEL-like OS's.**
+**Only available for Ubuntu (20.04/22.04/24.04), Debian 12, RHEL-family (RHEL/CentOS/Rocky/AlmaLinux 7-9), and openSUSE/SLE 15.**
 
-### Usage
+## Usage
 ```shell
 rv sysdeps [OPTIONS]
 ```
 
-#### Options
+### Options
 * `--only-absent` - Only show the dependencies not detected on the system
 * `--ignore <IGNORE>` - A list of dependencies to not list in the output. For example, if you install pandoc manually 
 without using the OS package manager and do not want to include in this output
 
-### Example
+## Example
 The sysdeps for the `tidyverse`
 
 ```shell {1}
