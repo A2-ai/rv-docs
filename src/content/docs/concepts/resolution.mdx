@@ -318,9 +318,8 @@ Since `foo` is not within the lockfile, we consult the repository and get these 
     * `bar >= 1.0.0` if `foo 1.0.0`
     * `bar >= 2.0.0` if `foo 2.0.0`
 
-Since `repo2` is listed first, we prefer packages to be sourced from that repository. Since `foo 2.0.0` meets all requirements and comes from the preferred
-repository, `repo2`, we choose to use this version. This leads to conflicting requirements on `bar` since `bar 1.0.0` cannot come from `repo1` 
-AND `bar >= 2.0.0` since `foo 2.0.0`. In this case, we prefer to ignore the lockfile requirement and resolve to `foo 2.0.0` and `bar 2.0.0` from `repo2`.
+Since `bar` is locked to `1.0.0` we start with that requirement. While we prefer `foo` to come as `2.0.0` from `repo2`, but `bar 1.0.0` fails the requirement that
+it must be `>= 2.0.0`. In this case, we ignore the preference to install from the first repository to meet the lockfile requirement and install `foo 1.0.0` from `repo1`.
 
 ##### Example 3.3.2 - Compatible Locked Version
 Like we have discussed in [other sections](../../commands#project-status), one of the benefits of `rv` is the ability to resolve and see what will happen
