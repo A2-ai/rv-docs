@@ -1,0 +1,36 @@
+---
+title: rv export renv
+description: Export an rv project to renv.lock format
+---
+
+Exports an `rv` project's lock file to `renv.lock` format, acting as an escape hatch back to
+[`renv`](../../../reference/renv-difference) if needed.
+
+## Usage
+```shell
+rv export renv [OPTIONS]
+```
+
+### Options
+* `--output` (`-o`) - Path to write the `renv.lock` file to.
+
+    > Default: `renv.lock`
+
+## Source Conversion
+Most package sources map directly to their `renv.lock` equivalent (CRAN-style repository packages, git, and local sources).
+A couple of sources are converted rather than mapped 1:1:
+
+* **R-universe sources** are converted to `renv`'s `GitHub`/`git` source, pinned to the exact commit `rv` resolved. R-universe
+  is a rolling build that doesn't preserve historical versions, so this ensures the exported lock file reproduces exactly
+  what was installed, rather than pointing at a build that may no longer exist.
+* **URL sources** have no direct `renv` equivalent and are mapped as a `Repository` source with a `RemoteUrl` field. A warning
+  is reported for each package converted this way.
+
+Any package that couldn't be converted cleanly is reported as a warning; the export otherwise still succeeds.
+
+## Example
+```shell
+% rv export renv
+WARNING: `mypkg`: URL source `https://example.com/mypkg_1.0.0.tar.gz` has no direct renv equivalent, mapped as Repository with RemoteUrl
+Successfully exported to renv.lock
+```

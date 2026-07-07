@@ -85,6 +85,7 @@ export default defineConfig({
 							items: [
 								{ label: 'Overview', slug: 'commands/editing-the-config' },
 								{ label: 'rv add', slug: 'commands/editing-the-config/add' },
+								{ label: 'rv remove', slug: 'commands/editing-the-config/remove' },
 								{
 									label: 'rv configure repository',
 									collapsed: true,
@@ -126,7 +127,9 @@ export default defineConfig({
 							items: [
 								{ label: 'Overview', slug: 'commands/other' },
 								{ label: 'rv fmt', slug: 'commands/other/fmt' },
-								{ label: 'rv activate & rv deactivate', slug: 'commands/other/activation' }
+								{ label: 'rv activate & rv deactivate', slug: 'commands/other/activation' },
+								{ label: 'rv run', slug: 'commands/other/run' },
+								{ label: 'rv export renv', slug: 'commands/other/export_renv' }
 							]
 						}
 					],
