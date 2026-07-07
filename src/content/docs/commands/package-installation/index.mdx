@@ -1,0 +1,14 @@
+---
+title: Package Installation
+description: Commands used to install packages into an rv project
+---
+
+In other R tools, individual packages are installed and removed through separate commands (i.e. `install.packages()` and `remove.packages()`).
+In `rv`, a project is synchronized across the config file, lock file, and the project library, performing whatever actions,
+including installation and removal of packages and dependencies, is necessary to reach the synchronized state.
+
+Every time a package is changed - added, removed, new version, source changed - the lockfile is automatically updated to reflect
+the new state of the project library.
+
+* [`rv sync`](./sync) - The basic command to install packages
+* [`rv upgrade`](./upgrade) - Install packages while ignoring the lockfile

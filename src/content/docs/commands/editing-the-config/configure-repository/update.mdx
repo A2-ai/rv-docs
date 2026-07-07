@@ -1,0 +1,73 @@
+---
+title: rv configure repository update
+description: Update an existing repository's fields in the config file
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Update an existing repository's fields
+
+### Usage
+```shell
+rv configure repository update <TARGET_ALIAS> [OPTIONS]
+```
+
+#### Arguments
+* `TARGET_ALIAS` - The alias of the repository to update. Required unless using `--match-url`
+
+#### Options
+* `--match-url <URL>` - Match repository based on the URL instead of the alias
+* `--alias <ALIAS>` - The new repository alias
+* `--url <URL>` - The new repository url
+* `--force-source` - Enable `force_source`
+* `--no-force-source` - Disable `force_source`
+
+### Examples
+
+#### Updating a repositories snapshot date
+```bash
+rv configure repository update PPM --url "https://packagemanager.posit.co/cran/2025-05-01"
+```
+
+<Tabs syncKey="configure">
+    <TabItem label = "Updated Config File">
+        ```toml {6}
+        //rproject.toml
+        [project]
+        name = "configure"
+        repositories = [
+            { alias = "CRAN", url = "https://cran.r-project.org" },
+            { alias = "PPM", url = "https://packagemanager.posit.co/cran/2025-05-01" },
+        ]
+        ```
+    </TabItem>
+    <TabItem label = "Command Output">
+        ```
+        Repository 'PPM' updated successfully
+        ```
+    </TabItem>
+</Tabs>
+
+#### Updating a CRAN URL
+
+```
+rv configure repository update --match-url https://cran.r-project.org -- url https://cran.rstudio.com
+```
+
+<Tabs syncKey="configure">
+    <TabItem label = "Updated Config File">
+        ```toml {5}
+        //rproject.toml
+        [project]
+        name = "configure"
+        repositories = [
+            { alias = "CRAN", url = "https://cran.rstudio.com" },
+            { alias = "PPM", url = "https://packagemanager.posit.co/cran/2025-05-01" },
+        ]
+        ```
+    </TabItem>
+    <TabItem label = "Command Output">
+        ```
+        Repository 'CRAN' updated successfully
+        ```
+    </TabItem>
+</Tabs>

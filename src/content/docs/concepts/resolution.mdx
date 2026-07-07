@@ -200,7 +200,7 @@ When a lockfile is present, the source tracked in the lockfile takes precedence 
 * The config file no longer contains the repository the package is locked as.
 * The dependency has a different source specified, or the specified source is removed.
 
-If a lockfile is not needed for your project, set the `[use_lockfile]`(../../config/use_lockfile) config option to false.
+If a lockfile is not needed for your project, set the [`use_lockfile`](../../config/use_lockfile) config option to false.
 
 The following examples will show how the lockfile works:
 
@@ -323,7 +323,7 @@ repository, `repo2`, we choose to use this version. This leads to conflicting re
 AND `bar >= 2.0.0` since `foo 2.0.0`. In this case, we prefer to ignore the lockfile requirement and resolve to `foo 2.0.0` and `bar 2.0.0` from `repo2`.
 
 ##### Example 3.3.2 - Compatible Locked Version
-Like we have discussed in [other sections](../../commands/intro#project-status), one of the benefits of `rv` is the ability to resolve and see what will happen
+Like we have discussed in [other sections](../../commands#project-status), one of the benefits of `rv` is the ability to resolve and see what will happen
 before it actually occurs. `rv plan` will resolve and show what would occur upon calling `rv sync`, as seen below.
 
 ```shell

@@ -1,0 +1,60 @@
+---
+title: Overview and Global Options
+description: Overview of the different commands
+sidebar:
+    order: 1
+---
+
+`rv` aims to provide users with commands that make package management and installation simple. To accomplish this,
+we have various "types" of commands which give users the ability to set up and configure their projects, install packages, and
+inspect their project status and other information.
+
+### [Project Initialization](./project-initialization/)
+Create, initialize, or migrate a project.
+
+* [`rv init`](./project-initialization/init) - Initialize a new or existing project with the necessary project infrastructure.
+* [`rv migrate renv`](./project-initialization/migrate_renv) - Initialize an existing `renv` project by migrating the `renv.lock` to an `rv` config file.
+
+### [Package Installation](./package-installation/)
+Sync the project library to the config and lock files.
+
+* [`rv sync`](./package-installation/sync) - The basic command to install packages
+* [`rv upgrade`](./package-installation/upgrade) - Install packages while ignoring the lockfile
+
+### [Editing the Config](./editing-the-config/)
+Edit the config file without opening it directly.
+
+* [`rv add`](./editing-the-config/add) - Quickly add packages to the config file and sync
+* [`rv configure repository`](./editing-the-config/configure-repository/) - Configure the repositories section of the config file
+
+### [Project Status](./project-status/)
+See what will happen before it happens.
+
+* [`rv plan`](./project-status/plan) - Show the results if you were to run `rv sync`. A more granular view.
+* [`rv summary`](./project-status/summary) - Inspect your project on a global level, indicating information 
+like how packages need to be installed and the source of packages.
+
+### [Project Information](./project-information/)
+Inspect information about the project.
+
+* [`rv tree`](./project-information/tree) - Show the dependency tree for the project's dependencies
+* [`rv cache`](./project-information/cache) - Returns the cache directories used in the project
+* [`rv library`](./project-information/library) - Returns the relative path to the library in UNIX-format
+* [`rv info`](./project-information/info) - Returns simple information about the project. Primarily used for project activation
+* [`rv sysdeps`](./project-information/sysdeps) - List the system dependencies needed by the dependency tree (only for Ubuntu/Debian)
+
+### [Other](./other/)
+A few other commands which can be used to control your project:
+
+* [`rv fmt`](./other/fmt) - Format the configuration file to ensure consistent styling, while maintaining spacing and comments
+* [`rv activate`](./other/activation#rv-activate) - Activate a previously initialized rv project
+* [`rv deactivate`](./other/activation#rv-deactivate) - Deactivate an rv project
+
+## Options
+Each command has the following global options:
+* `--config-file` - the path to a config file. Defaults to `rproject.toml` in the current directory. 
+Unless [otherwise specified in the config file](../config/library), the library will be synced at the level of the config file, 
+not in the working directory.
+* `--verbose` (`-v`) - increase the logging verbosity
+* `--quiet` (`-q`) - decrease logging verbosity
+* `--json` - print the output as JSON format. This will ignore the `--verbose` and `--quiet` flag and not log anything.

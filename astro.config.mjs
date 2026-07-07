@@ -60,56 +60,73 @@ export default defineConfig({
 				{
 					label: 'Commands',
 					items: [
-						{ label: 'Introduction and Global Options', slug: 'commands/intro' },
+						{ label: 'Overview and Global Options', slug: 'commands' },
 						{
 							label: 'Project Initialization',
 							collapsed: true,
 							items: [
-								{ label: 'rv init', slug: 'commands/init' },
-								{ label: 'rv migrate renv', slug: 'commands/migrate_renv' },
+								{ label: 'Overview', slug: 'commands/project-initialization' },
+								{ label: 'rv init', slug: 'commands/project-initialization/init' },
+								{ label: 'rv migrate renv', slug: 'commands/project-initialization/migrate_renv' },
 							]
 						},
 						{
 							label: 'Package Installation',
 							collapsed: true,
 							items: [
-								{ label: 'rv sync', slug: 'commands/sync' },
-								{ label: 'rv upgrade', slug: 'commands/upgrade' }
+								{ label: 'Overview', slug: 'commands/package-installation' },
+								{ label: 'rv sync', slug: 'commands/package-installation/sync' },
+								{ label: 'rv upgrade', slug: 'commands/package-installation/upgrade' }
 							]
 						},
 						{
-							label: 'Project Configuration',
+							label: 'Editing the Config',
 							collapsed: true,
 							items: [
-								{ label: 'rv add', slug: 'commands/add' },
-								{ label: 'rv configure repository', slug: 'commands/configure_repos'}
+								{ label: 'Overview', slug: 'commands/editing-the-config' },
+								{ label: 'rv add', slug: 'commands/editing-the-config/add' },
+								{
+									label: 'rv configure repository',
+									collapsed: true,
+									items: [
+										{ label: 'Overview', slug: 'commands/editing-the-config/configure-repository' },
+										{ label: 'add', slug: 'commands/editing-the-config/configure-repository/add' },
+										{ label: 'replace', slug: 'commands/editing-the-config/configure-repository/replace' },
+										{ label: 'update', slug: 'commands/editing-the-config/configure-repository/update' },
+										{ label: 'remove', slug: 'commands/editing-the-config/configure-repository/remove' },
+										{ label: 'clear', slug: 'commands/editing-the-config/configure-repository/clear' },
+									]
+								}
 							]
 						},
 						{
 							label: 'Project Status',
 							collapsed: true,
 							items: [
-								{ label: 'rv plan', slug: 'commands/plan' },
-								{ label: 'rv summary', slug: 'commands/summary' }
+								{ label: 'Overview', slug: 'commands/project-status' },
+								{ label: 'rv plan', slug: 'commands/project-status/plan' },
+								{ label: 'rv summary', slug: 'commands/project-status/summary' }
 							]
 						},
 						{
 							label: 'Project Information',
 							collapsed: true,
 							items: [
-								{ label: 'rv tree', slug: 'commands/tree' },
-								{ label: 'rv cache', slug: 'commands/cache' },
-								{ label: 'rv library', slug: 'commands/library' },
-								{ label: 'rv info', slug: 'commands/info' },
-								{ label: 'rv sysdeps', slug: 'commands/sysdeps' },
+								{ label: 'Overview', slug: 'commands/project-information' },
+								{ label: 'rv tree', slug: 'commands/project-information/tree' },
+								{ label: 'rv cache', slug: 'commands/project-information/cache' },
+								{ label: 'rv library', slug: 'commands/project-information/library' },
+								{ label: 'rv info', slug: 'commands/project-information/info' },
+								{ label: 'rv sysdeps', slug: 'commands/project-information/sysdeps' },
 							]
 						},
 						{
 							label: 'Other',
 							collapsed: true,
 							items: [
-								{ label: 'rv fmt', slug: 'commands/fmt' },
-								{ label: 'rv activate & rv deactivate', slug: 'commands/activation' }
+								{ label: 'Overview', slug: 'commands/other' },
+								{ label: 'rv fmt', slug: 'commands/other/fmt' },
+								{ label: 'rv activate & rv deactivate', slug: 'commands/other/activation' }
 							]
 						}
 					],

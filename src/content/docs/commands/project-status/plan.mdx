@@ -3,7 +3,7 @@ title: rv plan
 description: See the results of rv sync, without sync-ing
 ---
 
-`rv plan` will show you what [`sync`](../sync) would do, without sync-ing anything. This is useful to see how the changes to
+`rv plan` will show you what [`sync`](../../package-installation/sync) would do, without sync-ing anything. This is useful to see how the changes to
 the configuration file will impact your project before performing any action.
 
 ## Usage
@@ -14,7 +14,7 @@ rv plan [OPTIONS]
 ### Options
 * `--r-version` - Specify an R version different than the one in the config. This allows you to see what would occur if
 the project was changed to a different R version. The R version does not need to be on the system
-* `--upgrade` - The same as [`rv upgrade --dry-run`](../upgrade)
+* `--upgrade` - The same as [`rv upgrade --dry-run`](../../package-installation/upgrade)
 
 ## Example
 In this example, we start out with `tibble` installed and want to install the dev version of `dplyr` from GitHub.
