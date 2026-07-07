@@ -53,7 +53,7 @@ In this example, we'll start with a config file, inspect the output of `rv cache
     </TabItem>
     <TabItem label = "Cache File Tree">
         The cache file structure keeps each repository, R version, architecture, and os flavor (when applicable) isolated to ensure the proper package is 
-        installed each time. Also contained for each repository binary type is a `packages.bin` file, 
+        installed each time. Also contained for each repository binary type is a `packages.mp` file, 
         referred to as the [Repository Database](#repository-database), which contains an index of each package available in the CRAN-like repository.
 
         <FileTree>
@@ -62,12 +62,12 @@ In this example, we'll start with a config file, inspect the output of `rv cache
                     - 4.5/arm64
                         - fansi/1.0.6/
                             - fansi The unzipped, compiled package
-                        - packages.bin
+                        - packages.mp
                 - f4780dda90
                     - 4.5/arm64
                         - R6/2.6.1
                             - R6 The unzipped, compiled package
-                        - packages.bin
+                        - packages.mp
                     - src
                         - R6/2.6.1
                             - R6 The unzipped, source package
@@ -122,8 +122,11 @@ a combination of R version, OS, and architecture. `rv` will fetch a package to b
 
 1. Use the binary package found in the cache
 2. Download the binary package from the resolved source (ignored if `force_source`)
-3. Compile the package from the cached source package
-4. Download the source package from the resolved source and compile
+3. Download the binary package from the repository's binary archive, if the package's version was resolved from the lockfile
+   (ignored if `force_source`). This lets a lockfile-pinned version still install as a binary even after it has aged out of
+   the repository's current snapshot.
+4. Compile the package from the cached source package
+5. Download the source package from the resolved source and compile
 
 :::caution
 An important caveat to the above, if a binary is present but was downloaded and not compiled from source, if a dependency indicates `force_source`
@@ -174,5 +177,10 @@ export RV_GLOBAL_CACHE_DIR=/mnt/shared/rv-cache
 ```
 
 This allows all users and projects on the organization to benefit from a shared pool of pre-compiled packages, reducing network bandwidth and storage costs while maintaining isolation through the local cache layer.
+
+:::caution
+The directory pointed to by `RV_GLOBAL_CACHE_DIR` must already exist. If it doesn't (or isn't accessible), `rv` logs a warning and
+silently falls back to using only the local cache.
+:::
 
 

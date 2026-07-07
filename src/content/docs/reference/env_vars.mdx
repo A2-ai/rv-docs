@@ -42,7 +42,31 @@ a list of [known dependencies on the path](#known-path-dependencies), and any de
 ## `RV_LINK_MODE`
 
 `rv` aggressively [caches](../../concepts/cache) in order to avoid re-compiling and re-downloading packages. Additionally,
-caching minimizes the disk space used by installed packages. By default, `rv` will hard-link for Windows and Linux and [copy on write](https://en.wikipedia.org/wiki/Copy-on-write) for macOS.
+caching minimizes the disk space used by installed packages. To get packages from the cache into a project's library, `rv` links
+them using one of the following modes:
+
+* `copy` - A full file copy. The slowest option, but works on any file system.
+* `clone` - [Copy-on-write](https://en.wikipedia.org/wiki/Copy-on-write) via reflink. Requires file system support (APFS on macOS,
+  Btrfs/XFS on Linux, ReFS on Windows). Default on macOS.
+* `hardlink` - Hard links each file. The cache and library must be on the same file system. Default on Windows and Linux.
+* `symlink` - Symlinks to the package directory. Automatically selected on network file systems (e.g. NFS, Lustre on Linux),
+  regardless of OS default, since hardlinks and CoW clones don't work across most network mounts.
+
+Setting `RV_LINK_MODE` (case-insensitive) to one of these values overrides the automatic selection. The effective mode is chosen
+with the following priority: `RV_LINK_MODE` env var → network file system detection → OS default. If the selected mode fails
+(e.g. a hardlink across file systems), `rv` falls back to `copy` for that package.
+
+## `RV_INSECURE`
+
+Setting this variable to `true` or `1` disables TLS certificate verification for all HTTP requests `rv` makes. This is an escape
+hatch for environments where valid certificates aren't available, such as behind a corporate proxy with a custom CA that isn't
+in your system's trust store.
+
+:::caution
+Disabling TLS verification means `rv` can no longer detect a man-in-the-middle attack on any of its network requests, including
+package downloads. Only set this variable if you understand and accept that risk, and prefer installing your proxy's CA
+certificate into your system's trust store instead if possible.
+:::
 
 ## `RV_SUBMODULE_UPDATE_DISABLE`
 
@@ -69,3 +93,6 @@ This takes precedence over the `library` field in `rproject.toml`.
 ## `RV_GLOBAL_CACHE_DIR` (v0.18.0+)
 
 This environment variable specifies a global cache directory location, allowing for flexibility in cache placement across systems. This works in conjunction with `RV_CACHE_DIR` to provide multi-level caching strategy options.
+
+The directory must already exist. If it doesn't (or isn't accessible), `rv` logs a warning and silently falls back to using only
+the local cache, without a global cache layer.

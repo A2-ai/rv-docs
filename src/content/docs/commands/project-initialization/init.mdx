@@ -32,6 +32,7 @@ in `option("repos")`, by default. This flag leaves the repositories field in the
 
 * `--add` - The dependency field is blank by default. This flag can be used to add dependencies you know 
 will be needed to the project immediately. It does not sync these dependencies like [`rv add`](../../editing-the-config/add).
+This flag is repeatable (`--add pkg1 --add pkg2`) to add multiple dependencies, rather than taking a single space-separated list.
 
 * `--no-r-environment` - By default, `rv` creates an R environment `.rv` to enable `rv` to be called in R code 
 (see [rvr](../../../reference/rvr) for more info). This flag will disable this R environment.
@@ -83,18 +84,20 @@ Follow the tabs below to see the changes:
         name = "my_rv_project"
         r_version = "4.5"
 
-        # any CRAN-type repository, order matters. Additional ability to force source package installation
-        # Example: {alias = "CRAN", url = "https://cran.r-project.org", force_source = true}
+        # Optional: base URL for `rv add owner/repo` shorthand (defaults to https://github.com).
+        # git_shorthand_base_url = "https://github.example.com"
+        # A list of repositories to fetch packages from. Order matters: we will try to get a package from each repository in order.
+        # The alias is only used in this file if you want to specifically require a dependency to come from a certain repository.
+        # Example: { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
         repositories = [
-            {alias = "CRAN", url = "https://cran.rstudio.com" }
+            {alias = "CRAN", url = "https://cran.rstudio.com"},
         ]
 
-        # package to install and any specifications. Any descriptive dependency can have the `install_suggestions` specification
+        # A list of packages to install and any additional configuration
         # Examples:
             # "dplyr",
-            # {name = "dplyr", repository = "CRAN", force_source = true},
+            # {name = "dplyr", repository = "CRAN"},
             # {name = "dplyr", git = "https://github.com/tidyverse/dplyr.git", tag = "v1.1.4"},
-            # {name = "dplyr", path = "/path/to/local/dplyr"},
         dependencies = [
             "tidyverse",
         ]
