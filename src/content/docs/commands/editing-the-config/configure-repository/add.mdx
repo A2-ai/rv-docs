@@ -1,0 +1,95 @@
+---
+title: rv configure repository add
+description: Add a repository to the config file
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Adds a new repository to the repositories section of the config file.
+
+## Usage
+
+```
+rv configure repository add <ALIAS> --url <URL> [OPTIONS]
+```
+
+### Arguments
+* `ALIAS` - The repository alias to add
+
+### Options
+* `--url <URL>` - The url of the repository to add
+* `--force-source` - Enable `force_source` for this repository
+* `--first` - Add as first repository entry
+* `--last` - Add as last repository entry
+
+    > Default: `--last`
+* `--before <alias>` - Add before the specified alias
+* `--after <alias>` - Add after the specified alias
+
+## Examples
+All examples on this page will start with the following configuration:
+
+```toml
+//rproject.toml
+[project]
+name = "configure"
+repositories = [
+    { alias = "CRAN", url = "https://cran.r-project.org" },
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/2025-01-01" },
+]
+```
+
+### Add Repository as Last Entry
+
+```bash
+rv configure repository add "bioconductor" --url "https://bioconductor.org/packages/3.18/bioc"
+OR
+rv configure repository add "bioconductor" --url "https://bioconductor.org/packages/3.18/bioc" --last
+```
+
+<Tabs syncKey="configure">
+    <TabItem label = "Updated Config File">
+        ```toml ins={7}
+        //rproject.toml
+        [project]
+        name = "configure"
+        repositories = [
+            { alias = "CRAN", url = "https://cran.r-project.org" },
+            { alias = "PPM", url = "https://packagemanager.posit.co/cran/2025-01-01" },
+            { alias = "bioconductor", url = "https://bioconductor.org/packages/3.18/bioc" },
+        ]
+        ```
+    </TabItem>
+    <TabItem label = "Command Output">
+        ```
+        Repository 'bioconductor' added successfully with URL: https://bioconductor.org/packages/3.18/bioc
+        ```
+    </TabItem>
+</Tabs>
+
+### Add a Repository with `force_source` as the Middle Repository
+
+```bash
+rv configure repository add "bioconductor" --url "https://bioconductor.org/packages/3.18/bioc" --force-source --after CRAN
+OR
+rv configure repository add "bioconductor" --url "https://bioconductor.org/packages/3.18/bioc" --force-source --before PPM
+```
+
+<Tabs syncKey="configure">
+    <TabItem label = "Updated Config File">
+        ```toml ins={6}
+        //rproject.toml
+        [project]
+        name = "configure"
+        repositories = [
+            { alias = "CRAN", url = "https://cran.r-project.org" },
+            { alias = "bioconductor", url = "https://bioconductor.org/packages/3.18/bioc", force_source = true },
+            { alias = "PPM", url = "https://packagemanager.posit.co/cran/2025-01-01" },
+        ]
+        ```
+    </TabItem>
+    <TabItem label = "Command Output">
+        ```
+        Repository 'bioconductor' added successfully with URL: https://bioconductor.org/packages/3.18/bioc
+        ```
+    </TabItem>
+</Tabs>

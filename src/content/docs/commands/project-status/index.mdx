@@ -1,0 +1,14 @@
+---
+title: Project Status
+description: Commands used to inspect the status of an rv project
+---
+
+In other R tools, packages are installed and any consequence is up to the user to reconcile. With `rv`, users have the
+ability to see what will happen before it occurs, giving power to the users to reconcile any potential issues without
+changing your current project. This concept persists across other commands, like `add` and `upgrade`,
+with the `--dry-run` flag, but two commands specifically indicate the status of the project, displaying the information
+differently depending on your needs.
+
+* [`rv plan`](./plan) - Show the results if you were to run `rv sync`. A more granular view.
+* [`rv summary`](./summary) - Inspect your project on a global level, indicating information
+like how packages need to be installed and the source of packages.

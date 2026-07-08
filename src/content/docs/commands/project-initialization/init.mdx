@@ -1,0 +1,110 @@
+---
+title: rv init
+description: Initialize a project for use with rv
+---
+
+import { Badge, FileTree, Tabs, TabItem } from '@astrojs/starlight/components';
+
+`rv init` will initialize a new or existing project by:
+
+1. Setting up the project infrastructure, including the project library and activation scripts.
+2. Creating a configuration file which is populated with the R version and repositories
+
+## Usage
+
+```shell
+rv init [project_directory] [OPTIONS]
+```
+
+#### Arguments
+
+* `project_directory` <Badge text="optional" variant="caution"/> - Creates an `rv` project at the directory specified
+
+    > Default: current directory (`./`)
+
+#### Options
+
+* `--r-version` - The R version is set to be the version found on the path by default. 
+Use this flag to set a custom version.
+
+* `--no-repositories` - The repositories are set to what is found in the current R profile,
+in `option("repos")`, by default. This flag leaves the repositories field in the config file blank.
+
+* `--add` - The dependency field is blank by default. This flag can be used to add dependencies you know 
+will be needed to the project immediately. It does not sync these dependencies like [`rv add`](../../editing-the-config/add).
+This flag is repeatable (`--add pkg1 --add pkg2`) to add multiple dependencies, rather than taking a single space-separated list.
+
+:::note
+Prior to `rv` 0.21.0, `--add` accepted a list of space-separated package names to be added to the configuration file. To ensure clarity, `--add` must be specified for each package individually.
+:::
+
+* `--no-r-environment` - By default, `rv` creates an R environment `.rv` to enable `rv` to be called in R code 
+(see [rvr](../../../reference/rvr) for more info). This flag will disable this R environment.
+
+* `--force` - By default, if an `rproject.toml` exists within a directory already, `rv` will not overwrite the file.
+The flag will force the creation of a new config file.
+
+:::note
+* For RStudio/Positron users, the R version on the path does NOT always match the version set for the session. 
+Please use `--r-version` to ensure the correct R version is used for the project.
+
+* `rv init` will not automatically sync your project
+
+* For interactive R sessions, we recommend restarting R after initializing your project to ensure your 
+project is activated properly.
+
+* To determine the default repositories, an `Rscript` command is launched from the working directory. 
+Depending on the locations of your [`.Rprofile`s](https://docs.posit.co/ide/user/ide/guide/environments/r/managing-r.html#rprofile), 
+this may affect the repositories found.
+:::
+
+### Example
+
+Follow the tabs below to see the changes:
+
+<Tabs>
+    <TabItem label = "Command">
+    ```shell
+    rv init my_rv_project --r-version 4.5 --add tidyverse
+    ```
+    </TabItem>
+    <TabItem label = "File Structure">
+        <FileTree>
+            - my_rv_project
+                - rv/
+                    - library/
+                    - scripts/
+                        - activate.R set the library and repositories within R
+                        - rvr.R set up `.rv`. See [rvr](../../../reference/rvr) for more info
+                    - .gitignore ignores the library
+                - .Rprofile
+                - rproject.toml
+        </FileTree>
+    </TabItem>
+    <TabItem label = "Config File">
+        ```toml
+        // rproject.toml
+        [project]
+        name = "my_rv_project"
+        r_version = "4.5"
+
+        # Optional: base URL for `rv add owner/repo` shorthand (defaults to https://github.com).
+        # git_shorthand_base_url = "https://github.example.com"
+        # A list of repositories to fetch packages from. Order matters: we will try to get a package from each repository in order.
+        # The alias is only used in this file if you want to specifically require a dependency to come from a certain repository.
+        # Example: { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+        repositories = [
+            {alias = "CRAN", url = "https://cran.rstudio.com"},
+        ]
+
+        # A list of packages to install and any additional configuration
+        # Examples:
+            # "dplyr",
+            # {name = "dplyr", repository = "CRAN"},
+            # {name = "dplyr", git = "https://github.com/tidyverse/dplyr.git", tag = "v1.1.4"},
+        dependencies = [
+            "tidyverse",
+        ]
+        ```
+    </TabItem>
+</Tabs>

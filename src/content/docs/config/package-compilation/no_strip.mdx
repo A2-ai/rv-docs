@@ -1,0 +1,32 @@
+---
+title: no_strip
+description: Disable stripping of debug symbols for specific packages
+---
+
+import { Badge } from '@astrojs/starlight/components';
+
+<Badge text="Introduced in rv v0.19.0" variant="note"/>
+<br/><br/>
+
+By default, `rv` passes `--strip` and `--strip-lib` to `R CMD INSTALL`, which strips debug symbols from compiled shared objects to
+reduce their size. `no_strip` lists packages for which this stripping should be disabled, installing them without those flags.
+
+This is useful if you need to debug a compiled package (e.g. with `gdb` or `lldb`) or are hitting a bug caused by stripping a
+package's binary.
+
+## Example
+```toml ins={11-13}
+//rproject.toml
+[project]
+name = "no strip"
+r_version = "4.5"
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+]
+dependencies = [
+    { name = "archive", force_source = true },
+]
+no_strip = [
+    "archive",
+]
+```

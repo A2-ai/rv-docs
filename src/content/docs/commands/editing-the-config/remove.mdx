@@ -1,0 +1,40 @@
+---
+title: rv remove
+description: Quickly remove packages from the config and sync
+---
+
+import { Code, FileTree, Tabs, TabItem, Badge } from '@astrojs/starlight/components';
+
+<Badge text="Introduced in rv v0.18.0" variant="note"/>
+<br/><br/>
+
+Used to quickly remove packages from the config file, then [sync](../../package-installation/sync).
+
+`rv remove` matches packages in the `dependencies` field by name, regardless of whether they were declared as a
+[simple dependency](../../../config/required-fields/dependencies#simple) or with a more advanced table entry (git, path, url, etc.), and
+removes the matching entries from the config file.
+
+## Usage
+```shell
+rv remove [packages]... [OPTIONS]
+```
+
+### Arguments
+* `packages` - A list of package names to remove from the project, given as separate arguments (e.g. `rv remove dplyr tidyr`)
+
+### Options
+* `--dry-run` - No changes made to the config or the package library, only reports what would happen if the command was run.
+* `--no-sync` - Packages are removed from the config file, but not synced.
+
+## Example
+```shell
+% rv remove tibble
+Removed 1 package from rproject.toml:
+  - tibble
+```
+
+If none of the packages given are found in the config file, `rv remove` reports that nothing happened rather than erroring:
+```shell
+% rv remove not-a-dependency
+No matching packages in rproject.toml. Nothing to remove.
+```

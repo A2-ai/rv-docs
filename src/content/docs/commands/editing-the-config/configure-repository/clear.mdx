@@ -1,0 +1,47 @@
+---
+title: rv configure repository clear
+description: Clear all repositories from the config file
+---
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+
+Clear all repositories
+
+## Usage
+```shell
+rv configure repository clear [OPTIONS]
+```
+
+## Example
+
+Starting with the following configuration:
+
+```toml
+//rproject.toml
+[project]
+name = "configure"
+repositories = [
+    { alias = "CRAN", url = "https://cran.r-project.org" },
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/2025-01-01" },
+]
+```
+
+To clear the repositories section, we run the following command:
+
+```shell
+rv configure repository clear
+```
+<Tabs syncKey="configure">
+    <TabItem label = "Updated Config File">
+        ```toml
+        //rproject.toml
+        [project]
+        name = "configure"
+        repositories = []
+        ```
+    </TabItem>
+    <TabItem label = "Command Output">
+        ```
+        All repositories cleared successfully
+        ```
+    </TabItem>
+</Tabs>

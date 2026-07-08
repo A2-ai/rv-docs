@@ -1,5 +1,6 @@
 ---
 title: Frequently Asked Questions
+description: Frequently Asked Questions about rv
 ---
 
 import { Steps, FileTree } from '@astrojs/starlight/components';
@@ -19,11 +20,11 @@ It is likely because your `.libPaths()` is not set to the `rv` library path.
 There are a few reasons this can occur:
 
 ### 1. Your `.Rprofile` is not sourcing `rv/scripts/activate.R`
-    * Run restart R or run `source(".Rprofile")`. After either, you should see a message containing the following:
+    * Restart R or run `source(".Rprofile")`. After either, you should see a message containing the following:
         ```txt
         rv libpaths active!
         library paths: 
-            /Users/rv-user/projects/prism-pkg-pub/rv/library/4.4/arm64
+            /Users/rv-user/project/rv/library/4.4/arm64
             /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library
         ```
     * Ensure `rv/scripts/activate.R` is present in your directory. If it is not, run `rv activate` and restart R.

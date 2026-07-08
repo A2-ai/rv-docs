@@ -1,0 +1,59 @@
+---
+title: library
+description: A custom library path
+---
+
+import { Badge } from '@astrojs/starlight/components';
+
+By default, `rv` installs packages within the project directory, in the subdirectory `rv/library`, which is further name spaced by
+R version, arch, and, for linux OS, the OS codename. Therefore, the default library path is `<project directory>/rv/library/<R version>/<arch>/<linux codename>`.
+
+However, packages can be installed to any directory using the `library` configuration. `rv` will not do any name spacing, so the burden is on
+the user to ensure the correct set of packages is used across R versions and systems. 
+
+To increase reproducibility, `rv` does not consider a package as installed if this option is set since tracking how packages are installed is not as well controlled.
+
+## Example
+```toml ins={2}
+//rproject.toml
+library = "/opt/rpkgs/4.5"
+[project]
+name = "custom library"
+r_version = "4.5"
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+]
+dependencies = [
+    "dplyr",
+]
+```
+
+## Templating
+<Badge text="Introduced in rv v0.22.0" variant="note"/>
+<br/>
+<br/>
+
+Since the burden of name spacing falls on the user with a custom `library` path, `rv` supports two placeholders to make it easier to keep
+libraries separated by R version or project: `{r_version}` and `{name}`. These are expanded using the project's `r_version` (major.minor)
+and `name` fields.
+
+```toml ins={2}
+//rproject.toml
+library = "/opt/rpkgs/{r_version}/{name}"
+[project]
+name = "templated_library"
+r_version = "4.5"
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+]
+dependencies = [
+    "dplyr",
+]
+```
+
+In this example, packages would be installed to `/opt/rpkgs/4.5/templated_library`.
+
+## Overriding with `RV_LIBRARY_DIR`
+The [`RV_LIBRARY_DIR`](../../../reference/env_vars#rv_library_dir) environment variable overrides the `library` field (and the default `rv/library` path)
+entirely, taking precedence over whatever is set in the config file.
+

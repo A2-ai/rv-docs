@@ -9,10 +9,10 @@ hero:
     file: ../../assets/images/rv-logo.png
   actions:
     - text: Getting Started
-      link: /rv-docs/intro/getting-started/
+      link: intro/getting-started/
       icon: right-arrow
     - text: Install rv
-      link: /rv-docs/intro/installation/
+      link: intro/installation/
       icon: download
       variant: minimal
 ---
@@ -21,16 +21,16 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 
 <CardGrid>
 	<Card title="Getting Started" icon="pencil">
-		<a href="/rv-docs/intro/installation">Installing `rv`</a> and <a href="/rv-docs/intro/getting-started">your first project</a>
+		<a href="intro/installation/">Installing `rv`</a> and <a href="intro/getting-started/">your first project</a>
 	</Card>
 	<Card title="Configuration" icon="document">
-		<a href="/rv-docs/config/intro">The configurations available for project package management</a>
+		<a href="config/">The configurations available for project package management</a>
 	</Card>
 	<Card title="Commands" icon = "setting">
-		<a href="/rv-docs/commands/intro">The commands to interact with your rv project</a> 
+		<a href="commands/">The commands to interact with your rv project</a> 
 	</Card>
 	<Card title="Cookbook" icon="open-book">
-		<a href="/rv-docs/cookbook/intro">Example projects showing various configurations</a>
+		<a href="cookbook/intro/">Example projects showing various configurations</a>
 	</Card>
 </CardGrid>
 
@@ -73,4 +73,4 @@ instead of only after it is installed.
 In summary, `rv`'s declarative design ensures users are provided with a working, fully reproducible environment in a way
 that's approachable enough for a new R user, but complex enough to fit an advanced developer's need.
 
-Additional information can be found in the [differences with `renv`](reference/renv-difference) section.
+Additional information can be found in the [differences with `renv`](reference/renv-difference/) section.

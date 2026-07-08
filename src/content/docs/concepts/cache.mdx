@@ -48,12 +48,12 @@ In this example, we'll start with a config file, inspect the output of `rv cache
         /Users/rv-user/.cache/rv
         PPM (https://packagemanager.posit.co/cran/2025-01-01 -> c7c3cf56b9), path: /Users/rv-user/.cache/rv/c7c3cf56b9
         PPM_new (https://packagemanager.posit.co/cran/latest -> f4780dda90), path: /Users/rv-user/.cache/rv/f4780dda90
-        Git: https://github.com/a2-ai/osinfo, source: /Users/rv-user/.cache/rv/git/8497b6723f, binary: /Users/rv-user/.cache/rv/8497b6723f/4.4/arm64/f815095b7b
+        Git: https://github.com/a2-ai/osinfo, source: /Users/rv-user/.cache/rv/git/8497b6723f, binary: /Users/rv-user/.cache/rv/8497b6723f/4.5/arm64/f815095b7b
         ```
     </TabItem>
     <TabItem label = "Cache File Tree">
         The cache file structure keeps each repository, R version, architecture, and os flavor (when applicable) isolated to ensure the proper package is 
-        installed each time. Also contained for each repository binary type is a `packages.bin` file, 
+        installed each time. Also contained for each repository binary type is a `packages.mp` file, 
         referred to as the [Repository Database](#repository-database), which contains an index of each package available in the CRAN-like repository.
 
         <FileTree>
@@ -62,19 +62,19 @@ In this example, we'll start with a config file, inspect the output of `rv cache
                     - 4.5/arm64
                         - fansi/1.0.6/
                             - fansi The unzipped, compiled package
-                        - packages.bin
+                        - packages.mp
                 - f4780dda90
                     - 4.5/arm64
                         - R6/2.6.1
                             - R6 The unzipped, compiled package
-                        - packages.bin
+                        - packages.mp
                     - src
                         - R6/2.6.1
                             - R6 The unzipped, source package
                 - git
                     - 8497b6723f Clone of the git repository to build
                 - 8497b6723f
-                    -4.5/arm64
+                    - 4.5/arm64
                         - f815095b7b Git commit sha, not package version
                             - osinfo The unzipped, compiled package
 
@@ -89,7 +89,7 @@ Within the cache root, `rv` contains its cache within an `rv` subdirectory.
 
 The cache root can be tuned by setting the `XDG_CACHE_HOME` for Unix like systems and `%LOCALAPPDATA%` for Windows.
 
-For additional tunability, use the [`GHQC_CACHE_DIR` env var](../../reference/env_vars/#rv_cache_dir).
+For additional tunability, use the [`RV_CACHE_DIR` env var](../../reference/env_vars/#rv_cache_dir).
 
 ## Repository Database
 
@@ -113,7 +113,7 @@ PKGCACHE_TIMEOUT=0 rv plan
 
 Within the `rv` cache, each source is its own subdirectory 
 
-The details of package caching vary based on the [dependency type](../../config/dependencies).
+The details of package caching vary based on the [dependency type](../../config/required-fields/dependencies).
 
 #### Repository
 
@@ -122,15 +122,18 @@ a combination of R version, OS, and architecture. `rv` will fetch a package to b
 
 1. Use the binary package found in the cache
 2. Download the binary package from the resolved source (ignored if `force_source`)
-3. Compile the package from the cached source package
-4. Download the source package from the resolved source and compile
+3. Download the binary package from the repository's binary archive, if the package's version was resolved from the lockfile
+   (ignored if `force_source`). This lets a lockfile-pinned version still install as a binary even after it has aged out of
+   the repository's current snapshot.
+4. Compile the package from the cached source package
+5. Download the source package from the resolved source and compile
 
 :::caution
 An important caveat to the above, if a binary is present but was downloaded and not compiled from source, if a dependency indicates `force_source`
 a new source compilation will occur and replace the downloaded binary. 
 
-This is something to always consider when using `force_source`, [`packages_env_vars`](../../config/packages_env_vars), and [`configure_args`](../../config/configure_args)
-as changing the compiled binary will effect other packages using the same package binary. 
+This is something to always consider when using `force_source`, [`packages_env_vars`](../../config/package-compilation/packages_env_vars), and [`configure_args`](../../config/package-compilation/configure_args)
+as changing the compiled binary will affect other packages using the same package binary. 
 :::
 
 #### Git
@@ -174,5 +177,10 @@ export RV_GLOBAL_CACHE_DIR=/mnt/shared/rv-cache
 ```
 
 This allows all users and projects on the organization to benefit from a shared pool of pre-compiled packages, reducing network bandwidth and storage costs while maintaining isolation through the local cache layer.
+
+:::caution
+The directory pointed to by `RV_GLOBAL_CACHE_DIR` must already exist. If it doesn't (or isn't accessible), `rv` logs a warning and
+silently falls back to using only the local cache.
+:::
 
 

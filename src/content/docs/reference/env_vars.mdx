@@ -3,6 +3,8 @@ title: Environment Variables
 description: Environment variables used/respected in rv
 ---
 
+import { Badge } from '@astrojs/starlight/components';
+
 `rv` respects existing environment variables and introduces a few as well. This page contains information about
 what each does and how it effects `rv`:
 
@@ -25,13 +27,13 @@ this variable can be set to `true` or `1` to not check for open files if the fil
 
 ## `RV_SYS_REQ_URL`
 
-For certain Linux distributions, currently Ubuntu, Debian, and RHEL-like, `rv` will check if the system dependencies for packages are found. To determine each package's system dependencies,
+For certain Linux distributions, currently Ubuntu (20.04/22.04/24.04), Debian 12, RHEL-family (RHEL/CentOS/Rocky/AlmaLinux 7-9), and openSUSE/SLE 15, `rv` will check if the system dependencies for packages are found. To determine each package's system dependencies,
 `rv` consults [Posit Package Manager's api](https://packagemanager.posit.co/__api__/repos/cran/sysreqs) by default. This environment variable can be used
 to tune where `rv` determines the system dependencies from.
 
 ## `RV_SYS_DEPS_CHECK_IN_PATH`
 
-For certain Linux distributions, currently Ubuntu, Debian, and RHEL-like, `rv` will check if the system dependencies for packages are found. To check if the system dependencies
+For certain Linux distributions, currently Ubuntu (20.04/22.04/24.04), Debian 12, RHEL-family (RHEL/CentOS/Rocky/AlmaLinux 7-9), and openSUSE/SLE 15, `rv` will check if the system dependencies for packages are found. To check if the system dependencies
 required for this project are installed, `rv` consults the [`dpkg`](https://debian-handbook.info/browse/da-DK/stable/sect.manipulating-packages-with-dpkg.html#sect.dpkg-list),
 a list of [known dependencies on the path](#known-path-dependencies), and any dependencies set by this environment variable in a comma separated list.
 
@@ -41,13 +43,40 @@ a list of [known dependencies on the path](#known-path-dependencies), and any de
 
 ## `RV_LINK_MODE`
 
-`rv` aggressively [cache's](../../concepts/cache) in order to avoid re-compiling and re-downloading pages. Additionally,
-caching minimizes the disk space used by installed packages. By default, `rv` will hard-link for Windows and Linux and [copy on write](https://en.wikipedia.org/wiki/Copy-on-write) for macOS.
+`rv` aggressively [caches](../../concepts/cache) in order to avoid re-compiling and re-downloading packages. Additionally,
+caching minimizes the disk space used by installed packages. To get packages from the cache into a project's library, `rv` links
+them using one of the following modes:
+
+* `copy` - A full file copy. The slowest option, but works on any file system.
+* `clone` - [Copy-on-write](https://en.wikipedia.org/wiki/Copy-on-write) via reflink. Requires file system support (APFS on macOS,
+  Btrfs/XFS on Linux, ReFS on Windows). Default on macOS.
+* `hardlink` - Hard links each file. The cache and library must be on the same file system. Default on Windows and Linux.
+* `symlink` - Symlinks to the package directory. Automatically selected on network file systems (e.g. NFS, Lustre on Linux),
+  regardless of OS default, since hardlinks and CoW clones don't work across most network mounts.
+
+Setting `RV_LINK_MODE` (case-insensitive) to one of these values overrides the automatic selection. The effective mode is chosen
+with the following priority: `RV_LINK_MODE` env var → network file system detection → OS default. If the selected mode fails
+(e.g. a hardlink across file systems), `rv` falls back to `copy` for that package.
+
+## `RV_INSECURE`
+<Badge text="Introduced in rv v0.22.0" variant="note"/>
+<br/>
+<br/>
+
+Setting this variable to `true` or `1` disables TLS certificate verification for all HTTP requests `rv` makes. This is an escape
+hatch for environments where valid certificates aren't available, such as behind a corporate proxy with a custom CA that isn't
+in your system's trust store.
+
+:::caution
+Disabling TLS verification means `rv` can no longer detect a man-in-the-middle attack on any of its network requests, including
+package downloads. Only set this variable if you understand and accept that risk, and prefer installing your proxy's CA
+certificate into your system's trust store instead if possible.
+:::
 
 ## `RV_SUBMODULE_UPDATE_DISABLE`
 
 By default, when using Git sources, `rv` will run `git submodule update --init --recursive` after checking out a commit to ensure all required submodules are initialized.
-This behavior ca be disabled by setting this variable to `true` or `1` to skip updating submodules entirely. This can be useful in cases where submodules are not needed
+This behavior can be disabled by setting this variable to `true` or `1` to skip updating submodules entirely. This can be useful in cases where submodules are not needed
 or when working in network-constrained or CI environments.
 
 ## `RV_CACHE_DIR`
@@ -56,16 +85,28 @@ By default, `rv` respects [XDG Base Directory Specification](https://specificati
 and the [Known Folder Locations](https://learn.microsoft.com/en-us/windows/win32/shell/known-folders) on Windows. Setting this environment variable will override the default and allows for
 flexibility.
 
+## `RV_GLOBAL_CACHE_DIR`
+<Badge text="Introduced in rv v0.18.0" variant="note"/>
+<br/>
+<br/>
+
+This environment variable specifies a global cache directory location, allowing for flexibility in cache placement across systems. This works in conjunction with `RV_CACHE_DIR` to provide multi-level caching strategy options.
+
+The directory must already exist. If it doesn't (or isn't accessible), `rv` logs a warning and silently falls back to using only
+the local cache, without a global cache layer.
+
 ## `RV_COPY_THREADS`
 
 `rv` uses multiple threads when copying files to improve performance. This variable allows overriding the default thread count used for file operations. **Only set this variable if you are experiencing known file system performance issues, particularly on slow NFS drives.** In most cases, the default behavior will provide optimal performance.
 
-## `RV_LIBRARY_DIR` (v0.20.0+)
+## `RV_LIBRARY_DIR`
+<Badge text="Introduced in rv v0.20.0" variant="note"/>
+<br/>
+<br/>
 
 By default, `rv` stores the project library under `rv/library/` within the project directory, or at the path specified by the `library` field in `rproject.toml`.
 Setting this environment variable overrides both defaults. Absolute paths are used as-is, while relative paths are resolved against the project directory.
 This takes precedence over the `library` field in `rproject.toml`.
 
-## `RV_GLOBAL_CACHE_DIR` (v0.18.0+)
-
-This environment variable specifies a global cache directory location, allowing for flexibility in cache placement across systems. This works in conjunction with `RV_CACHE_DIR` to provide multi-level caching strategy options.
+Like the [`library`](../../config/project-options/library) config field, this variable's value supports `{r_version}`/`{name}` placeholder templating, since both go
+through the same templating logic.

@@ -12,7 +12,7 @@ This is great for a lot of scenarios, for example, if you want to install the pa
 
 But there are scenarios where a package is contained in a repository and the installer, including `rv`, still prefers the remote dependency
 
-As discussed in [`prefer_repositories_for`](../../config/prefer_repositories_for), `rv` has the power to prefer repositories
+As discussed in [`prefer_repositories_for`](../../config/package-compilation/prefer_repositories_for), `rv` has the power to prefer repositories
 over remotes for explicit dependencies following the conditions mentioned.
 
 In this example, we will try to install the simple example package [`rv.remotes`](https://github.com/a2-ai/rv.remotes), 
@@ -49,7 +49,7 @@ We can see in the `summary` and `plan` that we will install `tibble` and `glue` 
         R Version: 4.4
 
         Num Workers for Sync: 8 (8 cpus available)
-        Cache Location: /Users/wescummings/projects/rv-docs-playground/cache/rv
+        Cache Location: /Users/rv-user/.cache/rv
 
         == Dependencies == 
         Library: rv/library/4.4/arm64
@@ -69,7 +69,7 @@ We can see in the `summary` and `plan` that we will install `tibble` and `glue` 
         PPM: 8/8 to download
         
         == Remote == 
-        PPM (https://packagemanager.posit.co/cran/latest): 19436 binary packages, 22462 source packages
+        PPM (https://packagemanager.posit.co/cran/2025-05-01): 19436 binary packages, 22462 source packages
         ```
     </TabItem>
     <TabItem label="rv plan">
@@ -125,7 +125,7 @@ We can now see that `tibble` and `glue` are not sourced from GitHub anymore and 
         R Version: 4.4
 
         Num Workers for Sync: 8 (8 cpus available)
-        Cache Location: /Users/wescummings/projects/rv-docs-playground/cache/rv
+        Cache Location: /Users/rv-user/.cache/rv
 
         == Dependencies == 
         Library: rv/library/4.4/arm64
@@ -140,7 +140,7 @@ We can now see that `tibble` and `glue` are not sourced from GitHub anymore and 
         https://github.com/a2-ai/rv.remotes: 1/1 in cache (1 to compile)
 
         == Remote == 
-        PPM (https://packagemanager.posit.co/cran/latest): 19436 binary packages, 22462 source packages
+        PPM (https://packagemanager.posit.co/cran/2025-05-01): 19436 binary packages, 22462 source packages
         ```
     </TabItem>
     <TabItem label="rv plan">
