@@ -114,7 +114,7 @@ dependencies = [
 ## `owner/repo` Shorthand
 
 As a shortcut for `--git`, a positional argument in the form `owner/repo` is resolved as a git source against
-`https://github.com` (or [`git_shorthand_base_url`](../../config/git_shorthand_base_url) if configured). A reference and
+`https://github.com` (or [`git_shorthand_base_url`](../../config/package-compilation/git_shorthand_base_url) if configured). A reference and
 subdirectory can be appended with `@`. Since the package name isn't given explicitly, `rv` fetches the repository's
 `DESCRIPTION` file to determine it:
 
@@ -147,7 +147,7 @@ plain `owner/repo` (defaults to the repo's `HEAD`).
 
 ### With a Custom `git_shorthand_base_url`
 
-If [`git_shorthand_base_url`](../../config/git_shorthand_base_url) is set in `rproject.toml` (e.g. for a GitHub Enterprise host),
+If [`git_shorthand_base_url`](../../config/package-compilation/git_shorthand_base_url) is set in `rproject.toml` (e.g. for a GitHub Enterprise host),
 the shorthand resolves against that base URL instead of `https://github.com`:
 
 ```toml

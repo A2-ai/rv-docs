@@ -1,0 +1,28 @@
+---
+title: Required Fields
+description: The required fields for an rv project configuration file
+---
+
+The first set of configurations are the fields that are required and most commonly used. These options must be under the `[project]` header.
+
+* [`name`](./name) - A name for your project
+* [`r_version`](./r_version) - The R version for which to install packages. See [`use_devel`](./r_version#use_devel) if you're running R-devel.
+* [`repositories`](./repositories) - A list of CRAN-like repositories to fetch packages from. The order matters!
+* [`dependencies`](./dependencies) - A list of dependencies to install
+
+#### Example Simple Config File
+```toml
+//rproject.toml
+[project]
+name = "simple"
+r_version = "4.5"
+
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+]
+
+dependencies = [
+    "dplyr",
+    "ggplot2",
+]
+```

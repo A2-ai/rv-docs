@@ -1,0 +1,49 @@
+---
+title: Package Compilation
+description: Configuration options for controlling how packages are compiled
+---
+
+On top of the [`dependencies`](../required-fields/dependencies) section configuration available, `rv` provides additional configurations and controls for package installation.
+
+* [`prefer_repositories_for`](./prefer_repositories_for) - Used to prefer repositories for dependencies that may be listed as `Remotes` in another package.
+* [`packages_env_vars`](./packages_env_vars) - Used to specify package specific environment variables for compilation. Has no effect if the package is sourced as a binary.
+* [`configure_args`](./configure_args) - Used to specify package specific configure.args. Can be tuned by OS and arch. Has no effect if the package is sourced as a binary.
+* [`no_strip`](./no_strip) - Disable stripping of debug symbols (passed by default to `R CMD INSTALL`) for specific packages.
+* [`git_shorthand_base_url`](./git_shorthand_base_url) - Override the base URL used by the [`rv add owner/repo` shorthand](../../commands/editing-the-config/add#ownerrepo-shorthand).
+
+> `dev_dependencies` and `suggests` are reserved fields for further dependency control, but are not yet implemented.
+
+#### Example Config File
+```toml ins={15,17-19,21-23,25-26,28-31}
+//rproject.toml
+[project]
+name = "package compilation"
+r_version = "4.5"
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+    { alias = "my-repo", url = "https://my-repo.com" },
+]
+dependencies = [
+    { name = "foo", git = "https://github.com/org/foo", branch = "main" },
+    { name = "data.table", force_source = true },
+    { name = "archive", force_source = true },
+]
+
+git_shorthand_base_url = "https://git.mycompany.com/scm"
+
+prefer_repositories_for = [
+    "bar",
+]
+
+no_strip = [
+    "archive",
+]
+
+[project.packages_env_vars."data.table"]
+OPENMP_CFLAGS = ''
+
+[project.configure_args]
+"foo" = [
+    { os = "macos", args = ["--some-flag"] },
+]
+```

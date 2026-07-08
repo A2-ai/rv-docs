@@ -7,7 +7,7 @@ import { Code, FileTree, Tabs, TabItem, Badge } from '@astrojs/starlight/compone
 
 Used to quickly add packages to the config file and [syncing](../../package-installation/sync).
 
-The `rv add` command supports adding packages as [simple dependencies](../../../config/dependencies#simple) or with advanced configuration options like specifying repositories, git sources, local paths, URLs, and various installation behaviors.
+The `rv add` command supports adding packages as [simple dependencies](../../../config/required-fields/dependencies#simple) or with advanced configuration options like specifying repositories, git sources, local paths, URLs, and various installation behaviors.
 
 Using this command may feel similar to `install.packages()` in which packages can be iteratively added to the project,
 just with the additional benefits provided by `rv`.
@@ -49,7 +49,7 @@ When using `--git` on its own (without the `owner/repo` shorthand), exactly one 
 <br/>
 <br/>
 As a shortcut for `--git`, a package argument in the form `owner/repo` is treated as a git source, resolved against `https://github.com`
-(or [`git_shorthand_base_url`](../../../config/git_shorthand_base_url) if configured):
+(or [`git_shorthand_base_url`](../../../config/package-compilation/git_shorthand_base_url) if configured):
 * `rv add r-lib/cli` - installs from the repository's default branch
 * `rv add r-lib/cli@v3.6.2` - installs from a tag, branch, or commit SHA (auto-detected)
 * `rv add r-lib/cli@branch:main`, `@tag:v3.6.2`, or `@commit:9a8c5d2` - explicitly typed reference

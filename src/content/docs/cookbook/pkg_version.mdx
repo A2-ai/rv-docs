@@ -5,10 +5,10 @@ description: Installing a specific package version through an older snapshot or 
 
 import { Aside } from '@astrojs/starlight/components';
 
-As mentioned in [the repository dependency configuration note](../../config/dependencies#repository),
+As mentioned in [the repository dependency configuration note](../../config/required-fields/dependencies#repository),
 `rv` intentionally does not have a way to specify a version directly. Instead, you can add an older snapshot 
-and [specify an out of order repository](../../config/dependencies#detailed) or install a package 
-using the a direct [`url` configuration](../../config/dependencies#url). 
+and [specify an out of order repository](../../config/required-fields/dependencies#detailed) or install a package 
+using the a direct [`url` configuration](../../config/required-fields/dependencies#url). 
 
 On this page, we will consider the scenario where we would like to install `jsonlite 1.9.1` but `jsonlite 2.0.0` is the version available in the repository
 used by other packages.
@@ -60,7 +60,7 @@ mixing packages.
 
 ## Through an Archive/Tarball
 
-If adding a different snapshot is not desired, we can add the dependency using the [`url` configuration](../../config/dependencies#url) to point to the Archive.
+If adding a different snapshot is not desired, we can add the dependency using the [`url` configuration](../../config/required-fields/dependencies#url) to point to the Archive.
 In a CRAN-like repository, packages are found in the archive in the pattern `{repo url}/src/contrib/Archive/{pkg name}/{pkg name}_{pkg version}.tar.gz`
 
 ```toml {13}

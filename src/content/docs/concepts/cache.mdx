@@ -113,7 +113,7 @@ PKGCACHE_TIMEOUT=0 rv plan
 
 Within the `rv` cache, each source is its own subdirectory 
 
-The details of package caching vary based on the [dependency type](../../config/dependencies).
+The details of package caching vary based on the [dependency type](../../config/required-fields/dependencies).
 
 #### Repository
 
@@ -132,7 +132,7 @@ a combination of R version, OS, and architecture. `rv` will fetch a package to b
 An important caveat to the above, if a binary is present but was downloaded and not compiled from source, if a dependency indicates `force_source`
 a new source compilation will occur and replace the downloaded binary. 
 
-This is something to always consider when using `force_source`, [`packages_env_vars`](../../config/packages_env_vars), and [`configure_args`](../../config/configure_args)
+This is something to always consider when using `force_source`, [`packages_env_vars`](../../config/package-compilation/packages_env_vars), and [`configure_args`](../../config/package-compilation/configure_args)
 as changing the compiled binary will affect other packages using the same package binary. 
 :::
 

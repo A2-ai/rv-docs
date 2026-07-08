@@ -10,9 +10,9 @@ available. Similar to R's [`install.packages()`](https://www.rdocumentation.org/
 `rv` allows you to set `configure.args` per package, but it additionally gives the ability to provide different `configure.args` per OS and arch.
 
 :::caution
-As discussed in the [Cache Concept Section](../../concepts/cache), changing the compilation of a package may affect other projects. If 
+As discussed in the [Cache Concept Section](../../../concepts/cache), changing the compilation of a package may affect other projects. If 
 the desired behavior is to keep the compilation change isolated to this project, we recommend setting your cache directory 
-(using `XDG_CACHE_HOME` for unix-like systems) to a separate directory to ensure this does not impact other projects.
+(using `RV_CACHE_DIR` or `XDG_CACHE_HOME` for unix-like systems) to a separate directory to ensure this does not impact other projects.
 :::
 
 ## Options

@@ -23,7 +23,7 @@ rv sync [OPTIONS]
 By default, `rv sync` will create or update the lockfile as needed to match the config file. `--locked` is intended for CI and other
 reproducible-install contexts where an unexpected lockfile change should be treated as an error rather than silently applied:
 * If the lockfile would need to be created or updated to match the config, `rv sync --locked` fails instead of writing it.
-* If [`use_lockfile`](../../../config/use_lockfile) is set to `false`, `--locked` fails immediately, since there's no lockfile to check against.
+* If [`use_lockfile`](../../../config/project-options/use_lockfile) is set to `false`, `--locked` fails immediately, since there's no lockfile to check against.
 
 Run `rv sync` (without `--locked`) locally to update the lockfile, then commit it, before relying on `--locked` in CI.
 

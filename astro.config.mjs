@@ -27,34 +27,37 @@ export default defineConfig({
 				{
 					label: 'Project Configuration',
 					items: [
-						{ label: 'Introduction', slug: 'config/intro' },
-						{ 
+						{ label: 'Overview', slug: 'config' },
+						{
 							label: 'Required Fields',
 							items: [
-								{ label: 'name', slug: 'config/name' },
-								{ label: 'r_version', slug: 'config/r_version' },
-								{ label: 'repositories', slug: 'config/repositories' },
-								{ label: 'dependencies', slug: 'config/dependencies' },
+								{ label: 'Overview', slug: 'config/required-fields' },
+								{ label: 'name', slug: 'config/required-fields/name' },
+								{ label: 'r_version', slug: 'config/required-fields/r_version' },
+								{ label: 'repositories', slug: 'config/required-fields/repositories' },
+								{ label: 'dependencies', slug: 'config/required-fields/dependencies' },
 							]
 						},
 						{
 							label: 'Package Compilation',
 							collapsed: true,
 							items: [
-								{ label: 'prefer_repositories_for', slug: 'config/prefer_repositories_for' },
-								{ label: 'packages_env_vars', slug: 'config/packages_env_vars' },
-								{ label: 'configure_args', slug: 'config/configure_args' },
-								{ label: 'no_strip', slug: 'config/no_strip' },
-								{ label: 'git_shorthand_base_url', slug: 'config/git_shorthand_base_url' }
+								{ label: 'Overview', slug: 'config/package-compilation' },
+								{ label: 'prefer_repositories_for', slug: 'config/package-compilation/prefer_repositories_for' },
+								{ label: 'packages_env_vars', slug: 'config/package-compilation/packages_env_vars' },
+								{ label: 'configure_args', slug: 'config/package-compilation/configure_args' },
+								{ label: 'no_strip', slug: 'config/package-compilation/no_strip' },
+								{ label: 'git_shorthand_base_url', slug: 'config/package-compilation/git_shorthand_base_url' }
 							]
 						},
 						{
 							label: 'Project Options',
 							collapsed: true,
 							items: [
-								{ label: 'library', slug: 'config/library' },
-								{ label: 'use_lockfile', slug: 'config/use_lockfile' },
-								{ label: 'lockfile_name', slug: 'config/lockfile_name' },
+								{ label: 'Overview', slug: 'config/project-options' },
+								{ label: 'library', slug: 'config/project-options/library' },
+								{ label: 'use_lockfile', slug: 'config/project-options/use_lockfile' },
+								{ label: 'lockfile_name', slug: 'config/project-options/lockfile_name' },
 							]
 						}
 					]
