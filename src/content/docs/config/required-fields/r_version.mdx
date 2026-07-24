@@ -10,6 +10,8 @@ The R version to install packages for, containing at least the major and minor v
 ## Finding the Executable
 The R version is found on the system according to the following guidelines:
 
+We recommend managing R installations with [rig](https://github.com/r-lib/rig), which lets multiple R versions coexist on the same system. `rv` is aware of how rig lays out its installations, and can ask rig directly as a last resort, so a project's pinned `r_version` is found even when it isn't rig's current global default. `rv` only reads what rig has installed; it never asks rig to switch the default or to install a version.
+
 ### Version Matching
 `rv` utilizes a flexible version matching approach, similar to [Posit Connect's `major-minor`](https://docs.posit.co/connect/admin/r/#r-version-matching) approach. 
 If the patch version is specified, it will perform an exact match. If the patch version is not specified, it will match to any R version found 
