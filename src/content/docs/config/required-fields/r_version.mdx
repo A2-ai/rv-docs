@@ -23,15 +23,20 @@ Since R packages are compatible across patch versions of R, it is recommended to
 to increase cross-system compatibility.
 
 ### Known Binary Locations
-`rv` will look to find the specified versions of R first on the path, then in the following locations based on OS:
-* **Linux** - Searches within the subdirectories of `/opt/R` (i.e. `/opt/R/4.5.0/bin/R`)
-* **macOS** - `rv` looks for `R` on the path first; if it isn't found there, or the version found doesn't match, it also scans
-`/Library/Frameworks/R.framework/Versions/*` (the layout used by the CRAN installer) and `/opt/homebrew/Cellar/r/*` (Apple Silicon
-Homebrew installs). Intel Homebrew's `/usr/local/Cellar/r` is not scanned.
-* **Windows** - [rig](https://github.com/r-lib/rig) keeps the installed/selected version as R.bat, therefore we check for `R.bat` on the path first.
-If not found there, `rv` also scans `C:\Program Files\R\R-*`.
+`rv` looks for a matching R installation in four steps, stopping at the first match. A step that finds no match, or one whose R does not match the requested version, simply falls through to the next step:
+
+1. **[rig](https://github.com/r-lib/rig) versioned quick links on the path** - rig writes a versioned link for every R version it manages, not just the one currently selected as its default, so `rv` scans the directories on `PATH` for a link matching the requested major/minor version: `R-4.5` (optionally with an `-arm64` or `-x86_64` suffix) on macOS, `R-4.5.1` on Linux, and `R-4.5.1.bat` on Windows. This is what lets `rv` find a project's pinned version even when it isn't rig's current global default.
+2. **Plain `R` on the path** (`R.bat` on Windows) - this is rig's global default, or any other R install that puts a plain `R` on the path (e.g. a system package manager).
+3. **Known install locations**, scanned based on OS:
+    * **Linux** - `/opt/R/*` (e.g. `/opt/R/4.5.0/bin/R`), where rig installs R and where Posit's pre-built R binaries land as well. This location is scanned whether or not rig is installed.
+    * **macOS** - `/Library/Frameworks/R.framework/Versions/*`, rig's default install location, matching the layout used by the official CRAN installer, and `/opt/homebrew/Cellar/r/*` (Apple Silicon Homebrew installs). Intel Homebrew's `/usr/local/Cellar/r` is not scanned.
+    * **Windows** - `C:\Program Files\R\R-*`, used by rig and the official Windows installer for system-wide installs, and `%LOCALAPPDATA%\Programs\R\R-*` for per-user installs
+    * **All platforms** - rig's *user-mode* installs, a separate install mode from the system-wide locations above: `%APPDATA%\rig\data\r` on Windows or `$HOME/.local/share/rig/r` on macOS/Linux, or a `RIG_R_INSTALL_DIR` override for that location. This currently only applies to rig's devel builds, which are the only ones that support user-mode installs so far.
+4. **Asking rig**, via `rig list --json`. rig resolves its install locations from environment variables *and* from its own config file, and its quick-link directory can be relocated the same way, so a rig setup can put R somewhere none of the locations above reach. This step only runs when the earlier steps found nothing and `rig` is on the path, and `rv` uses only the binary path rig reports, working out the version itself as it does for any other install. If rig is absent, fails, or returns something `rv` cannot make sense of, it is treated as no match rather than an error.
 
 :::note
+* For entries found via a known install location, the version is read from that installation's `Rversion.h` header rather than by running the R executable. For the other steps, `rv` runs the executable and falls back to the header for devel builds, which do not report a version number.
+
 * For interactive sessions of R in an rv project, if the R version does not match the R version in your config, `rv` enters a safe mode
 for that session: the library is redirected to a temporary directory (`tempdir()/__rv_R_mismatch`), so any package installs or loads during
 the mismatch silently use a throwaway library rather than the project's real library.
