@@ -55,6 +55,10 @@ The [`r_version` page](../../config/required-fields/r_version) contains addition
 If using RStudio/Positron, the R version on the path does not always match the version selected.
 :::
 
+:::tip
+Managing R installations with [rig](https://github.com/r-lib/rig) makes it easy to keep multiple R versions available on the same system, so different projects can pin different versions without conflicting.
+:::
+
 #### `repositories`
 The repositories dependencies are sourced from unless otherwise specified. During `rv init` defaults to the repositories set in `options("repos")` when possible.
 
