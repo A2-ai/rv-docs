@@ -25,6 +25,7 @@ rv remove [packages]... [OPTIONS]
 ### Options
 * `--dry-run` - No changes made to the config or the package library, only reports what would happen if the command was run.
 * `--no-sync` - Packages are removed from the config file, but not synced.
+* `--r-bin <PATH>` - Use the R at that path instead of the one `rv` finds for the project. Its version has to match the project's `r_version`, see [overriding the R version](../../../config/required-fields/r_version#overriding-the-r-version) <Badge text="Introduced in rv v0.23.0" variant="note"/>
 
 ## Example
 ```shell

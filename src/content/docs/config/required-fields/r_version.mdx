@@ -23,13 +23,21 @@ Since R packages are compatible across patch versions of R, it is recommended to
 to increase cross-system compatibility.
 
 ### Known Binary Locations
-`rv` will look to find the specified versions of R first on the path, then in the following locations based on OS:
-* **Linux** - Searches within the subdirectories of `/opt/R` (i.e. `/opt/R/4.5.0/bin/R`)
-* **macOS** - `rv` looks for `R` on the path first; if it isn't found there, or the version found doesn't match, it also scans
-`/Library/Frameworks/R.framework/Versions/*` (the layout used by the CRAN installer) and `/opt/homebrew/Cellar/r/*` (Apple Silicon
-Homebrew installs). Intel Homebrew's `/usr/local/Cellar/r` is not scanned.
-* **Windows** - [rig](https://github.com/r-lib/rig) keeps the installed/selected version as R.bat, therefore we check for `R.bat` on the path first.
-If not found there, `rv` also scans `C:\Program Files\R\R-*`.
+`rv` looks for an R matching the `r_version` of the project in the following order.
+
+1. The `R` found on the `PATH`, if its version matches
+2. The versioned links `rig` puts on the `PATH` <Badge text="rv v0.23.0" variant="note"/>, named after the version they
+point at: `R-4.5`, sometimes suffixed with `-arm64`/`-x86_64`, on macOS, `R-4.5.1` on Linux and `R-4.5.1.exe` or
+`R-4.5.1.bat` on Windows.
+3. The known installation locations of each OS:
+    * **Linux** - the subdirectories of `/opt/R` (i.e. `/opt/R/4.5.0/bin/R`)
+    * **macOS** - `/Library/Frameworks/R.framework/Versions/*` (the layout used by the CRAN installer) and
+    `/opt/homebrew/Cellar/r/*` (Apple Silicon Homebrew installs). Intel Homebrew's `/usr/local/Cellar/r` is not scanned.
+    * **Windows** - the subdirectories of `C:\Program Files\R` and of `%LOCALAPPDATA%\Programs\R`
+
+    Those installations do not need to be on the `PATH`: `rv` reads their version from the `Rversion.h` header they ship.
+4. `rig list --json` <Badge text="rv v0.23.0" variant="note"/>, if `rig` is on the `PATH` but none of its installs were
+found by the steps above.
 
 :::note
 * For interactive sessions of R in an rv project, if the R version does not match the R version in your config, `rv` enters a safe mode
@@ -39,6 +47,32 @@ the mismatch silently use a throwaway library rather than the project's real lib
 
 * When adding an R version to the path, the R executable is often within a `bin/` directory
 :::
+
+## Overriding the R version
+<Badge text="Introduced in rv v0.23.0" variant="note"/>
+<br/>
+<br/>
+
+The commands that need to know which R to use take flags to override the discovery described above. Both have an
+environment variable equivalent, [`RV_R_BIN`](../../../reference/env_vars#rv_r_bin) and
+[`RV_R_VERSION`](../../../reference/env_vars#rv_r_version).
+
+* `--r-bin <PATH>` - Use the R at that path instead of looking for one. Its version has to match the `r_version` of the
+project, otherwise `rv` errors and tells you what to pass to run with it anyway
+* `--r-version <VERSION>` - The R version to use. On its own it can only ask for a version matching the project's
+`r_version`, unless the command never runs R. Together with `--r-bin`, it asserts the version of that R and allows it to
+differ from the project
+
+Running against an R that does not match the project is therefore a deliberate two step opt-in: `--r-bin` alone will not
+do it, since a wrong path should not quietly install packages for another R version.
+
+What that means per command:
+
+| Commands | Overriding |
+|----------|------------|
+| `rv plan`, `rv summary`, `rv tree`, `rv library` | Those never run R, so `--r-version` alone is enough to see what the project would look like on another R version, even one that is not installed |
+| `rv sync`, `rv run` | `--r-bin` together with `--r-version` runs against an R that differs from the project. The lockfile is then neither read nor updated, and `rv` warns about it |
+| `rv add`, `rv remove`, `rv upgrade` | Only take `--r-bin`, and its version has to match the project. Those commands write the lockfile, so running them against another R is an error |
 
 ## `use_devel`
 <Badge text="Introduced in rv v0.18.0" variant="note"/>

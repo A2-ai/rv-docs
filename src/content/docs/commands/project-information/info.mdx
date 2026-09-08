@@ -15,6 +15,8 @@ rv info [OPTIONS]
 * `--library` - Returns the relative path of the library in UNIX format, even on Windows  (alias: `rv library`)
 * `--r-version` - The R version specified in the config
 * `--repositories` - The repositories specified in the config
+* `--sandbox` - The path of the [system library sandbox](../../../concepts/sandbox) for the project, building it if it
+does not exist yet. Prints an empty value when the project does not enable the sandbox
 
 ## Example
 ```shell {1}
@@ -23,3 +25,13 @@ library: rv/library/4.4/arm64
 r-version: 4.4
 repositories: (PPM, https://packagemanager.posit.co/cran/latest)
 ```
+
+When the project is sandboxed, `--sandbox` also reports the path a session would use:
+
+```shell {1}
+% rv info --sandbox
+sandbox: /home/me/.cache/rv/sandboxes/4f77a81337/4.5/x86_64/ubuntu-22.04/ee29fbe8c9
+```
+
+This is the flag the activate script uses, so it is also the way to see the error behind a
+`failed to run rv info` warning at R startup.

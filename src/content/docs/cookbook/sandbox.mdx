@@ -1,0 +1,59 @@
+---
+title: Working with the Sandbox
+description: Turning the system library sandbox on and off
+---
+
+import { Badge } from '@astrojs/starlight/components';
+
+<Badge text="Introduced in rv v0.23.0" variant="note"/>
+<br/><br/>
+
+Four things you are likely to want to do with the [system library sandbox](../../concepts/sandbox). Apart from
+`rv init --sandbox` on a brand new project, they are all edits to `rproject.toml`: no `rv` command flips the field on an
+existing project.
+
+## Sandboxing an existing project
+
+Add the field to `rproject.toml`, above the `[project]` header since it is a top level field:
+
+```toml ins={2}
+//rproject.toml
+sandbox = true
+[project]
+name = "my-analysis"
+r_version = "4.5"
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+]
+dependencies = [
+    "dplyr",
+]
+```
+
+Then run `rv activate` and **restart your R session**. The sandbox is applied by the activate script at startup, so a session that is already
+running keeps the `.libPaths()` it started with. `rv sync` and `rv run` do not need a restart.
+
+## Initializing a project with the sandbox
+
+You can run either `rv init --sandbox` or set [`RV_USE_SANDBOX`](../../reference/env_vars#rv_use_sandbox) instead of editing each project.
+
+## Opting out of sandbox
+
+This is the default. However, if you have `RV_USE_SANDBOX` set, you will need to opt-out explicitly in `rproject.toml`
+by adding `sandbox = false`.
+
+```toml ins={2}
+//rproject.toml
+sandbox = false
+[project]
+name = "needs-the-system-library"
+r_version = "4.5"
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+]
+dependencies = []
+```
+
+## Stopping sandboxing a project
+
+Remove `sandbox = true` (or set it to `false`) and restart your R session.

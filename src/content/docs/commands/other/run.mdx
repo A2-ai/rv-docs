@@ -27,6 +27,8 @@ rv run [--no-sync] [args]...
 * `--no-sync` <Badge text="must be first" variant="caution"/> - Skip syncing the project library before running the command.
   Because all other arguments are passed through to `Rscript` as-is, this flag must be given as the very first argument or it
   will be treated as an argument to your script instead.
+* `--r-bin <PATH>` - Use the R at that path instead of the one `rv` finds for the project. See [overriding the R version](../../../config/required-fields/r_version#overriding-the-r-version) <Badge text="Introduced in rv v0.23.0" variant="note"/>
+* `--r-version <VERSION>` - Paired with `--r-bin`, run against an R that does not match the config. The lockfile is then neither read nor updated <Badge text="Introduced in rv v0.23.0" variant="note"/>
 
 ## Example
 ```shell
@@ -39,3 +41,24 @@ To skip the sync and run directly against the current library:
 ```shell
 % rv run --no-sync analysis.R
 ```
+
+## Self-contained scripts
+
+If the script contains a `# /// rv` block, `rv run` takes its configuration from there instead of from an
+`rproject.toml`, and installs the dependencies it declares in a library kept in the cache:
+
+```r
+//analysis.R
+# /// rv
+# dependencies = ["dplyr"]
+# ///
+
+library(dplyr)
+```
+
+```shell
+rv run analysis.R
+```
+
+See [self-contained scripts](../../../reference/self_contained_scripts) for the details of the block and what `rv`
+fills in for you.
