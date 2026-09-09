@@ -34,6 +34,9 @@ in `option("repos")`, by default. This flag leaves the repositories field in the
 will be needed to the project immediately. It does not sync these dependencies like [`rv add`](../../editing-the-config/add).
 This flag is repeatable (`--add pkg1 --add pkg2`) to add multiple dependencies, rather than taking a single space-separated list.
 
+* `--sandbox` - Writes `sandbox = true` into the generated config, so the project runs against a
+[system library sandbox](../../../concepts/sandbox) instead of R's own library.
+
 :::note
 Prior to `rv` 0.21.0, `--add` accepted a list of space-separated package names to be added to the configuration file. To ensure clarity, `--add` must be specified for each package individually.
 :::

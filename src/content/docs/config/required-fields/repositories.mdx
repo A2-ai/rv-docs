@@ -35,20 +35,54 @@ Currently, `rv` is tuned to best support CRAN and PPM style repositories, but th
 Bioconductor is _just_ a collection of CRAN-like repositories. In R itself, tools like `BiocManager` expands the repositories and sets them,
 so that when you call `install.packages()` it will search through them to find the package of interest.
 
-While it is likely we will include a configuration to handle the repository expansion internally, the onus currently is on the user.
-
-Below is an example expansion, where the [bioconductor version](https://www.bioconductor.org/about/release-announcements/) 
-and [which repositories](https://www.bioconductor.org/packages/release/BiocViews.html) to include can vary based on the R version and 
-packages of interest:
+`rv` can do that expansion for you <Badge text="Introduced in rv v0.23.0" variant="note"/>, with a `bioconductor` entry
+in the repositories list instead of an `alias`/`url` pair:
 
 ```toml
 repositories = [
-    { alias = "BioCsoft", url = "https://bioconductor.org/packages/3.21/bioc" },
-    { alias = "BioCann", url = "https://bioconductor.org/packages/3.21/data/annotation" },
-    { alias = "BioCexp", url = "https://bioconductor.org/packages/3.21/data/experiment" },
-    { alias = "BioCworkflows", url = "https://bioconductor.org/packages/3.21/workflows" },
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+    { bioconductor = "auto" },
 ]
 ```
+
+That entry expands to the four Bioconductor repositories, in this order:
+
+```toml
+{ url = "https://bioconductor.org/packages/3.22/bioc" },
+{ url = "https://bioconductor.org/packages/3.22/data/annotation" },
+{ url = "https://bioconductor.org/packages/3.22/data/experiment" },
+{ url = "https://bioconductor.org/packages/3.22/workflows" },
+```
+
+#### Options
+* `bioconductor` - The [Bioconductor version](https://www.bioconductor.org/about/release-announcements/) to use:
+    * `auto` - the latest release matching the `r_version` of the project
+    * `release` - the current Bioconductor release
+    * `devel` - the current Bioconductor devel version
+    * an explicit version, like `3.21`. A version released after your `rv` was built is used as-is: only versions that
+    never existed are refused
+* `mirror` <Badge text="optional" variant="caution"/> - Fetch from a mirror instead of `https://bioconductor.org`. The
+`/packages/<version>/<repository>` paths are appended to it, so the mirror must follow the same layout. Can also be set
+for every project with the [`RV_BIOC_MIRROR`](../../../reference/env_vars#rv_bioc_mirror) environment variable
+    > Default: `https://bioconductor.org`
+* `force_source` <Badge text="optional" variant="caution"/> - Force all packages coming from those repositories to be source
+    > Default: `false`
+
+Only one `bioconductor` entry is allowed per config. List the repository URLs yourself if you need more to mix versions.
+
+:::caution
+`release` and `devel` are the versions that were current when your `rv` was built, and are not tied to the `r_version`
+of the project: with R 4.5, `release` currently resolves to Bioconductor 3.23, which targets R 4.6. Use `auto`, or an
+explicit version, to stay aligned with your R version.
+
+`rv` warns when the Bioconductor version it ends up using targets a different R version than the project, though the
+warning is only shown when running with `-v`.
+:::
+
+To require that a package comes from Bioconductor, use
+[`bioconductor = true`](../dependencies#detailed) on the dependency. The expanded repositories are internal, they
+appear as `__rv__BioCsoft` and friends in `rv` output and in `options("repos")`, and cannot be used as a dependency's
+`repository` alias.
 
 ### R-universe
 R-universe is formatted like a CRAN-like repository, but is missing a critical component: there is [no archive](https://docs.r-universe.dev/install/reproducibility.html#does-r-universe-archive-old-versions-of-packages-how-does-it-work-with-renv).

@@ -32,6 +32,10 @@ by indicating an alias corresponding to the [repositories](../repositories) sect
     > Default: first resolvable repository
 * `force_source` <Badge text="optional" variant="caution"/> - Force the package to be fetched as source
     > Default: `false`
+* `bioconductor` <Badge text="optional" variant="caution"/> <Badge text="rv v0.23.0" variant="note"/> - Only look for the package
+in the repositories expanded from the [`bioconductor` shorthand](../repositories#bioconductor). Requires that shorthand
+to be present and cannot be combined with `repository`
+    > Default: `false`
 
 :::tip
 Specifying `force_source = false` will override the repository level `force_source` configuration. This is different
@@ -45,6 +49,7 @@ dependencies = [
     { name = "purrr", force_source = true },
     { name = "ggplot2", repository = "CRAN" },
     { name = "tibble", force_source = true, repository = "PPM" },
+    { name = "Biobase", bioconductor = true },
 ]
 ```
 

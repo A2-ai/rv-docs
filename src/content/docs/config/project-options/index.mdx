@@ -8,13 +8,15 @@ description: Configuration options for tuning project-level behavior
 * [`library`](./library) - Specify a custom library location, optionally templated by R version or project name
 * [`use_lockfile`](./use_lockfile) - Whether to use a lockfile or not
 * [`lockfile_name`](./lockfile_name) - The name of the lockfile corresponding to the config file
+* [`sandbox`](./sandbox) - Whether to hide packages installed directly in R's own library from the project
 
 #### Example Config File
-```toml ins={2-4}
+```toml ins={2-5}
 //rproject.toml
 library = "/opt/rpkgs/{r_version}/{name}"
 use_lockfile = false
 lockfile_name = "custom.lock"
+sandbox = true
 [project]
 name = "project options"
 r_version = "4.5"

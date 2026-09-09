@@ -110,3 +110,39 @@ This takes precedence over the `library` field in `rproject.toml`.
 
 Like the [`library`](../../config/project-options/library) config field, this variable's value supports `{r_version}`/`{name}` placeholder templating, since both go
 through the same templating logic.
+
+## `RV_USE_SANDBOX`
+<Badge text="Introduced in rv v0.23.0" variant="note"/>
+<br/>
+<br/>
+
+Every `rv` project will now use a sandbox if this variable is truthy without having to specify it every time in the config file.
+
+## `RV_BIOC_MIRROR`
+<Badge text="Introduced in rv v0.23.0" variant="note"/>
+<br/>
+<br/>
+
+The base URL the [`bioconductor` shorthand](../../config/required-fields/repositories#bioconductor) expands against,
+instead of `https://bioconductor.org`. `rv` appends the `/packages/<version>/<repository>` paths to it, so the mirror
+has to follow the same layout.
+
+The `mirror` field of the shorthand takes precedence over this variable.
+
+## `RV_R_BIN`
+<Badge text="Introduced in rv v0.23.0" variant="note"/>
+<br/>
+<br/>
+
+Equivalent to passing [`--r-bin`](../../config/required-fields/r_version#overriding-the-r-version) to the commands that
+accept it: the R at that path is used instead of the one `rv` would find for the project. Its version still has to match
+the project's `r_version` unless `--r-version`/`RV_R_VERSION` is set as well.
+
+## `RV_R_VERSION`
+<Badge text="Introduced in rv v0.23.0" variant="note"/>
+<br/>
+<br/>
+
+Equivalent to passing [`--r-version`](../../config/required-fields/r_version#overriding-the-r-version) to `rv sync`,
+`rv run`, `rv plan`, `rv summary`, `rv tree` and `rv library`. `rv add`, `rv remove` and `rv upgrade` have no such flag
+and ignore this variable.

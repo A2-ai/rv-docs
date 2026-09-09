@@ -3,6 +3,8 @@ title: rv library
 description: List the library directory
 ---
 
+import { Badge } from '@astrojs/starlight/components';
+
 Returns the relative path of the library in UNIX format, even on Windows. 
 
 The library is by default `rv/library/<R version>/<arch>/<linux codename>` (with the linux codename only appearing on linux OSs).
@@ -12,6 +14,12 @@ This can be tuned using the [`library`](../../../config/project-options/library)
 ```shell
 rv library [OPTIONS]
 ```
+
+### Options
+* `--r-bin <PATH>` - Use the R at that path instead of the one `rv` finds for the project <Badge text="Introduced in rv v0.23.0" variant="note"/>
+* `--r-version <VERSION>` - Report the library path of another R version, which does not need to be installed <Badge text="Introduced in rv v0.23.0" variant="note"/>
+
+See [overriding the R version](../../../config/required-fields/r_version#overriding-the-r-version) for how those two interact.
 
 ## Example
 ```shell {1}

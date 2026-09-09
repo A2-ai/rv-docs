@@ -15,6 +15,7 @@ rv plan [OPTIONS]
 ### Options
 * `--r-version` - Specify an R version different than the one in the config. This allows you to see what would occur if
 the project was changed to a different R version. The R version does not need to be on the system
+* `--r-bin <PATH>` - Use the R at that path instead of the one `rv` finds for the project. See [overriding the R version](../../../config/required-fields/r_version#overriding-the-r-version) <Badge text="Introduced in rv v0.23.0" variant="note"/>
 * `--upgrade` - The same as [`rv upgrade --dry-run`](../../package-installation/upgrade)
 * `--locked` - Fail instead of reporting a plan that would update the lockfile. Conflicts with `--upgrade`. Intended for the same
 CI/reproducibility use case as [`rv sync --locked`](../../package-installation/sync#using---locked-for-ci). <Badge text="Introduced in rv v0.22.0" variant="note"/>
