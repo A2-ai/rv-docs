@@ -15,6 +15,8 @@ rv sync [OPTIONS]
 ### Options
 * `--save-install-logs-in`: Directory in which the install logs for packages compiled from source should be copied to. By default is kept in cache.
 * `--locked`: Fail instead of updating the lockfile. <Badge text="Introduced in rv v0.22.0" variant="note"/>
+* `--r-bin <PATH>`: Use the R at that path instead of the one `rv` finds for the project. See [overriding the R version](../../../config/required-fields/r_version#overriding-the-r-version) <Badge text="Introduced in rv v0.23.0" variant="note"/>
+* `--r-version <VERSION>`: Paired with `--r-bin`, sync against an R that does not match the config. The lockfile is then neither read nor updated <Badge text="Introduced in rv v0.23.0" variant="note"/>
 
 ## Using `--locked` for CI
 <Badge text="Introduced in rv v0.22.0" variant="note"/>

@@ -3,6 +3,8 @@ title: rv tree
 description: List of package dependencies in a tree format
 ---
 
+import { Badge } from '@astrojs/starlight/components';
+
 Returns the dependency tree of all packages in the project. 
 
 ## Usage
@@ -16,6 +18,7 @@ Defaults to displaying everything
 * `--hide-system-deps` - Hide the system dependencies displayed on each leaf. 
 System dependencies are only available on some Linux platforms, otherwise they are already hidden.
 * `--r-version` - Specify an R version different than the one in the config. The R version does not need to be on the system
+* `--r-bin <PATH>` - Use the R at that path instead of the one `rv` finds for the project. See [overriding the R version](../../../config/required-fields/r_version#overriding-the-r-version) <Badge text="Introduced in rv v0.23.0" variant="note"/>
 
 ## Example
 **Config File:**

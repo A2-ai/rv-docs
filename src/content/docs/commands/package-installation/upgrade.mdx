@@ -3,7 +3,7 @@ title: rv upgrade
 description: Ignore the lockfile during a sync
 ---
 
-import { FileTree, Tabs, TabItem } from '@astrojs/starlight/components';
+import { FileTree, Tabs, TabItem, Badge } from '@astrojs/starlight/components';
 
 `rv` will [resolve](../../../concepts/resolution) packages from the source and the version it is locked at. 
 `rv upgrade` will ignore the lockfile, re-resolve, and install changed packages. This does not guarantee packages will be 
@@ -16,6 +16,7 @@ rv upgrade [OPTIONS]
 
 ### Options
 * `--dry-run` - No changes made, only reports what would happen if the command was run.
+* `--r-bin <PATH>` - Use the R at that path instead of the one `rv` finds for the project. Its version has to match the project's `r_version`, see [overriding the R version](../../../config/required-fields/r_version#overriding-the-r-version) <Badge text="Introduced in rv v0.23.0" variant="note"/>
 
 ## Example
 In this example, we will start with the following config and lock files:

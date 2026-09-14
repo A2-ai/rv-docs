@@ -1,0 +1,35 @@
+---
+title: sandbox
+description: Hide packages that were installed into R's own library from the project
+---
+
+import { Badge } from '@astrojs/starlight/components';
+
+<Badge text="Introduced in rv v0.23.0" variant="note"/>
+<br/><br/>
+
+Set `sandbox = true` to run the project using a [sandbox](../../../concepts/sandbox) to ensure truly reproducible
+projects if you are in an environment where there might be packages installed directly in the R library.
+
+Defaults to `false`. If the field is not set, `rv` will also look for [`RV_USE_SANDBOX`](../../../reference/env_vars#rv_use_sandbox)
+environment variable.
+
+## Example
+```toml ins={2}
+//rproject.toml
+sandbox = true
+[project]
+name = "sandboxed"
+r_version = "4.5"
+repositories = [
+    { alias = "PPM", url = "https://packagemanager.posit.co/cran/latest" },
+]
+dependencies = [
+    "dplyr",
+]
+```
+
+An interactive session picks the change up on its next start, since the [activate](../../../commands/other/activation)
+script sets the library up at startup. `rv run` and `rv sync` pick it up immediately.
+
+You can choose to enable or disable it at any time, `rv` will adjust automatically.

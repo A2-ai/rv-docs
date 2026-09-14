@@ -58,6 +58,7 @@ export default defineConfig({
 								{ label: 'library', slug: 'config/project-options/library' },
 								{ label: 'use_lockfile', slug: 'config/project-options/use_lockfile' },
 								{ label: 'lockfile_name', slug: 'config/project-options/lockfile_name' },
+								{ label: 'sandbox', slug: 'config/project-options/sandbox' },
 							]
 						}
 					]
@@ -147,6 +148,7 @@ export default defineConfig({
 						{ label: 'rv add examples', slug: 'cookbook/rv_add_examples' },
 						{ label: 'Installing a Specific Package Version', slug: 'cookbook/pkg_version' },
 						{ label: 'Overriding Remotes', slug: 'cookbook/remotes' },
+						{ label: 'Using a sandbox', slug: 'cookbook/sandbox' },
 					]
 				},
 				{
@@ -158,6 +160,7 @@ export default defineConfig({
 						{ label: 'Environment Variables', slug: 'reference/env_vars' },
 						{ label: 'rv with quarto', slug: 'reference/rv-quarto'},
 						{ label: 'rvr - rv for R', slug: 'reference/rvr' },
+						{ label: 'Self-contained scripts', slug: 'reference/self_contained_scripts' },
 					]
 				},
 				{
@@ -166,6 +169,7 @@ export default defineConfig({
 					items: [
 						{ label: 'Resolution', slug: 'concepts/resolution'},
 						{ label: 'Caching', slug: 'concepts/cache' },
+						{ label: 'Sandbox', slug: 'concepts/sandbox' },
 					]
 				}
 			],

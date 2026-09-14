@@ -1,0 +1,35 @@
+---
+title: System Library Sandbox
+description: Why and when to isolate your project from packages installed in R's own library
+---
+
+import { Badge } from '@astrojs/starlight/components';
+
+<Badge text="Introduced in rv v0.23.0" variant="note"/>
+<br/><br/>
+
+Every R installation ships a library of its own, holding the base and recommended packages. That library is always on
+`.libPaths()`, below the project library, and `rv` does not manage it.
+
+In some cases, users or admins might have installed additional packages into it. This means that some of your `rv` projects
+might be working on your machine but not on anyone else's because you're relying on a package without adding it to the
+`rproject.toml`.
+
+Enabling the sandbox ensures that your script will fail if you rely on a library not declared via `rv`.
+
+## How it works
+
+When the sandbox is enabled, `rv` builds a library containing **only** the base and recommended packages found in R's
+own library (`R_HOME/library`), and points `.Library` at it. `.Library.site` is emptied at the same time, so packages
+installed in a site library, eg the apt `r-cran-*` packages on Debian/Ubuntu, are hidden as well.
+
+The sandbox is built in the [cache](../cache), not in your project and will be reused between projects using the same
+R installation/version.
+
+If the sandbox is enabled, it applies to:
+
+- interactive sessions, through the [activate](../../commands/other/activation) script
+- [`rv run`](../../commands/other/run)
+- package installation so the project is reproducible
+
+The sandbox is built the first time a command needing it is run and then reused.

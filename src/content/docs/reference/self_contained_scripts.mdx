@@ -1,0 +1,71 @@
+---
+title: Self-contained scripts
+description: Declare the dependencies of a single script inside the script itself
+---
+
+import { Badge } from '@astrojs/starlight/components';
+
+<Badge text="Introduced in rv v0.23.0" variant="note"/>
+<br/><br/>
+
+A script can carry its own configuration in a comment block at the top. [`rv run`](../../commands/other/run) reads that
+block, installs what it declares and runs the script against it. There is no project directory to create: no
+`rproject.toml`, no `rv.lock` and no library are written next to the script.
+
+## Example
+
+```r
+//analysis.R
+# /// rv
+# dependencies = ["dplyr"]
+# ///
+
+library(dplyr)
+
+starwars |>
+    filter(species == "Droid") |>
+    select(name, height, mass)
+```
+
+```shell
+rv run analysis.R
+```
+
+## The block
+
+The block starts with a line that is exactly `# /// rv` and ends with a line that is exactly `# ///`, both at the very
+beginning of a line. Every line in between is either a bare `#` or a `#` followed by a space and the content. Everything
+after that `# ` (note the space after the `#`, it is required) is read as TOML, with the same fields as an [`rproject.toml`](../../config).
+Only the first block in the file is used.
+
+You only need to set the fields you care about in the block, the rest is filled in automatically:
+
+| Field | Default |
+|-------|---------|
+| `name` | `script` |
+| `r_version` | The version passed to `--r-version`, or the R found on the `PATH` |
+| `repositories` | The repositories found in your R profile, like [`rv init`](../../commands/project-initialization/init) does |
+
+If no repositories are declared in the block and none can be detected, it will error.
+
+You do not need to use a `[project]` table by default, everything will be automatically nested. To set a
+[top level field](../../config/project-options), write the `[project]` header yourself and keep the top level fields
+above it, as you would in an `rproject.toml`:
+
+```r
+//analysis.R
+# /// rv
+# sandbox = true
+#
+# [project]
+# dependencies = ["dplyr"]
+# ///
+```
+
+## Where the library lives
+
+`rv` writes the resolved configuration in the [cache](../../concepts/cache), under `scripts/`, in a directory keyed by
+the R version, the platform and a hash of the configuration itself. The library of the script is created next to it.
+
+Two scripts declaring the same thing therefore share a library, and running the same script again reuses it. Editing the
+block gives the script a new directory: the previous one stays in the cache.

@@ -109,6 +109,7 @@ PKGCACHE_TIMEOUT=0 rv plan
 ```
 :::
 
+
 ## Packages
 
 Within the `rv` cache, each source is its own subdirectory 
@@ -149,6 +150,10 @@ the package is re-downloaded to ensure the contents match. If they do, the packa
 
 `rv` does not keep local packages in the cache. Since the file is already on the system, keeping a cached version is not practical. `rv` does however keep track
 of the hash of the source file within the compiled package in the library, therefore re-installation only occurs when the source file changes.
+
+## Sandboxes
+
+We keep all the sandboxes we ever create in the cache. Most of the time, they are just folders containing symlinks which are never deleted.
 
 ## Global Cache
 
